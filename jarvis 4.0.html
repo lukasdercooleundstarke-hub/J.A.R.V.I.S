@@ -1,0 +1,2321 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no">
+
+<meta name="apple-mobile-web-app-capable"
+      content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent">
+
+<title>JARVIS 4.0</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    min-height: 100%;
+
+    background: #020508;
+
+    color: #dffaff;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+}
+
+body {
+
+    min-height: 100vh;
+
+    overflow-x: hidden;
+
+}
+
+.app {
+
+    min-height: 100vh;
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    padding: 25px 18px;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 40%,
+            rgba(15,103,128,.22),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(0,200,255,.08),
+            transparent 45%
+        );
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    width: 100%;
+
+    text-align: center;
+
+}
+
+.logo {
+
+    font-size:
+        clamp(42px,12vw,72px);
+
+    font-weight: 300;
+
+    letter-spacing: 14px;
+
+    margin-left: 14px;
+
+    color: #8cefff;
+
+    text-shadow:
+
+        0 0 8px #39dfff,
+        0 0 25px #1494b3,
+        0 0 60px rgba(0,200,255,.45);
+
+}
+
+.status {
+
+    margin-top: 5px;
+
+    font-size: 11px;
+
+    letter-spacing: 4px;
+
+    color: #5dffa0;
+
+}
+
+.clock {
+
+    margin-top: 10px;
+
+    color: #60818b;
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+}
+
+
+/* =========================
+   CORE
+========================= */
+
+.core-area {
+
+    flex: 1;
+
+    width: 100%;
+
+    max-width: 900px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-height: 55vh;
+
+}
+
+.core {
+
+    position: relative;
+
+    width: min(58vw,260px);
+
+    height: min(58vw,260px);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+.core::before,
+.core::after {
+
+    content: "";
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+}
+
+.core::before {
+
+    width: 100%;
+    height: 100%;
+
+    border: 1px solid
+        rgba(100,230,255,.35);
+
+    box-shadow:
+
+        0 0 20px rgba(0,210,255,.25),
+        inset 0 0 30px rgba(0,210,255,.10);
+
+    animation:
+        rotateCore 12s linear infinite;
+
+}
+
+.core::after {
+
+    width: 72%;
+    height: 72%;
+
+    border:
+        1px dashed
+        rgba(100,230,255,.30);
+
+    animation:
+        rotateCoreReverse 8s linear infinite;
+
+}
+
+@keyframes rotateCore {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+@keyframes rotateCoreReverse {
+
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+
+}
+
+.core-center {
+
+    width: 38%;
+    height: 38%;
+
+    border-radius: 50%;
+
+    background:
+
+        radial-gradient(
+            circle,
+            #dfffff 0%,
+            #63eaff 20%,
+            #0c8baa 55%,
+            #03151c 100%
+        );
+
+    box-shadow:
+
+        0 0 15px #55eaff,
+        0 0 40px #139fc2,
+        0 0 90px rgba(0,190,255,.55);
+
+    animation:
+        pulse 2.5s ease-in-out infinite;
+
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+
+        transform: scale(.92);
+
+        opacity: .85;
+
+    }
+
+    50% {
+
+        transform: scale(1.08);
+
+        opacity: 1;
+
+    }
+
+}
+
+
+/* KI AKTIV */
+
+body.ai-thinking
+.core-center {
+
+    animation:
+        aiPulse .7s ease-in-out infinite;
+
+}
+
+@keyframes aiPulse {
+
+    0% {
+        transform: scale(.9);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(.9);
+    }
+
+}
+
+
+/* =========================
+   RESPONSE
+========================= */
+
+.response {
+
+    width: 100%;
+
+    max-width: 750px;
+
+    min-height: 100px;
+
+    margin-top: 30px;
+
+    text-align: center;
+
+    padding: 15px;
+
+    color: #bdeefa;
+
+    font-size: 17px;
+
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+
+}
+
+.response-label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #4fdfff;
+
+    font-size: 9px;
+
+    letter-spacing: 4px;
+
+}
+
+
+/* =========================
+   INPUT
+========================= */
+
+.controls {
+
+    width: 100%;
+
+    max-width: 800px;
+
+    padding-bottom: 10px;
+
+}
+
+.input-row {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    border:
+        1px solid #164958;
+
+    border-radius: 16px;
+
+    padding: 15px;
+
+    background:
+        rgba(2,10,14,.92);
+
+    color: white;
+
+    font-size: 16px;
+
+    outline: none;
+
+}
+
+input:focus {
+
+    border-color: #39c9e9;
+
+    box-shadow:
+        0 0 15px
+        rgba(0,190,255,.12);
+
+}
+
+button {
+
+    border:
+        1px solid #226277;
+
+    border-radius: 16px;
+
+    background: #071d26;
+
+    color: #8eeeff;
+
+    font-weight: 700;
+
+    padding: 0 16px;
+
+    cursor: pointer;
+
+}
+
+button:active {
+
+    transform: scale(.96);
+
+}
+
+.mic {
+
+    width: 55px;
+
+    padding: 0;
+
+    font-size: 21px;
+
+}
+
+.mic.active {
+
+    background: #123e4b;
+
+    box-shadow:
+        0 0 20px
+        rgba(0,210,255,.5);
+
+}
+
+.send {
+
+    background: #54d8f2;
+
+    color: #021017;
+
+}
+
+
+/* =========================
+   QUICK
+========================= */
+
+.quick {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 10px;
+
+    overflow-x: auto;
+
+    scrollbar-width: none;
+
+}
+
+.quick::-webkit-scrollbar {
+
+    display: none;
+
+}
+
+.quick button {
+
+    white-space: nowrap;
+
+    padding: 9px 13px;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================
+   AI PANEL
+========================= */
+
+.ai-panel {
+
+    width: 100%;
+
+    max-width: 800px;
+
+    margin-top: 10px;
+
+    padding: 10px 14px;
+
+    border-radius: 12px;
+
+    border:
+        1px solid #123a45;
+
+    background:
+        rgba(0,15,20,.65);
+
+    color: #648d97;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+    text-align: center;
+
+}
+
+
+/* =========================
+   DEVELOPER
+========================= */
+
+.developer {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 100;
+
+    display: none;
+
+    padding: 15px;
+
+    background:
+        rgba(0,4,7,.97);
+
+}
+
+.developer.open {
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+.dev-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 12px;
+
+}
+
+.dev-title {
+
+    color: #6eeaff;
+
+    font-size: 14px;
+
+    letter-spacing: 3px;
+
+}
+
+.dev-grid {
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    min-height: 0;
+
+}
+
+textarea {
+
+    flex: 1;
+
+    width: 100%;
+
+    resize: none;
+
+    border-radius: 15px;
+
+    border:
+        1px solid #174958;
+
+    background: #010607;
+
+    color: #bceeff;
+
+    padding: 15px;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    outline: none;
+
+}
+
+.dev-buttons {
+
+    display: flex;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+}
+
+.dev-buttons button {
+
+    padding: 11px 14px;
+
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+
+    width: 100%;
+
+    text-align: center;
+
+    padding-top: 8px;
+
+    color: #344f58;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+<header>
+
+<div class="logo">
+JARVIS
+</div>
+
+<div class="status"
+     id="status">
+
+● SYSTEM ONLINE
+
+</div>
+
+<div class="clock"
+     id="clock">
+
+--
+
+</div>
+
+</header>
+
+
+<main class="core-area">
+
+<div class="core">
+
+<div class="core-center"></div>
+
+</div>
+
+
+<div class="response">
+
+<span class="response-label">
+JARVIS
+</span>
+
+<span id="responseText">
+System bereit.
+</span>
+
+</div>
+
+</main>
+
+
+<section class="controls">
+
+<div class="input-row">
+
+<input
+    id="input"
+    type="text"
+    placeholder="Sprich mit JARVIS..."
+    autocomplete="off"
+>
+
+<button
+    id="mic"
+    class="mic">
+
+🎙️
+
+</button>
+
+<button
+    id="send"
+    class="send">
+
+→
+
+</button>
+
+</div>
+
+
+<div class="quick">
+
+<button onclick="quick('Wie spät ist es?')">
+Uhrzeit
+</button>
+
+<button onclick="quick('Was ist heute für ein Datum?')">
+Datum
+</button>
+
+<button onclick="quick('Was kannst du?')">
+Fähigkeiten
+</button>
+
+<button onclick="quick('Was weißt du über mich?')">
+Gedächtnis
+</button>
+
+<button onclick="quick('Entwicklermodus')">
+Developer
+</button>
+
+</div>
+
+
+<div
+    class="ai-panel"
+    id="aiPanel">
+
+🧠 KI WIRD NICHT GELADEN
+
+</div>
+
+</section>
+
+
+<div class="footer">
+
+JARVIS 4.0 • LOCAL AI SYSTEM
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     DEVELOPER
+========================= -->
+
+<div
+    id="developer"
+    class="developer">
+
+<div class="dev-header">
+
+<div class="dev-title">
+
+JARVIS // DEVELOPER MODE
+
+</div>
+
+<button onclick="closeDeveloper()">
+
+✕ Schließen
+
+</button>
+
+</div>
+
+
+<div class="dev-grid">
+
+<textarea
+    id="codeEditor"
+    spellcheck="false"
+    placeholder="// JARVIS 4.0 Code
+"></textarea>
+
+
+<div class="dev-buttons">
+
+<button onclick="saveProject()">
+💾 Speichern
+</button>
+
+<button onclick="loadProject()">
+📂 Laden
+</button>
+
+<button onclick="downloadProject()">
+⬇️ Export
+</button>
+
+<button onclick="askAIForCode()">
+🧠 KI → Code
+</button>
+
+<button onclick="askAIForDesign()">
+🎨 KI → Design
+</button>
+
+<button onclick="clearEditor()">
+🗑️ Löschen
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+/*
+=================================================
+ JARVIS 4.0
+ LOCAL AI
+=================================================
+*/
+
+
+/* =========================
+   WEBLLM
+========================= */
+
+import {
+    CreateMLCEngine
+} from
+"https://esm.run/@mlc-ai/web-llm";
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const input =
+    document.getElementById("input");
+
+const responseText =
+    document.getElementById("responseText");
+
+const status =
+    document.getElementById("status");
+
+const aiPanel =
+    document.getElementById("aiPanel");
+
+const developer =
+    document.getElementById("developer");
+
+const codeEditor =
+    document.getElementById("codeEditor");
+
+
+/* =========================
+   MEMORY
+========================= */
+
+let memory =
+    JSON.parse(
+        localStorage.getItem(
+            "jarvisMemory"
+        ) || "{}"
+    );
+
+
+function saveMemory() {
+
+    localStorage.setItem(
+        "jarvisMemory",
+        JSON.stringify(memory)
+    );
+
+}
+
+
+/* =========================
+   DESIGN MEMORY
+========================= */
+
+let designMemory =
+    JSON.parse(
+        localStorage.getItem(
+            "jarvisDesign"
+        ) || "{}"
+    );
+
+
+function saveDesignMemory() {
+
+    localStorage.setItem(
+        "jarvisDesign",
+        JSON.stringify(designMemory)
+    );
+
+}
+
+
+/* =========================
+   AI
+========================= */
+
+let engine = null;
+
+let aiReady = false;
+
+const MODEL =
+    "Qwen3-1.7B-q4f16_1-MLC";
+
+
+async function loadAI() {
+
+    try {
+
+        aiPanel.textContent =
+            "🧠 KI WIRD GELADEN...";
+
+        status.textContent =
+            "● KI WIRD INITIALISIERT";
+
+        engine =
+            await CreateMLCEngine(
+                MODEL,
+                {
+
+                    initProgressCallback:
+                        function(progress) {
+
+                            if (
+                                progress &&
+                                progress.text
+                            ) {
+
+                                aiPanel.textContent =
+                                    "🧠 " +
+                                    progress.text;
+
+                            }
+
+                        }
+
+                }
+            );
+
+        aiReady = true;
+
+        aiPanel.textContent =
+            "🧠 LOCAL AI ONLINE";
+
+        status.textContent =
+            "● SYSTEM ONLINE";
+
+        jarvisSay(
+            "Lokales KI-Gehirn ist bereit."
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        aiPanel.textContent =
+            "⚠️ WEBGPU / KI NICHT VERFÜGBAR";
+
+        status.textContent =
+            "● BASISSYSTEM ONLINE";
+
+        jarvisSay(
+            "Das lokale KI-Modell konnte nicht geladen werden. " +
+            "Die normalen JARVIS-Funktionen bleiben verfügbar."
+        );
+
+    }
+
+}
+
+
+/* =========================
+   CLOCK
+========================= */
+
+function updateClock() {
+
+    const now =
+        new Date();
+
+    document.getElementById(
+        "clock"
+    ).textContent =
+
+        now.toLocaleDateString(
+            "de-DE"
+        ) +
+        " • " +
+        now.toLocaleTimeString(
+            "de-DE"
+        );
+
+}
+
+setInterval(
+    updateClock,
+    1000
+);
+
+updateClock();
+
+
+/* =========================
+   SPEAK
+========================= */
+
+function speak(text) {
+
+    if (
+        !("speechSynthesis" in window)
+    ) {
+
+        return;
+
+    }
+
+    speechSynthesis.cancel();
+
+    const voice =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+    voice.lang =
+        "de-DE";
+
+    voice.rate =
+        1;
+
+    voice.pitch =
+        .9;
+
+    speechSynthesis.speak(
+        voice
+    );
+
+}
+
+
+/* =========================
+   SAY
+========================= */
+
+function jarvisSay(text) {
+
+    responseText.textContent =
+        text;
+
+}
+
+
+/* =========================
+   TIME
+========================= */
+
+function getTime() {
+
+    return new Date()
+        .toLocaleTimeString(
+            "de-DE"
+        );
+
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+function getDate() {
+
+    return new Date()
+        .toLocaleDateString(
+            "de-DE",
+            {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            }
+        );
+
+}
+
+
+/* =========================
+   CALCULATOR
+========================= */
+
+function calculate(expression) {
+
+    try {
+
+        if (
+            !/^[0-9+\-*/(). %]+$/
+                .test(expression)
+        ) {
+
+            return "Diese Rechnung ist nicht erlaubt.";
+
+        }
+
+        const result =
+            Function(
+                '"use strict"; return (' +
+                expression +
+                ')'
+            )();
+
+        return (
+            "Das Ergebnis ist " +
+            result +
+            "."
+        );
+
+    }
+
+    catch {
+
+        return (
+            "Ich konnte die Rechnung nicht berechnen."
+        );
+
+    }
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+function parseTimer(text) {
+
+    const match =
+        text.match(
+            /(\d+)\s*(sekunden?|minuten?)/i
+        );
+
+    if (!match) {
+
+        return null;
+
+    }
+
+    const value =
+        Number(match[1]);
+
+    const unit =
+        match[2].toLowerCase();
+
+    if (
+        unit.startsWith("minute")
+    ) {
+
+        return value * 60;
+
+    }
+
+    return value;
+
+}
+
+
+function createTimer(seconds) {
+
+    setTimeout(
+        function() {
+
+            jarvisSay(
+                "⏰ Der Timer ist abgelaufen."
+            );
+
+            speak(
+                "Der Timer ist abgelaufen."
+            );
+
+        },
+        seconds * 1000
+    );
+
+    return (
+        "Timer gestartet für " +
+        seconds +
+        " Sekunden."
+    );
+
+}
+
+
+/* =========================
+   MEMORY LIST
+========================= */
+
+function memoryList() {
+
+    const entries =
+        Object.values(memory);
+
+    if (!entries.length) {
+
+        return (
+            "Mein Gedächtnis ist leer."
+        );
+
+    }
+
+    return (
+        "Ich erinnere mich an:\n\n" +
+
+        entries
+            .map(
+                item =>
+                    "• " + item
+            )
+            .join("\n")
+    );
+
+}
+
+
+/* =========================
+   MEMORY LEARNING
+========================= */
+
+function learn(text) {
+
+    const id =
+        "memory_" +
+        Date.now();
+
+    memory[id] =
+        text;
+
+    saveMemory();
+
+}
+
+
+/* =========================
+   AI SYSTEM PROMPT
+========================= */
+
+function buildSystemPrompt() {
+
+    const memories =
+        Object.values(memory)
+            .slice(-30)
+            .join("\n");
+
+    return `
+
+Du bist JARVIS 4.0.
+
+Du bist ein persönlicher digitaler Assistent
+auf einem iPad.
+
+Antworte auf Deutsch.
+
+Sei intelligent, präzise, freundlich
+und futuristisch.
+
+Du hast Zugriff auf einen lokalen
+Gedächtnisspeicher.
+
+Diese Informationen wurden vom Benutzer
+gespeichert:
+
+${memories || "Keine gespeicherten Informationen."}
+
+WICHTIG:
+
+Du darfst nicht behaupten, etwas getan zu haben,
+wenn du es nicht wirklich tun kannst.
+
+Wenn der Benutzer möchte, dass du deinen Code
+änderst, sollst du zunächst einen Vorschlag
+erstellen.
+
+Wenn der Benutzer möchte, dass du dein Design
+änderst, sollst du einen Designvorschlag
+erstellen.
+
+Du darfst niemals eigenständig gefährliche,
+schädliche oder fremde Systeme verändern.
+
+Du bist JARVIS.
+
+`;
+
+}
+
+
+/* =========================
+   AI CHAT
+========================= */
+
+async function askAI(text) {
+
+    if (!aiReady) {
+
+        return null;
+
+    }
+
+    document.body
+        .classList
+        .add("ai-thinking");
+
+    status.textContent =
+        "● JARVIS DENKT";
+
+    try {
+
+        const response =
+            await engine
+                .chat
+                .completions
+                .create({
+
+                    messages: [
+
+                        {
+                            role: "system",
+                            content:
+                                buildSystemPrompt()
+                        },
+
+                        {
+                            role: "user",
+                            content: text
+                        }
+
+                    ],
+
+                    temperature: 0.7,
+
+                    max_tokens: 500
+
+                });
+
+        const answer =
+            response
+                .choices[0]
+                .message
+                .content;
+
+        return answer;
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        return (
+            "Mein lokales KI-Gehirn hat gerade einen Fehler."
+        );
+
+    }
+
+    finally {
+
+        document.body
+            .classList
+            .remove("ai-thinking");
+
+        status.textContent =
+            "● SYSTEM ONLINE";
+
+    }
+
+}
+
+
+/* =========================
+   DEVELOPER
+========================= */
+
+function openDeveloper() {
+
+    developer
+        .classList
+        .add("open");
+
+    status.textContent =
+        "● DEVELOPER MODE";
+
+}
+
+
+function closeDeveloper() {
+
+    developer
+        .classList
+        .remove("open");
+
+    status.textContent =
+        "● SYSTEM ONLINE";
+
+}
+
+
+/* =========================
+   SAVE PROJECT
+========================= */
+
+function saveProject() {
+
+    localStorage.setItem(
+        "jarvisProject",
+        codeEditor.value
+    );
+
+    jarvisSay(
+        "Projekt gespeichert."
+    );
+
+}
+
+
+/* =========================
+   LOAD PROJECT
+========================= */
+
+function loadProject() {
+
+    const project =
+        localStorage.getItem(
+            "jarvisProject"
+        );
+
+    if (project !== null) {
+
+        codeEditor.value =
+            project;
+
+        jarvisSay(
+            "Projekt geladen."
+        );
+
+    }
+    else {
+
+        jarvisSay(
+            "Noch kein Projekt gespeichert."
+        );
+
+    }
+
+}
+
+
+/* =========================
+   EXPORT
+========================= */
+
+function downloadProject() {
+
+    const blob =
+        new Blob(
+            [codeEditor.value],
+            {
+                type:
+                    "text/html"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+    link.href =
+        url;
+
+    link.download =
+        "JARVIS-4.0.html";
+
+    link.click();
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+/* =========================
+   CLEAR
+========================= */
+
+function clearEditor() {
+
+    codeEditor.value = "";
+
+}
+
+
+/* =========================
+   AI CODE
+========================= */
+
+async function askAIForCode() {
+
+    if (!aiReady) {
+
+        jarvisSay(
+            "Die lokale KI ist noch nicht bereit."
+        );
+
+        return;
+
+    }
+
+    const request =
+        prompt(
+            "Was soll JARVIS programmieren?"
+        );
+
+    if (!request) {
+
+        return;
+
+    }
+
+    jarvisSay(
+        "Ich entwickle den Code..."
+    );
+
+    const answer =
+        await askAI(
+
+            `Erstelle Code für JARVIS.
+
+Aufgabe:
+
+${request}
+
+Gib zuerst eine kurze Erklärung
+und danach den vollständigen Code.
+`
+
+        );
+
+    codeEditor.value =
+        answer || "";
+
+    jarvisSay(
+        "Codevorschlag wurde erstellt."
+    );
+
+}
+
+
+/* =========================
+   AI DESIGN
+========================= */
+
+async function askAIForDesign() {
+
+    if (!aiReady) {
+
+        jarvisSay(
+            "Die lokale KI ist noch nicht bereit."
+        );
+
+        return;
+
+    }
+
+    const request =
+        prompt(
+            "Wie soll mein Design aussehen?"
+        );
+
+    if (!request) {
+
+        return;
+
+    }
+
+    jarvisSay(
+        "Ich entwickle ein neues Design..."
+    );
+
+    const answer =
+        await askAI(
+
+            `Entwickle einen Designvorschlag
+für JARVIS.
+
+Wunsch:
+
+${request}
+
+Erstelle modernes HTML/CSS.
+Keine externen Frameworks.
+
+Gib den Code aus.
+`
+
+        );
+
+    codeEditor.value =
+        answer || "";
+
+    designMemory[
+        "lastDesign"
+    ] = request;
+
+    saveDesignMemory();
+
+    jarvisSay(
+        "Neuer Designvorschlag wurde erstellt."
+    );
+
+}
+
+
+/* =========================
+   MAIN BRAIN
+========================= */
+
+async function jarvisAnswer(text) {
+
+    const command =
+        text
+            .toLowerCase()
+            .trim();
+
+
+    if (!command) {
+
+        return "Ich höre.";
+
+    }
+
+
+    /* DEVELOPER */
+
+    if (
+
+        command.includes(
+            "entwicklermodus"
+        )
+
+        ||
+
+        command.includes(
+            "developer mode"
+        )
+
+        ||
+
+        command.includes(
+            "programmiermodus"
+        )
+
+    ) {
+
+        openDeveloper();
+
+        return (
+            "Entwicklermodus aktiviert."
+        );
+
+    }
+
+
+    /* MEMORY */
+
+    if (
+        command.startsWith(
+            "merke dir "
+        )
+    ) {
+
+        const information =
+            text
+                .substring(10)
+                .trim();
+
+        if (!information) {
+
+            return (
+                "Was soll ich mir merken?"
+            );
+
+        }
+
+        learn(
+            information
+        );
+
+        return (
+            "Gespeichert. Ich werde mich daran erinnern."
+        );
+
+    }
+
+
+    /* MEMORY LIST */
+
+    if (
+
+        command.includes(
+            "was weißt du über mich"
+        )
+
+        ||
+
+        command.includes(
+            "was hast du dir gemerkt"
+        )
+
+    ) {
+
+        return memoryList();
+
+    }
+
+
+    /* FORGET */
+
+    if (
+        command ===
+        "vergiss alles"
+    ) {
+
+        memory = {};
+
+        saveMemory();
+
+        return (
+            "Mein Gedächtnis wurde gelöscht."
+        );
+
+    }
+
+
+    /* TIME */
+
+    if (
+
+        command.includes(
+            "wie spät"
+        )
+
+        ||
+
+        command.includes(
+            "uhrzeit"
+        )
+
+    ) {
+
+        return (
+            "Es ist " +
+            getTime() +
+            " Uhr."
+        );
+
+    }
+
+
+    /* DATE */
+
+    if (
+
+        command.includes(
+            "datum"
+        )
+
+        ||
+
+        command.includes(
+            "welcher tag"
+        )
+
+    ) {
+
+        return (
+            "Heute ist " +
+            getDate() +
+            "."
+        );
+
+    }
+
+
+    /* CALCULATOR */
+
+    if (
+        command.startsWith(
+            "rechne "
+        )
+    ) {
+
+        return calculate(
+            text.substring(7)
+        );
+
+    }
+
+
+    if (
+        command.startsWith(
+            "berechne "
+        )
+    ) {
+
+        return calculate(
+            text.substring(9)
+        );
+
+    }
+
+
+    /* TIMER */
+
+    if (
+        command.includes(
+            "timer"
+        )
+    ) {
+
+        const seconds =
+            parseTimer(text);
+
+        if (!seconds) {
+
+            return (
+                "Sag zum Beispiel: Timer auf 30 Sekunden."
+            );
+
+        }
+
+        return createTimer(
+            seconds
+        );
+
+    }
+
+
+    /* GOOGLE */
+
+    if (
+        command.startsWith(
+            "suche "
+        )
+    ) {
+
+        const query =
+            text
+                .substring(6)
+                .trim();
+
+        window.open(
+
+            "https://www.google.com/search?q=" +
+
+            encodeURIComponent(
+                query
+            ),
+
+            "_blank"
+
+        );
+
+        return (
+            "Ich suche nach " +
+            query +
+            "."
+        );
+
+    }
+
+
+    /* YOUTUBE */
+
+    if (
+        command.includes(
+            "öffne youtube"
+        )
+    ) {
+
+        window.open(
+            "https://www.youtube.com",
+            "_blank"
+        );
+
+        return (
+            "YouTube wurde geöffnet."
+        );
+
+    }
+
+
+    /* GOOGLE */
+
+    if (
+        command.includes(
+            "öffne google"
+        )
+    ) {
+
+        window.open(
+            "https://www.google.com",
+            "_blank"
+        );
+
+        return (
+            "Google wurde geöffnet."
+        );
+
+    }
+
+
+    /* HELP */
+
+    if (
+
+        command.includes(
+            "was kannst du"
+        )
+
+        ||
+
+        command.includes(
+            "fähigkeiten"
+        )
+
+    ) {
+
+        return `
+
+Ich kann:
+
+• mit dir sprechen
+• dir zuhören
+• lokal denken
+• Informationen speichern
+• Erinnerungen verwenden
+• rechnen
+• Timer starten
+• Google öffnen
+• YouTube öffnen
+• Code erzeugen
+• Designvorschläge erstellen
+• meinen Entwicklerbereich öffnen
+
+Mein KI-Gehirn läuft lokal auf diesem Gerät.
+
+`;
+
+    }
+
+
+    /* IDENTITY */
+
+    if (
+        command.includes(
+            "wer bist du"
+        )
+    ) {
+
+        return (
+            "Ich bin JARVIS 4.0. " +
+            "Ein lokaler digitaler Assistent " +
+            "mit KI-Gehirn und Langzeitgedächtnis."
+        );
+
+    }
+
+
+    /* AI */
+
+    const aiAnswer =
+        await askAI(text);
+
+    if (aiAnswer) {
+
+        return aiAnswer;
+
+    }
+
+
+    return (
+        "Ich habe diesen Befehl empfangen. " +
+        "Mein lokales KI-Gehirn ist momentan " +
+        "noch nicht verfügbar."
+    );
+
+}
+
+
+/* =========================
+   SEND
+========================= */
+
+async function sendMessage() {
+
+    const text =
+        input.value.trim();
+
+    if (!text) {
+
+        return;
+
+    }
+
+    input.value = "";
+
+    jarvisSay(
+        "..."
+    );
+
+    const answer =
+        await jarvisAnswer(
+            text
+        );
+
+    jarvisSay(
+        answer
+    );
+
+    speak(
+        answer
+    );
+
+}
+
+
+/* =========================
+   QUICK
+========================= */
+
+window.quick =
+function(text) {
+
+    input.value =
+        text;
+
+    sendMessage();
+
+};
+
+
+/* =========================
+   BUTTON
+========================= */
+
+document
+    .getElementById("send")
+    .addEventListener(
+        "click",
+        sendMessage
+    );
+
+
+/* =========================
+   ENTER
+========================= */
+
+input.addEventListener(
+
+    "keydown",
+
+    function(event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            sendMessage();
+
+        }
+
+    }
+
+);
+
+
+/* =========================
+   SPEECH
+========================= */
+
+const SpeechRecognition =
+
+    window.SpeechRecognition ||
+
+    window.webkitSpeechRecognition;
+
+
+if (SpeechRecognition) {
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.lang =
+        "de-DE";
+
+    recognition.continuous =
+        false;
+
+    recognition.interimResults =
+        false;
+
+
+    recognition.onstart =
+    function() {
+
+        document
+            .getElementById("mic")
+            .classList
+            .add("active");
+
+        status.textContent =
+            "● ICH HÖRE ZU";
+
+    };
+
+
+    recognition.onend =
+    function() {
+
+        document
+            .getElementById("mic")
+            .classList
+            .remove("active");
+
+        status.textContent =
+            "● SYSTEM ONLINE";
+
+    };
+
+
+    recognition.onresult =
+    function(event) {
+
+        const text =
+            event
+                .results[0][0]
+                .transcript;
+
+        input.value =
+            text;
+
+        sendMessage();
+
+    };
+
+
+    document
+        .getElementById("mic")
+        .addEventListener(
+            "click",
+            function() {
+
+                try {
+
+                    recognition.start();
+
+                }
+
+                catch {}
+
+            }
+        );
+
+}
+else {
+
+    document
+        .getElementById("mic")
+        .addEventListener(
+            "click",
+            function() {
+
+                jarvisSay(
+                    "Spracheingabe wird von diesem Browser nicht unterstützt."
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================
+   GLOBAL DEV FUNCTIONS
+========================= */
+
+window.openDeveloper =
+    openDeveloper;
+
+window.closeDeveloper =
+    closeDeveloper;
+
+window.saveProject =
+    saveProject;
+
+window.loadProject =
+    loadProject;
+
+window.downloadProject =
+    downloadProject;
+
+window.clearEditor =
+    clearEditor;
+
+window.askAIForCode =
+    askAIForCode;
+
+window.askAIForDesign =
+    askAIForDesign;
+
+
+/* =========================
+   START
+========================= */
+
+jarvisSay(
+    "System bereit. Lokales KI-Gehirn wird gestartet."
+);
+
+loadAI();
+
+</script>
+
+</body>
+</html>

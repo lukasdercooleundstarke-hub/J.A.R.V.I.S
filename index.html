@@ -2,21 +2,21 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>J.A.R.V.I.S</title>
 
 <style>
 :root{
     --cyan:#00eaff;
-    --blue:#178fff;
-    --orange:#ff8a00;
-    --red:#ff304f;
-    --green:#32ff9a;
-    --bg:#03070b;
-    --panel:rgba(5,13,20,.82);
+    --blue:#168cff;
+    --orange:#ff8b00;
+    --green:#36ff9b;
+    --red:#ff4058;
+    --bg:#020609;
+    --panel:rgba(5,13,19,.92);
     --line:rgba(0,234,255,.25);
-    --text:#d9faff;
-    --muted:#66818b;
+    --text:#dcfbff;
+    --muted:#66818a;
 }
 
 *{
@@ -29,653 +29,683 @@ html,body{
     height:100%;
     overflow:hidden;
     background:
-        radial-gradient(circle at 50% 45%,#08222b 0%,#03080c 32%,#010204 72%);
+        radial-gradient(circle at 50% 50%,#092a33 0,#030a0e 36%,#010204 75%);
     color:var(--text);
     font-family:Arial,Helvetica,sans-serif;
 }
 
-body:before{
+body::before{
     content:"";
     position:fixed;
     inset:0;
     pointer-events:none;
-    opacity:.15;
+    z-index:100;
+    opacity:.12;
     background:
         repeating-linear-gradient(
             0deg,
-            transparent 0px,
-            transparent 3px,
-            rgba(255,255,255,.035) 4px
+            transparent 0 3px,
+            rgba(255,255,255,.04) 4px
         );
-    z-index:50;
 }
 
-body:after{
+body::after{
     content:"";
     position:fixed;
     inset:0;
     pointer-events:none;
+    z-index:101;
     background:
-        radial-gradient(circle,transparent 45%,rgba(0,0,0,.65) 100%);
-    z-index:49;
+        radial-gradient(
+            circle,
+            transparent 50%,
+            rgba(0,0,0,.75)
+        );
 }
 
-/* =========================================================
-   MAIN HUD
-========================================================= */
+/* HEADER */
 
-#app{
-    position:relative;
-    width:100vw;
-    height:100vh;
-    overflow:hidden;
-}
-
-/* TOP BAR */
-
-.topbar{
+.header{
     position:absolute;
     top:0;
     left:0;
     right:0;
-    height:72px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 28px;
-    border-bottom:1px solid var(--line);
-    background:linear-gradient(
-        90deg,
-        rgba(0,234,255,.04),
-        rgba(0,0,0,.5),
-        rgba(255,138,0,.04)
-    );
+    height:68px;
     z-index:20;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 24px;
+
+    border-bottom:1px solid var(--line);
+
+    background:rgba(1,5,8,.78);
+    backdrop-filter:blur(15px);
 }
 
-.brand{
+.logo{
     display:flex;
     align-items:center;
     gap:14px;
-    letter-spacing:5px;
-    font-weight:bold;
+
     font-size:18px;
+    font-weight:bold;
+    letter-spacing:5px;
 }
 
-.brand-core{
-    width:14px;
-    height:14px;
+.logoMark{
+    width:13px;
+    height:13px;
+
     border:2px solid var(--cyan);
+
     transform:rotate(45deg);
-    box-shadow:0 0 15px var(--cyan);
+
+    box-shadow:
+        0 0 18px var(--cyan);
 }
 
-.status{
+.headerRight{
     display:flex;
-    gap:24px;
+    gap:20px;
     align-items:center;
-    font-size:11px;
+
+    font-size:10px;
     letter-spacing:2px;
+
     color:var(--muted);
 }
 
-.status-item{
-    display:flex;
-    align-items:center;
-    gap:7px;
-}
+.statusDot{
+    display:inline-block;
 
-.dot{
     width:7px;
     height:7px;
+
+    margin-right:6px;
+
     border-radius:50%;
+
     background:var(--green);
-    box-shadow:0 0 10px var(--green);
+
+    box-shadow:0 0 12px var(--green);
 }
 
-.dot.orange{
-    background:var(--orange);
-    box-shadow:0 0 10px var(--orange);
-}
+/* SIDE PANELS */
 
-.dot.red{
-    background:var(--red);
-    box-shadow:0 0 10px var(--red);
-}
-
-/* LEFT PANEL */
-
-.left-panel{
+.left{
     position:absolute;
-    left:22px;
-    top:100px;
-    width:260px;
-    bottom:100px;
-    z-index:10;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-}
 
-.panel{
-    position:relative;
-    background:var(--panel);
-    border:1px solid var(--line);
-    clip-path:polygon(
-        0 12px,
-        12px 0,
-        calc(100% - 18px) 0,
-        100% 18px,
-        100% calc(100% - 12px),
-        calc(100% - 12px) 100%,
-        14px 100%,
-        0 calc(100% - 14px)
-    );
-    backdrop-filter:blur(12px);
-}
+    top:90px;
+    left:18px;
+    bottom:92px;
 
-.panel-title{
-    padding:12px 16px;
-    font-size:10px;
-    letter-spacing:2px;
-    color:var(--cyan);
-    border-bottom:1px solid var(--line);
-}
+    width:240px;
 
-.telemetry{
-    padding:14px;
-}
-
-.telemetry-row{
-    display:flex;
-    justify-content:space-between;
-    padding:7px 0;
-    border-bottom:1px solid rgba(255,255,255,.04);
-    font-size:10px;
-}
-
-.telemetry-row span:first-child{
-    color:var(--muted);
-}
-
-.telemetry-row span:last-child{
-    color:var(--text);
-}
-
-/* RIGHT PANEL */
-
-.right-panel{
-    position:absolute;
-    right:22px;
-    top:100px;
-    width:300px;
-    bottom:100px;
-    z-index:10;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-}
-
-.memory-list{
-    max-height:230px;
-    overflow:auto;
-    padding:10px;
-}
-
-.memory-item{
-    padding:10px;
-    margin-bottom:7px;
-    background:rgba(0,234,255,.035);
-    border-left:2px solid var(--cyan);
-    font-size:11px;
-    line-height:1.45;
-}
-
-.memory-item small{
-    display:block;
-    margin-top:5px;
-    color:var(--muted);
-}
-
-/* =========================================================
-   CENTRAL CORE
-========================================================= */
-
-.center{
-    position:absolute;
-    inset:72px 340px 100px 300px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.core-wrap{
-    position:relative;
-    width:min(48vw,520px);
-    height:min(48vw,520px);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-/* outer rings */
-
-.ring{
-    position:absolute;
-    border-radius:50%;
-    border:1px solid rgba(0,234,255,.2);
-}
-
-.ring.r1{
-    width:100%;
-    height:100%;
-    border-top-color:var(--cyan);
-    animation:spin 18s linear infinite;
-}
-
-.ring.r2{
-    width:86%;
-    height:86%;
-    border-right-color:var(--orange);
-    animation:spinReverse 12s linear infinite;
-}
-
-.ring.r3{
-    width:70%;
-    height:70%;
-    border-left-color:var(--cyan);
-    animation:spin 9s linear infinite;
-}
-
-.ring.r4{
-    width:57%;
-    height:57%;
-    border-bottom-color:var(--orange);
-    animation:spinReverse 7s linear infinite;
-}
-
-.ring:after{
-    content:"";
-    position:absolute;
-    width:5px;
-    height:5px;
-    border-radius:50%;
-    background:var(--cyan);
-    box-shadow:0 0 12px var(--cyan);
-    top:-3px;
-    left:50%;
-}
-
-/* Core */
-
-.arc-reactor{
-    position:relative;
-    width:190px;
-    height:190px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,.9) 0%,
-            rgba(0,234,255,.8) 8%,
-            rgba(0,91,110,.65) 23%,
-            rgba(0,16,23,.9) 52%,
-            rgba(0,0,0,1) 70%
-        );
-    box-shadow:
-        0 0 20px rgba(0,234,255,.8),
-        0 0 70px rgba(0,234,255,.35),
-        inset 0 0 45px rgba(0,234,255,.7);
-    animation:pulse 3s ease-in-out infinite;
-}
-
-.arc-reactor:before,
-.arc-reactor:after{
-    content:"";
-    position:absolute;
-    inset:15px;
-    border-radius:50%;
-    border:1px solid rgba(0,234,255,.65);
-}
-
-.arc-reactor:after{
-    inset:33px;
-    border-color:rgba(255,138,0,.7);
-}
-
-.core-letter{
-    position:relative;
-    z-index:2;
-    font-size:76px;
-    font-weight:100;
-    letter-spacing:-8px;
-    color:#eaffff;
-    text-shadow:
-        0 0 8px white,
-        0 0 25px var(--cyan),
-        0 0 60px var(--cyan);
-}
-
-/* core states */
-
-.listening .arc-reactor{
-    box-shadow:
-        0 0 25px var(--green),
-        0 0 90px rgba(50,255,154,.4),
-        inset 0 0 55px rgba(50,255,154,.75);
-}
-
-.thinking .arc-reactor{
-    animation:pulse .65s ease-in-out infinite;
-}
-
-.speaking .arc-reactor{
-    animation:pulse .35s ease-in-out infinite;
-}
-
-/* center labels */
-
-.core-label{
-    position:absolute;
-    bottom:-36px;
-    left:0;
-    right:0;
-    text-align:center;
-    font-size:10px;
-    letter-spacing:4px;
-    color:var(--muted);
-}
-
-.scan{
-    position:absolute;
-    width:100%;
-    height:1px;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        var(--cyan),
-        transparent
-    );
-    opacity:.45;
-    animation:scan 5s ease-in-out infinite;
-}
-
-/* =========================================================
-   CHAT / COMMAND AREA
-========================================================= */
-
-.conversation{
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    bottom:112px;
-    width:min(650px,calc(100vw - 700px));
-    min-width:400px;
     z-index:15;
 }
 
-.message{
-    max-height:150px;
-    overflow:auto;
-    padding:16px 20px;
-    margin-bottom:12px;
-    background:rgba(1,7,11,.82);
-    border-left:2px solid var(--cyan);
-    border-right:1px solid rgba(0,234,255,.15);
-    font-size:13px;
-    line-height:1.55;
-    box-shadow:0 0 30px rgba(0,234,255,.05);
+.right{
+    position:absolute;
+
+    top:90px;
+    right:18px;
+    bottom:92px;
+
+    width:285px;
+
+    z-index:15;
 }
 
-.message.user{
-    border-left-color:var(--orange);
+.panel{
+    background:var(--panel);
+
+    border:1px solid var(--line);
+
+    margin-bottom:10px;
+
+    clip-path:
+        polygon(
+            0 12px,
+            12px 0,
+            calc(100% - 15px) 0,
+            100% 15px,
+            100% calc(100% - 12px),
+            calc(100% - 12px) 100%,
+            12px 100%,
+            0 calc(100% - 12px)
+        );
+
+    backdrop-filter:blur(12px);
 }
 
-.message.system{
-    border-left-color:var(--green);
+.panelTitle{
+    padding:11px 14px;
+
+    border-bottom:1px solid var(--line);
+
+    color:var(--cyan);
+
+    font-size:9px;
+    letter-spacing:2px;
 }
 
-.input-area{
+.telemetry{
+    padding:10px 14px;
+}
+
+.row{
     display:flex;
+    justify-content:space-between;
+
+    gap:10px;
+
+    padding:8px 0;
+
+    font-size:10px;
+
+    border-bottom:1px solid rgba(255,255,255,.035);
+}
+
+.row span:first-child{
+    color:var(--muted);
+}
+
+.row span:last-child{
+    color:var(--text);
+}
+
+/* CENTRAL HUD */
+
+.hud{
+    position:absolute;
+
+    top:68px;
+    bottom:105px;
+
+    left:280px;
+    right:310px;
+
+    display:flex;
+    justify-content:center;
     align-items:center;
-    gap:8px;
-    padding:7px;
-    background:rgba(0,0,0,.82);
-    border:1px solid rgba(0,234,255,.35);
-    clip-path:polygon(
-        0 0,
-        calc(100% - 15px) 0,
-        100% 15px,
-        100% 100%,
-        0 100%
-    );
+}
+
+.hudCore{
+    width:min(62vh,580px);
+    height:min(62vh,580px);
+
+    position:relative;
+}
+
+/*
+   Kein J mehr in der Mitte.
+   Nur HUD-Ringe und Status.
+*/
+
+.circle{
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    border-radius:50%;
+
+    border:1px solid rgba(0,234,255,.17);
+}
+
+.c1{
+    width:100%;
+    height:100%;
+
+    border-top-color:var(--cyan);
+
+    animation:spin 22s linear infinite;
+}
+
+.c2{
+    width:87%;
+    height:87%;
+
+    border-right-color:var(--orange);
+
+    animation:spinReverse 15s linear infinite;
+}
+
+.c3{
+    width:72%;
+    height:72%;
+
+    border-left-color:var(--cyan);
+
+    animation:spin 10s linear infinite;
+}
+
+.c4{
+    width:57%;
+    height:57%;
+
+    border-bottom-color:var(--orange);
+
+    animation:spinReverse 8s linear infinite;
+}
+
+.c5{
+    width:40%;
+    height:40%;
+
+    border-color:rgba(0,234,255,.4);
+}
+
+.marker{
+    position:absolute;
+
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:var(--cyan);
+
+    box-shadow:0 0 15px var(--cyan);
+}
+
+.marker.a{
+    left:50%;
+    top:0;
+}
+
+.marker.b{
+    right:0;
+    top:50%;
+}
+
+.marker.c{
+    left:50%;
+    bottom:0;
+}
+
+.marker.d{
+    left:0;
+    top:50%;
+}
+
+/* CENTER INFORMATION */
+
+.centerInfo{
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    width:280px;
+
+    text-align:center;
+}
+
+.centerTitle{
+    font-size:13px;
+
+    letter-spacing:5px;
+
+    color:var(--cyan);
+
+    margin-bottom:12px;
+}
+
+.centerState{
+    font-size:10px;
+
+    letter-spacing:3px;
+
+    color:var(--muted);
+}
+
+.wave{
+    margin:20px auto;
+
+    width:180px;
+    height:30px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    gap:3px;
+}
+
+.wave i{
+    display:block;
+
+    width:2px;
+    height:7px;
+
+    background:var(--cyan);
+
+    box-shadow:0 0 8px var(--cyan);
+
+    animation:wave .8s infinite ease-in-out;
+}
+
+.wave i:nth-child(2){animation-delay:.08s}
+.wave i:nth-child(3){animation-delay:.16s}
+.wave i:nth-child(4){animation-delay:.24s}
+.wave i:nth-child(5){animation-delay:.32s}
+.wave i:nth-child(6){animation-delay:.40s}
+.wave i:nth-child(7){animation-delay:.48s}
+.wave i:nth-child(8){animation-delay:.56s}
+.wave i:nth-child(9){animation-delay:.64s}
+
+.listening .wave i{
+    background:var(--green);
+}
+
+.speaking .wave i{
+    background:var(--orange);
+}
+
+.thinking .wave i{
+    background:var(--cyan);
+}
+
+/* CHAT */
+
+.chat{
+    position:absolute;
+
+    left:50%;
+    bottom:20px;
+
+    transform:translateX(-50%);
+
+    width:min(720px,calc(100vw - 590px));
+
+    min-width:350px;
+
+    z-index:30;
+}
+
+.response{
+    min-height:45px;
+    max-height:110px;
+
+    overflow:auto;
+
+    margin-bottom:8px;
+
+    padding:12px 16px;
+
+    background:rgba(0,5,8,.9);
+
+    border-left:2px solid var(--cyan);
+
+    font-size:12px;
+
+    line-height:1.45;
+}
+
+.inputBox{
+    display:flex;
+
+    padding:6px;
+
+    border:1px solid rgba(0,234,255,.4);
+
+    background:rgba(0,0,0,.86);
 }
 
 #input{
     flex:1;
+
     border:0;
     outline:0;
-    background:transparent;
+
     color:white;
-    padding:13px;
-    font-size:14px;
+
+    background:transparent;
+
+    padding:12px;
 }
 
 #input::placeholder{
-    color:#46636b;
+    color:#47636b;
 }
 
-.button{
-    width:44px;
-    height:44px;
-    border:1px solid rgba(0,234,255,.4);
+.btn{
+    width:45px;
+    height:45px;
+
+    border:1px solid rgba(0,234,255,.35);
+
+    color:var(--cyan);
+
     background:rgba(0,234,255,.05);
-    color:var(--cyan);
+
     cursor:pointer;
-    font-size:18px;
-    transition:.2s;
 }
 
-.button:hover{
+.btn:hover{
     background:rgba(0,234,255,.16);
-    box-shadow:0 0 18px rgba(0,234,255,.25);
 }
 
-.button.active{
-    color:#00100b;
+.btn.active{
     background:var(--green);
-    border-color:var(--green);
-    box-shadow:0 0 20px rgba(50,255,154,.5);
+
+    color:#00150b;
 }
 
-/* =========================================================
-   BOTTOM
-========================================================= */
+/* WINDOWS */
 
-.bottom{
+#windows{
     position:absolute;
-    bottom:20px;
-    left:25px;
-    right:25px;
-    height:55px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    z-index:20;
-}
 
-.mode{
-    font-size:10px;
-    letter-spacing:2px;
-    color:var(--muted);
-}
+    inset:82px 20px 125px 20px;
 
-.progress{
-    width:230px;
-    height:3px;
-    background:rgba(255,255,255,.08);
-    overflow:hidden;
-}
-
-.progress-bar{
-    width:40%;
-    height:100%;
-    background:var(--cyan);
-    box-shadow:0 0 12px var(--cyan);
-    animation:progress 3s ease-in-out infinite;
-}
-
-/* =========================================================
-   VISUAL STUDIO
-========================================================= */
-
-#visualStudio{
-    position:absolute;
-    inset:100px 330px 100px 290px;
-    z-index:30;
-    display:none;
-    align-items:center;
-    justify-content:center;
     pointer-events:none;
+
+    z-index:50;
 }
 
-#visualStudio.active{
-    display:flex;
-}
+.window{
+    position:absolute;
 
-.visual-card{
-    width:min(700px,80%);
-    max-height:70%;
-    overflow:auto;
-    padding:20px;
-    background:rgba(2,9,14,.94);
+    width:440px;
+    max-width:calc(100vw - 40px);
+
+    max-height:72vh;
+
+    overflow:hidden;
+
+    pointer-events:auto;
+
+    background:rgba(2,8,12,.98);
+
     border:1px solid var(--cyan);
+
     box-shadow:
-        0 0 50px rgba(0,234,255,.16),
-        inset 0 0 30px rgba(0,234,255,.04);
-    clip-path:polygon(
-        0 15px,
-        15px 0,
-        calc(100% - 20px) 0,
-        100% 20px,
-        100% calc(100% - 15px),
-        calc(100% - 15px) 100%,
-        15px 100%,
-        0 calc(100% - 15px)
-    );
+        0 0 45px rgba(0,234,255,.12);
+
+    animation:windowIn .25s ease;
 }
 
-.visual-title{
+.windowHeader{
+    height:38px;
+
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 12px;
+
+    border-bottom:1px solid var(--line);
+
     color:var(--cyan);
-    letter-spacing:3px;
-    font-size:12px;
-    margin-bottom:15px;
+
+    font-size:10px;
+
+    letter-spacing:2px;
 }
 
-.visual-content svg{
+.close{
+    border:0;
+
+    background:none;
+
+    color:var(--muted);
+
+    cursor:pointer;
+}
+
+.windowBody{
+    padding:12px;
+
+    max-height:calc(72vh - 38px);
+
+    overflow:auto;
+}
+
+.windowBody img{
+    display:block;
+
     width:100%;
-    height:auto;
+
+    max-height:340px;
+
+    object-fit:cover;
+
+    margin-bottom:10px;
 }
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+.result{
+    padding:10px;
 
-@media(max-width:1100px){
+    margin-bottom:7px;
 
-    .left-panel{
-        width:190px;
-    }
+    border:1px solid rgba(0,234,255,.12);
 
-    .right-panel{
-        width:210px;
-    }
-
-    .center{
-        inset-left:210px;
-        inset-right:230px;
-    }
-
-    .conversation{
-        width:50vw;
-        min-width:300px;
-    }
+    background:rgba(0,234,255,.025);
 }
 
-@media(max-width:800px){
+.result a,
+.platform{
+    color:var(--cyan);
 
-    .left-panel,
-    .right-panel{
+    text-decoration:none;
+}
+
+.platform{
+    display:inline-block;
+
+    padding:8px 10px;
+
+    margin:4px;
+
+    border:1px solid var(--line);
+
+    font-size:10px;
+}
+
+.cardGrid{
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:8px;
+}
+
+.card{
+    border:1px solid var(--line);
+
+    padding:8px;
+
+    background:rgba(0,234,255,.025);
+}
+
+.card img{
+    height:125px!important;
+
+    margin:0 0 7px!important;
+}
+
+.mini{
+    font-size:10px;
+
+    color:var(--muted);
+
+    line-height:1.4;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .left,
+    .right{
         display:none;
     }
 
-    .center{
-        inset:72px 10px 100px 10px;
+    .hud{
+        left:10px;
+        right:10px;
+        bottom:120px;
     }
 
-    .conversation{
-        width:calc(100vw - 30px);
+    .chat{
+        width:calc(100vw - 24px);
         min-width:0;
-        bottom:80px;
     }
 
-    .arc-reactor{
-        width:145px;
-        height:145px;
-    }
-
-    .core-letter{
-        font-size:58px;
-    }
-
-    .status-item:nth-child(n+2){
-        display:none;
+    .hudCore{
+        width:min(72vw,420px);
+        height:min(72vw,420px);
     }
 }
-
-/* =========================================================
-   ANIMATIONS
-========================================================= */
 
 @keyframes spin{
-    to{transform:rotate(360deg);}
+    to{
+        transform:
+            translate(-50%,-50%)
+            rotate(360deg);
+    }
 }
 
 @keyframes spinReverse{
-    to{transform:rotate(-360deg);}
+    to{
+        transform:
+            translate(-50%,-50%)
+            rotate(-360deg);
+    }
 }
 
-@keyframes pulse{
+@keyframes wave{
+
     0%,100%{
-        transform:scale(1);
+        height:5px;
     }
+
     50%{
-        transform:scale(1.045);
+        height:27px;
     }
 }
 
-@keyframes scan{
-    0%,100%{
-        transform:translateY(-180px);
+@keyframes windowIn{
+
+    from{
         opacity:0;
+        transform:scale(.94) translateY(10px);
     }
-    40%{
-        opacity:.55;
-    }
-    60%{
-        opacity:.2;
-    }
-    100%{
-        transform:translateY(180px);
-    }
-}
 
-@keyframes progress{
-    0%{transform:translateX(-100%);}
-    100%{transform:translateX(350%);}
+    to{
+        opacity:1;
+        transform:none;
+    }
 }
 </style>
 </head>
@@ -684,1330 +714,550 @@ body:after{
 
 <div id="app">
 
-    <!-- =====================================================
-         TOP
-    ====================================================== -->
+<header class="header">
 
-    <header class="topbar">
+    <div class="logo">
+        <div class="logoMark"></div>
+        J.A.R.V.I.S
+    </div>
 
-        <div class="brand">
-            <div class="brand-core"></div>
+    <div class="headerRight">
+
+        <div>
+            <span class="statusDot"></span>
+            <span id="systemStatus">
+                SYSTEM ONLINE
+            </span>
+        </div>
+
+        <div id="aiStatus">
+            LOCAL CORE
+        </div>
+
+        <div id="clock">
+            --:--:--
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- LINKES PANEL -->
+
+<aside class="left">
+
+<section class="panel">
+
+<div class="panelTitle">
+    SYSTEM
+</div>
+
+<div class="telemetry">
+
+<div class="row">
+    <span>CORE</span>
+    <span id="coreState">READY</span>
+</div>
+
+<div class="row">
+    <span>VOICE</span>
+    <span id="voiceState">READY</span>
+</div>
+
+<div class="row">
+    <span>LISTENING</span>
+    <span id="listenState">OFF</span>
+</div>
+
+<div class="row">
+    <span>MEMORY</span>
+    <span id="memoryCount">0</span>
+</div>
+
+<div class="row">
+    <span>WEB</span>
+    <span>READY</span>
+</div>
+
+</div>
+
+</section>
+
+
+<section class="panel">
+
+<div class="panelTitle">
+    AUTOMATION
+</div>
+
+<div class="telemetry">
+
+<div class="row">
+    <span>AUTO LEARNING</span>
+    <span>ON</span>
+</div>
+
+<div class="row">
+    <span>PROACTIVE</span>
+    <span>ON</span>
+</div>
+
+<div class="row">
+    <span>VISUAL HUD</span>
+    <span>AUTO</span>
+</div>
+
+<div class="row">
+    <span>WEB RESEARCH</span>
+    <span>AUTO</span>
+</div>
+
+<div class="row">
+    <span>AGENT MODE</span>
+    <span id="agentState">READY</span>
+</div>
+
+</div>
+
+</section>
+
+</aside>
+
+
+<!-- RECHTES PANEL -->
+
+<aside class="right">
+
+<section class="panel">
+
+<div class="panelTitle">
+    MEMORY CORE
+</div>
+
+<div
+    id="memoryList"
+    class="telemetry"
+    style="max-height:220px;overflow:auto">
+</div>
+
+</section>
+
+
+<section class="panel">
+
+<div class="panelTitle">
+    QUICK ACCESS
+</div>
+
+<div class="telemetry">
+
+<div class="row">
+    <span>YouTube</span>
+    <span>WEB</span>
+</div>
+
+<div class="row">
+    <span>Instagram</span>
+    <span>WEB</span>
+</div>
+
+<div class="row">
+    <span>TikTok</span>
+    <span>WEB</span>
+</div>
+
+<div class="row">
+    <span>Images</span>
+    <span>SEARCH</span>
+</div>
+
+</div>
+
+</section>
+
+</aside>
+
+
+<!-- ZENTRALER HUD -->
+
+<main class="hud">
+
+<div class="hudCore" id="hudCore">
+
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
+    <div class="circle c3"></div>
+    <div class="circle c4"></div>
+    <div class="circle c5"></div>
+
+    <div class="marker a"></div>
+    <div class="marker b"></div>
+    <div class="marker c"></div>
+    <div class="marker d"></div>
+
+
+    <!-- KEIN J IN DER MITTE -->
+
+    <div class="centerInfo">
+
+        <div class="centerTitle">
             J.A.R.V.I.S
         </div>
 
-        <div class="status">
+        <div
+            class="centerState"
+            id="centerState">
 
-            <div class="status-item">
-                <span id="systemDot" class="dot"></span>
-                <span id="systemStatus">SYSTEM ONLINE</span>
-            </div>
-
-            <div class="status-item">
-                <span class="dot"></span>
-                LOCAL CORE
-            </div>
-
-            <div class="status-item">
-                <span id="webgpuDot" class="dot orange"></span>
-                <span id="webgpuStatus">INITIALIZING</span>
-            </div>
-
-            <div class="status-item" id="clock">
-                --:--:--
-            </div>
+            INTELLIGENT SUPPORT SYSTEM
 
         </div>
 
-    </header>
+        <div class="wave">
 
-    <!-- =====================================================
-         LEFT
-    ====================================================== -->
-
-    <aside class="left-panel">
-
-        <section class="panel">
-
-            <div class="panel-title">
-                SYSTEM TELEMETRY
-            </div>
-
-            <div class="telemetry">
-
-                <div class="telemetry-row">
-                    <span>CORE</span>
-                    <span id="coreState">STANDBY</span>
-                </div>
-
-                <div class="telemetry-row">
-                    <span>VOICE</span>
-                    <span id="voiceState">READY</span>
-                </div>
-
-                <div class="telemetry-row">
-                    <span>MEMORY</span>
-                    <span id="memoryCount">0</span>
-                </div>
-
-                <div class="telemetry-row">
-                    <span>SESSION</span>
-                    <span id="sessionCount">0</span>
-                </div>
-
-                <div class="telemetry-row">
-                    <span>MODE</span>
-                    <span id="modeState">PASSIVE</span>
-                </div>
-
-            </div>
-
-        </section>
-
-        <section class="panel">
-
-            <div class="panel-title">
-                ACTIVE FUNCTIONS
-            </div>
-
-            <div class="telemetry">
-
-                <div class="telemetry-row">
-                    <span>CONVERSATION</span>
-                    <span>READY</span>
-                </div>
-
-                <div class="telemetry-row">
-                    <span>LEARNING</span>
-                    <span>AUTO</span>
-                </div>
-
-                <div class="telemetry-row">
-                    <span>VISUALS</span>
-                    <span>AUTO</span>
-                </div>
-
-                <div class="telemetry-row">
-                    <span>VOICE INPUT</span>
-                    <span>AUTO</span>
-                </div>
-
-            </div>
-
-        </section>
-
-    </aside>
-
-    <!-- =====================================================
-         RIGHT
-    ====================================================== -->
-
-    <aside class="right-panel">
-
-        <section class="panel">
-
-            <div class="panel-title">
-                MEMORY CORE
-            </div>
-
-            <div id="memoryList" class="memory-list">
-                <div class="memory-item">
-                    Noch keine Erinnerungen.
-                    <small>Lokaler Speicher</small>
-                </div>
-            </div>
-
-        </section>
-
-        <section class="panel">
-
-            <div class="panel-title">
-                LIVE ACTIVITY
-            </div>
-
-            <div class="telemetry">
-
-                <div class="telemetry-row">
-                    <span>LISTENING</span>
-                    <span id="listenStatus">OFF</span>
-                </div>
-
-                <div class="telemetry-row">
-                    <span>SPEAKING</span>
-                    <span id="speakStatus">OFF</span>
-                </div>
-
-                <div class="telemetry-row">
-                    <span>LEARNING</span>
-                    <span id="learnStatus">READY</span>
-                </div>
-
-            </div>
-
-        </section>
-
-    </aside>
-
-    <!-- =====================================================
-         CENTER
-    ====================================================== -->
-
-    <main class="center">
-
-        <div class="core-wrap" id="coreWrap">
-
-            <div class="ring r1"></div>
-            <div class="ring r2"></div>
-            <div class="ring r3"></div>
-            <div class="ring r4"></div>
-
-            <div class="scan"></div>
-
-            <div class="arc-reactor">
-                <div class="core-letter">J</div>
-            </div>
-
-            <div class="core-label" id="coreLabel">
-                AWAITING COMMAND
-            </div>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
 
         </div>
 
-    </main>
+        <div
+            id="activity"
+            style="
+                font-size:9px;
+                color:#66818a;
+                letter-spacing:2px;
+            ">
 
-    <!-- =====================================================
-         VISUAL STUDIO
-    ====================================================== -->
-
-    <div id="visualStudio">
-
-        <div class="visual-card">
-
-            <div class="visual-title">
-                VISUAL ANALYSIS
-            </div>
-
-            <div id="visualContent" class="visual-content"></div>
+            STANDING BY
 
         </div>
 
     </div>
 
-    <!-- =====================================================
-         CONVERSATION
-    ====================================================== -->
+</div>
 
-    <section class="conversation">
+</main>
 
-        <div id="message" class="message system">
-            J.A.R.V.I.S ist bereit. Du kannst mit mir sprechen.
-        </div>
 
-        <div class="input-area">
+<!-- DYNAMISCHE FENSTER -->
 
-            <input
-                id="input"
-                autocomplete="off"
-                placeholder="Sprich mit mir oder gib einen Befehl ein..."
-            >
+<div id="windows"></div>
 
-            <button
-                id="micButton"
-                class="button"
-                title="Sprachmodus"
-            >◉</button>
 
-            <button
-                id="sendButton"
-                class="button"
-                title="Senden"
-            >➤</button>
+<!-- CHAT / SPRACHE -->
 
-        </div>
+<section class="chat">
 
-    </section>
+<div
+    class="response"
+    id="response">
 
-    <!-- =====================================================
-         BOTTOM
-    ====================================================== -->
-
-    <footer class="bottom">
-
-        <div class="mode">
-            LOCAL INTELLIGENCE / ADAPTIVE CONVERSATION
-        </div>
-
-        <div class="progress">
-            <div class="progress-bar"></div>
-        </div>
-
-        <div class="mode" id="conversationMode">
-            PASSIVE
-        </div>
-
-    </footer>
+    Guten Abend. Ich bin J.A.R.V.I.S.,
+    dein intelligentes Unterstützungsprogramm.
 
 </div>
 
+
+<div class="inputBox">
+
+<input
+    id="input"
+    placeholder="Sprich mit mir..."
+    autocomplete="off">
+
+<button
+    class="btn"
+    id="mic"
+    title="Sprachmodus">
+
+    🎙
+
+</button>
+
+<button
+    class="btn"
+    id="send"
+    title="Senden">
+
+    ➤
+
+</button>
+
+</div>
+
+</section>
+
+</div>
+
+
 <script type="module">
 
-/* ============================================================
-   J.A.R.V.I.S LOCAL CORE
-============================================================ */
+/* =========================================================
+   J.A.R.V.I.S CORE
+========================================================= */
 
-import {
-    CreateMLCEngine,
-    prebuiltAppConfig
-} from "https://esm.run/@mlc-ai/web-llm";
+let engine = null;
 
+let aiReady = false;
 
-/* ============================================================
-   CONFIG
-============================================================ */
+const DATA_KEY = "JARVIS_CORE_MEMORY";
 
-const CONFIG = {
+let data = {
 
-    storageKey: "JARVIS_8_LOCAL_CORE",
+    memory: [],
 
-    model:
-        "Llama-3.2-1B-Instruct-q4f16_1-MLC",
+    conversation: [],
 
-    proactiveDelay: 90000,
+    settings: {
 
-    maxMemory: 100,
+        autoLearn: true,
 
-    maxConversation: 80
+        proactive: true,
 
-};
+        voice: true
 
-
-/* ============================================================
-   STATE
-============================================================ */
-
-let state = {
-
-    engine:null,
-
-    engineReady:false,
-
-    listening:false,
-
-    speaking:false,
-
-    thinking:false,
-
-    proactiveTimer:null,
-
-    lastInteraction:Date.now(),
-
-    sessionMessages:[],
-
-    memory:[],
-
-    settings:{
-        proactive:true,
-        autoLearn:true,
-        autoVisual:true,
-        speak:true
     }
 
 };
 
+let speaking = false;
 
-/* ============================================================
-   DOM
-============================================================ */
+let listening = false;
+
+let voiceMode = false;
+
+let introDone = false;
+
+let windowCount = 0;
+
+let proactiveTimer = null;
+
+
+/* =========================================================
+   ELEMENT HELPER
+========================================================= */
 
 const $ = id => document.getElementById(id);
 
-const input = $("input");
-const sendButton = $("sendButton");
-const micButton = $("micButton");
-const message = $("message");
 
-const coreWrap = $("coreWrap");
-const coreLabel = $("coreLabel");
+/* =========================================================
+   MEMORY LADEN
+========================================================= */
 
-const memoryList = $("memoryList");
+try{
 
-const visualStudio = $("visualStudio");
-const visualContent = $("visualContent");
+    const saved =
+        localStorage.getItem(DATA_KEY);
 
+    if(saved){
 
-/* ============================================================
-   STORAGE
-============================================================ */
-
-function loadData(){
-
-    try{
-
-        const raw =
-            localStorage.getItem(CONFIG.storageKey);
-
-        if(!raw) return;
-
-        const data = JSON.parse(raw);
-
-        state.memory =
-            Array.isArray(data.memory)
-                ? data.memory
-                : [];
-
-        state.settings =
-            {
-                ...state.settings,
-                ...(data.settings || {})
-            };
-
-        state.sessionMessages =
-            Array.isArray(data.sessionMessages)
-                ? data.sessionMessages.slice(-CONFIG.maxConversation)
-                : [];
-
-    }catch(error){
-
-        console.warn(
-            "Local storage konnte nicht geladen werden.",
-            error
-        );
+        data = {
+            ...data,
+            ...JSON.parse(saved)
+        };
 
     }
 
-}
+}catch(error){
 
-
-function saveData(){
-
-    try{
-
-        localStorage.setItem(
-            CONFIG.storageKey,
-            JSON.stringify({
-
-                memory:
-                    state.memory.slice(-CONFIG.maxMemory),
-
-                settings:
-                    state.settings,
-
-                sessionMessages:
-                    state.sessionMessages.slice(
-                        -CONFIG.maxConversation
-                    )
-
-            })
-        );
-
-    }catch(error){
-
-        console.warn(
-            "Speichern fehlgeschlagen.",
-            error
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   UI
-============================================================ */
-
-function setState(mode){
-
-    coreWrap.classList.remove(
-        "listening",
-        "thinking",
-        "speaking"
+    console.warn(
+        "Memory konnte nicht geladen werden.",
+        error
     );
 
-    if(mode)
-        coreWrap.classList.add(mode);
+}
 
-    $("coreState").textContent =
-        mode
-            ? mode.toUpperCase()
-            : "STANDBY";
 
-    $("voiceState").textContent =
-        state.speaking
-            ? "SPEAKING"
-            : state.listening
-                ? "LISTENING"
-                : "READY";
+/* =========================================================
+   SPEICHERN
+========================================================= */
+
+function save(){
+
+    localStorage.setItem(
+        DATA_KEY,
+        JSON.stringify(data)
+    );
 
 }
 
 
-function updateTelemetry(){
-
-    $("memoryCount").textContent =
-        state.memory.length;
-
-    $("sessionCount").textContent =
-        state.sessionMessages.length;
-
-    $("listenStatus").textContent =
-        state.listening
-            ? "ON"
-            : "OFF";
-
-    $("speakStatus").textContent =
-        state.speaking
-            ? "ON"
-            : "OFF";
-
-    $("learnStatus").textContent =
-        state.settings.autoLearn
-            ? "AUTO"
-            : "MANUAL";
-
-    $("modeState").textContent =
-        state.settings.proactive
-            ? "ACTIVE"
-            : "PASSIVE";
-
-    $("conversationMode").textContent =
-        state.settings.proactive
-            ? "ACTIVE"
-            : "PASSIVE";
-
-}
-
-
-function showMessage(text,type="system"){
-
-    message.className =
-        "message " + type;
-
-    message.textContent =
-        text;
-
-    state.lastInteraction =
-        Date.now();
-
-    updateTelemetry();
-
-}
-
-
-function logMessage(role,text){
-
-    state.sessionMessages.push({
-
-        role,
-        content:text,
-        time:Date.now()
-
-    });
-
-    if(
-        state.sessionMessages.length >
-        CONFIG.maxConversation
-    ){
-
-        state.sessionMessages =
-            state.sessionMessages.slice(
-                -CONFIG.maxConversation
-            );
-
-    }
-
-    saveData();
-    updateTelemetry();
-
-}
-
-
-/* ============================================================
-   MEMORY
-============================================================ */
-
-function addMemory(text,source="conversation"){
-
-    const clean =
-        String(text)
-            .trim()
-            .replace(/\s+/g," ");
-
-    if(!clean) return;
-
-    const duplicate =
-        state.memory.some(
-            item =>
-                item.text.toLowerCase() ===
-                clean.toLowerCase()
-        );
-
-    if(duplicate) return;
-
-    state.memory.push({
-
-        text:clean,
-
-        source,
-
-        time:Date.now()
-
-    });
-
-    state.memory =
-        state.memory.slice(
-            -CONFIG.maxMemory
-        );
-
-    saveData();
-
-    renderMemory();
-
-}
-
-
-function renderMemory(){
-
-    memoryList.innerHTML = "";
-
-    if(!state.memory.length){
-
-        memoryList.innerHTML = `
-            <div class="memory-item">
-                Noch keine Erinnerungen.
-                <small>Lokaler Speicher</small>
-            </div>
-        `;
-
-        return;
-
-    }
-
-    [...state.memory]
-        .reverse()
-        .slice(0,12)
-        .forEach(item => {
-
-            const div =
-                document.createElement("div");
-
-            div.className =
-                "memory-item";
-
-            div.innerHTML = `
-                ${escapeHtml(item.text)}
-                <small>
-                    ${item.source || "local"}
-                </small>
-            `;
-
-            memoryList.appendChild(div);
-
-        });
-
-}
-
+/* =========================================================
+   HTML SICHER MACHEN
+========================================================= */
 
 function escapeHtml(value){
 
     return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+
+        .replaceAll("&","&amp;")
+
+        .replaceAll("<","&lt;")
+
+        .replaceAll(">","&gt;")
+
+        .replaceAll('"',"&quot;");
 
 }
 
 
-/* ============================================================
-   AUTOMATIC KNOWLEDGE EXTRACTION
-============================================================ */
+/* =========================================================
+   MEMORY UI
+========================================================= */
 
-function extractKnowledge(text){
+function updateMemory(){
 
-    if(!state.settings.autoLearn)
-        return;
+    $("memoryCount").textContent =
+        data.memory.length;
 
-    const patterns = [
+    if(!data.memory.length){
 
-        /ich heiße\s+(.+)/i,
+        $("memoryList").innerHTML = `
+            <div
+                style="
+                    color:#66818a;
+                    font-size:10px;
+                ">
 
-        /mein name ist\s+(.+)/i,
+                Noch keine gespeicherten
+                Informationen.
 
-        /ich wohne in\s+(.+)/i,
-
-        /ich lebe in\s+(.+)/i,
-
-        /ich arbeite als\s+(.+)/i,
-
-        /ich arbeite bei\s+(.+)/i,
-
-        /ich mag\s+(.+)/i,
-
-        /ich liebe\s+(.+)/i,
-
-        /ich bevorzuge\s+(.+)/i,
-
-        /mein lieblings(.+?) ist\s+(.+)/i,
-
-        /merke dir\s+(.+)/i,
-
-        /merk dir\s+(.+)/i,
-
-        /speichere\s+(.+)/i
-
-    ];
-
-    for(const pattern of patterns){
-
-        const match =
-            text.match(pattern);
-
-        if(match){
-
-            let memoryText =
-                match[0]
-                    .replace(/[.!?]+$/,"")
-                    .trim();
-
-            addMemory(
-                memoryText,
-                "automatic-learning"
-            );
-
-            return;
-
-        }
-
-    }
-
-}
-
-
-/* ============================================================
-   LOCAL CONTEXT
-============================================================ */
-
-function buildContext(){
-
-    const memories =
-        state.memory
-            .slice(-20)
-            .map(x => "- " + x.text)
-            .join("\n");
-
-    const conversation =
-        state.sessionMessages
-            .slice(-12)
-            .map(x =>
-                `${x.role}: ${x.content}`
-            )
-            .join("\n");
-
-    return `
-LOKALE ERINNERUNGEN:
-${memories || "Keine"}
-
-LETZTE KONVERSATION:
-${conversation || "Keine"}
-`;
-
-}
-
-
-/* ============================================================
-   SYSTEM PROMPT
-============================================================ */
-
-function systemPrompt(){
-
-return `
-Du bist J.A.R.V.I.S., ein lokaler persönlicher Assistent.
-
-Du arbeitest innerhalb einer Browser-Anwendung.
-
-Wichtige Regeln:
-
-1. Antworte auf Deutsch, sofern der Benutzer nicht eine andere Sprache verwendet.
-2. Sei natürlich, präzise und freundlich.
-3. Sprich nicht ständig lange Monologe.
-4. Wenn eine Rückfrage sinnvoll ist, stelle sie selbst.
-5. Wenn Informationen fehlen, frage gezielt danach.
-6. Du darfst proaktiv Interesse zeigen.
-7. Nutze den Gesprächskontext.
-8. Bereits bekannte Informationen stehen im lokalen Gedächtnis.
-9. Behaupte niemals, etwas ausgeführt zu haben, wenn es nicht ausgeführt wurde.
-10. Erfinde keine Systemzugriffe.
-11. Bei technischen Fragen erkläre verständlich.
-12. Bei einer Aufgabe darfst du zuerst kurz bestätigen und anschließend handeln.
-13. Wenn eine visuelle Darstellung sinnvoll wäre, kennzeichne deine Antwort mit:
-VISUAL_REQUIRED
-14. Verwende VISUAL_REQUIRED beispielsweise bei:
-   - Vergleichen
-   - Diagrammen
-   - Zahlenreihen
-   - Zeitlinien
-   - Abläufen
-   - Strukturen
-   - Statistiken
-15. Stelle gelegentlich eine sinnvolle Anschlussfrage, aber nicht bei jeder Antwort.
-
-Du bist kein Cloud-Assistent.
-Die Anwendung versucht, die eigentliche KI lokal im Browser auszuführen.
-`;
-}
-
-
-/* ============================================================
-   WEBGPU / LOCAL MODEL
-============================================================ */
-
-async function initAI(){
-
-    try{
-
-        if(!("gpu" in navigator)){
-
-            $("webgpuStatus").textContent =
-                "FALLBACK";
-
-            $("webgpuDot").className =
-                "dot orange";
-
-            return false;
-
-        }
-
-        $("webgpuStatus").textContent =
-            "LOADING CORE";
-
-        state.engine =
-            await CreateMLCEngine(
-                CONFIG.model,
-                {
-
-                    initProgressCallback:
-                        progress => {
-
-                            const text =
-                                progress?.text ||
-                                "";
-
-                            $("webgpuStatus").textContent =
-                                text
-                                    .slice(0,18)
-                                    .toUpperCase();
-
-                        }
-
-                },
-                prebuiltAppConfig
-            );
-
-        state.engineReady = true;
-
-        $("webgpuStatus").textContent =
-            "LOCAL READY";
-
-        $("webgpuDot").className =
-            "dot";
-
-        showMessage(
-            "Lokaler Intelligenzkern ist bereit.",
-            "system"
-        );
-
-        return true;
-
-    }catch(error){
-
-        console.warn(
-            "Lokales Modell konnte nicht geladen werden.",
-            error
-        );
-
-        state.engineReady = false;
-
-        $("webgpuStatus").textContent =
-            "FALLBACK";
-
-        $("webgpuDot").className =
-            "dot orange";
-
-        return false;
-
-    }
-
-}
-
-
-/* ============================================================
-   AI RESPONSE
-============================================================ */
-
-async function askLocalAI(userText){
-
-    if(!state.engineReady)
-        return null;
-
-    try{
-
-        setState("thinking");
-
-        const response =
-            await state.engine.chat.completions.create({
-
-                messages:[
-
-                    {
-                        role:"system",
-                        content:
-                            systemPrompt() +
-                            "\n\n" +
-                            buildContext()
-                    },
-
-                    {
-                        role:"user",
-                        content:userText
-                    }
-
-                ],
-
-                temperature:.7,
-
-                max_tokens:450
-
-            });
-
-        let result =
-            response?.choices?.[0]?.message?.content
-            || "";
-
-        result =
-            result
-                .replace(/VISUAL_REQUIRED/gi,"")
-                .trim();
-
-        return result;
-
-    }catch(error){
-
-        console.error(error);
-
-        return null;
-
-    }finally{
-
-        setState(null);
-
-    }
-
-}
-
-
-/* ============================================================
-   OFFLINE FALLBACK
-============================================================ */
-
-function fallbackResponse(text){
-
-    const t =
-        text.toLowerCase();
-
-    if(
-        t.includes("hallo") ||
-        t.includes("hi") ||
-        t.includes("hey")
-    ){
-
-        return "Hallo. Ich bin bereit. Was möchtest du als Nächstes machen?";
-
-    }
-
-    if(
-        t.includes("wer bist du") ||
-        t.includes("was bist du")
-    ){
-
-        return "Ich bin J.A.R.V.I.S., dein lokaler Browser-Assistent.";
-
-    }
-
-    if(
-        t.includes("uhrzeit") ||
-        t.includes("wie spät")
-    ){
-
-        return `Es ist ${new Date().toLocaleTimeString("de-DE")}.`;
-
-    }
-
-    if(
-        t.includes("datum") ||
-        t.includes("welcher tag")
-    ){
-
-        return `Heute ist ${new Date().toLocaleDateString("de-DE")}.`;
-
-    }
-
-    if(
-        t.includes("gedächtnis") ||
-        t.includes("memory")
-    ){
-
-        return `In meinem lokalen Gedächtnis befinden sich ${state.memory.length} Einträge.`;
-
-    }
-
-    return `
-Ich kann diese Anfrage gerade ohne lokalen KI-Kern nur eingeschränkt verarbeiten.
-
-Du kannst beispielsweise nach der Uhrzeit fragen, Erinnerungen speichern, Timer verwenden oder den lokalen Intelligenzkern aktivieren.
-`.trim();
-
-}
-
-
-/* ============================================================
-   VISUAL DETECTION
-============================================================ */
-
-function shouldVisualize(text){
-
-    if(!state.settings.autoVisual)
-        return false;
-
-    const keywords = [
-
-        "diagramm",
-
-        "diagram",
-
-        "vergleich",
-
-        "vergleiche",
-
-        "statistik",
-
-        "zahlen",
-
-        "daten",
-
-        "trend",
-
-        "entwicklung",
-
-        "ablauf",
-
-        "zeitlinie",
-
-        "timeline",
-
-        "struktur",
-
-        "grafik",
-
-        "chart",
-
-        "kurve",
-
-        "prozent",
-
-        "anteil"
-
-    ];
-
-    return keywords.some(
-        word =>
-            text.toLowerCase().includes(word)
-    );
-
-}
-
-
-/* ============================================================
-   VISUAL STUDIO
-============================================================ */
-
-function showVisual(type="bar"){
-
-    visualStudio.classList.add("active");
-
-    if(type === "bar"){
-
-        visualContent.innerHTML = createBarChart();
-
-    }else{
-
-        visualContent.innerHTML =
-            createHudDiagram();
-
-    }
-
-    setTimeout(() => {
-
-        visualStudio.classList.remove(
-            "active"
-        );
-
-    },10000);
-
-}
-
-
-function createBarChart(){
-
-    const values = [35,62,48,78,55,91];
-
-    const labels =
-        ["A","B","C","D","E","F"];
-
-    const max =
-        Math.max(...values);
-
-    const width=620;
-    const height=300;
-
-    const barWidth=65;
-
-    let bars="";
-
-    values.forEach((value,index)=>{
-
-        const x =
-            35 + index * 95;
-
-        const h =
-            (value/max)*190;
-
-        const y =
-            240-h;
-
-        bars += `
-            <rect
-                x="${x}"
-                y="${y}"
-                width="${barWidth}"
-                height="${h}"
-                fill="rgba(0,234,255,.55)"
-                stroke="#00eaff"
-            />
-
-            <text
-                x="${x+barWidth/2}"
-                y="${y-10}"
-                fill="#d9faff"
-                text-anchor="middle"
-                font-size="13"
-            >
-                ${value}
-            </text>
-
-            <text
-                x="${x+barWidth/2}"
-                y="265"
-                fill="#66818b"
-                text-anchor="middle"
-                font-size="12"
-            >
-                ${labels[index]}
-            </text>
+            </div>
         `;
 
-    });
+        return;
+    }
 
-    return `
-        <svg
-            viewBox="0 0 ${width} ${height}"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+    $("memoryList").innerHTML =
+        data.memory
+        .slice(-8)
+        .reverse()
+        .map(item => `
 
-            <line
-                x1="25"
-                y1="240"
-                x2="610"
-                y2="240"
-                stroke="#174954"
-            />
+            <div
+                style="
+                    padding:7px 0;
+                    border-bottom:
+                    1px solid rgba(255,255,255,.04);
+                    font-size:10px;
+                ">
 
-            ${bars}
+                ${escapeHtml(item)}
 
-        </svg>
-    `;
+            </div>
+
+        `)
+        .join("");
+
+}
+
+updateMemory();
+
+
+/* =========================================================
+   TEXT ANZEIGEN
+========================================================= */
+
+function show(text){
+
+    $("response").textContent = text;
 
 }
 
 
-function createHudDiagram(){
-
-    return `
-        <svg
-            viewBox="0 0 700 360"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-
-            <circle
-                cx="350"
-                cy="180"
-                r="70"
-                fill="none"
-                stroke="#00eaff"
-                stroke-width="2"
-            />
-
-            <circle
-                cx="350"
-                cy="180"
-                r="35"
-                fill="rgba(0,234,255,.18)"
-                stroke="#00eaff"
-            />
-
-            <line
-                x1="350"
-                y1="110"
-                x2="350"
-                y2="50"
-                stroke="#00eaff"
-            />
-
-            <line
-                x1="280"
-                y1="180"
-                x2="120"
-                y2="180"
-                stroke="#00eaff"
-            />
-
-            <line
-                x1="420"
-                y1="180"
-                x2="580"
-                y2="180"
-                stroke="#ff8a00"
-            />
-
-            <line
-                x1="350"
-                y1="250"
-                x2="350"
-                y2="310"
-                stroke="#00eaff"
-            />
-
-            <text
-                x="350"
-                y="185"
-                fill="#ffffff"
-                text-anchor="middle"
-                font-size="22"
-            >
-                CORE
-            </text>
-
-            <text
-                x="350"
-                y="38"
-                fill="#66818b"
-                text-anchor="middle"
-            >
-                INPUT
-            </text>
-
-            <text
-                x="95"
-                y="175"
-                fill="#66818b"
-                text-anchor="middle"
-            >
-                DATA
-            </text>
-
-            <text
-                x="605"
-                y="175"
-                fill="#66818b"
-                text-anchor="middle"
-            >
-                OUTPUT
-            </text>
-
-            <text
-                x="350"
-                y="335"
-                fill="#66818b"
-                text-anchor="middle"
-            >
-                LEARNING
-            </text>
-
-        </svg>
-    `;
-
-}
-
-
-/* ============================================================
-   SPEECH SYNTHESIS
-============================================================ */
+/* =========================================================
+   SPRACHAUSGABE
+========================================================= */
 
 function speak(text){
 
-    if(!state.settings.speak)
+    if(
+        !data.settings.voice ||
+        !("speechSynthesis" in window)
+    ){
+
         return;
 
-    if(!("speechSynthesis" in window))
-        return;
+    }
 
-    window.speechSynthesis.cancel();
+    speechSynthesis.cancel();
 
     const utterance =
         new SpeechSynthesisUtterance(text);
 
     utterance.lang = "de-DE";
 
-    utterance.rate = .95;
+    utterance.rate = .96;
 
-    utterance.pitch = .85;
+    utterance.pitch = .84;
 
-    const voices =
-        speechSynthesis.getVoices();
+    utterance.volume = 1;
 
-    const german =
-        voices.find(
-            voice =>
-                voice.lang &&
-                voice.lang
-                    .toLowerCase()
-                    .startsWith("de")
+
+    const voice =
+        speechSynthesis
+        .getVoices()
+        .find(
+            v =>
+            v.lang &&
+            v.lang
+            .toLowerCase()
+            .startsWith("de")
         );
 
-    if(german)
-        utterance.voice = german;
+    if(voice){
 
-    state.speaking = true;
+        utterance.voice = voice;
 
-    setState("speaking");
+    }
+
 
     utterance.onstart = () => {
 
-        $("speakStatus").textContent =
-            "ON";
+        speaking = true;
+
+        $("hudCore")
+            .classList
+            .add("speaking");
+
+        $("voiceState")
+            .textContent = "SPEAKING";
+
+        $("activity")
+            .textContent = "VOICE OUTPUT";
 
     };
+
 
     utterance.onend = () => {
 
-        state.speaking = false;
+        speaking = false;
 
-        $("speakStatus").textContent =
-            "OFF";
+        $("hudCore")
+            .classList
+            .remove("speaking");
 
-        setState(null);
+        $("voiceState")
+            .textContent =
+            listening
+            ? "LISTENING"
+            : "READY";
+
+        $("activity")
+            .textContent =
+            listening
+            ? "LISTENING"
+            : "STANDING BY";
 
     };
+
 
     speechSynthesis.speak(
         utterance
@@ -2016,193 +1266,325 @@ function speak(text){
 }
 
 
-/* ============================================================
-   SPEECH RECOGNITION
-============================================================ */
+/* =========================================================
+   STARTBEGRÜSSUNG
+========================================================= */
 
-let recognition = null;
+function introduction(){
 
-function setupRecognition(){
-
-    const Recognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
-
-    if(!Recognition){
-
-        micButton.style.opacity = ".35";
-
-        micButton.title =
-            "Spracherkennung wird von diesem Browser nicht unterstützt.";
+    if(introDone){
 
         return;
 
     }
 
-    recognition =
-        new Recognition();
-
-    recognition.lang =
-        "de-DE";
-
-    recognition.continuous =
-        true;
-
-    recognition.interimResults =
-        true;
-
-    recognition.onstart = () => {
-
-        state.listening = true;
-
-        micButton.classList.add(
-            "active"
-        );
-
-        $("listenStatus").textContent =
-            "ON";
-
-        setState("listening");
-
-    };
+    introDone = true;
 
 
-    recognition.onresult =
-        event => {
+    const text =
+        "Guten Abend. Ich bin J.A.R.V.I.S., " +
+        "dein intelligentes Unterstützungsprogramm. " +
+        "Ich kann zuhören, sprechen, recherchieren " +
+        "und dich bei Aufgaben unterstützen.";
 
-            let finalText = "";
+    show(text);
 
-            for(
-                let i =
-                    event.resultIndex;
-                i <
-                    event.results.length;
-                i++
-            ){
-
-                const result =
-                    event.results[i];
-
-                const transcript =
-                    result[0].transcript;
-
-                if(result.isFinal){
-
-                    finalText +=
-                        transcript;
-
-                }
-
-            }
-
-            if(finalText.trim()){
-
-                input.value =
-                    finalText.trim();
-
-                processInput();
-
-            }
-
-        };
-
-
-    recognition.onerror =
-        event => {
-
-            console.warn(
-                "Speech recognition:",
-                event.error
-            );
-
-        };
-
-
-    recognition.onend =
-        () => {
-
-            state.listening = false;
-
-            micButton.classList.remove(
-                "active"
-            );
-
-            $("listenStatus").textContent =
-                "OFF";
-
-            setState(null);
-
-            if(
-                state.settings.proactive &&
-                recognition &&
-                window.__jarvisVoiceMode
-            ){
-
-                setTimeout(() => {
-
-                    try{
-                        recognition.start();
-                    }catch(e){}
-
-                },500);
-
-            }
-
-        };
+    speak(text);
 
 }
 
 
-/* ============================================================
-   VOICE MODE
-============================================================ */
+/* Browser verlangt teilweise vorher Interaktion */
 
-function toggleVoiceMode(){
+window.addEventListener(
+    "pointerdown",
+    introduction,
+    {once:true}
+);
+
+
+/* =========================================================
+   SPRACHERKENNUNG
+========================================================= */
+
+const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+let recognition = null;
+
+
+if(Recognition){
+
+    recognition =
+        new Recognition();
+
+
+    recognition.lang =
+        "de-DE";
+
+
+    recognition.continuous =
+        true;
+
+
+    recognition.interimResults =
+        true;
+
+
+    recognition.onstart = () => {
+
+        listening = true;
+
+        $("mic")
+            .classList
+            .add("active");
+
+        $("listenState")
+            .textContent = "ON";
+
+        $("voiceState")
+            .textContent = "LISTENING";
+
+        $("activity")
+            .textContent = "LISTENING";
+
+        $("hudCore")
+            .classList
+            .add("listening");
+
+    };
+
+
+    recognition.onresult = event => {
+
+        let finalText = "";
+
+
+        for(
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+        ){
+
+            if(
+                event.results[i].isFinal
+            ){
+
+                finalText +=
+                    event.results[i][0]
+                    .transcript;
+
+            }
+
+        }
+
+
+        if(finalText.trim()){
+
+            $("input").value =
+                finalText.trim();
+
+            process();
+
+        }
+
+    };
+
+
+    recognition.onerror = event => {
+
+        console.log(
+            "Speech error:",
+            event.error
+        );
+
+    };
+
+
+    recognition.onend = () => {
+
+        listening = false;
+
+        $("listenState")
+            .textContent = "OFF";
+
+        $("hudCore")
+            .classList
+            .remove("listening");
+
+
+        /*
+          Sprachmodus bleibt aktiv.
+          Der Browser wird nach einem Ende
+          automatisch erneut gestartet.
+        */
+
+        if(voiceMode){
+
+            setTimeout(
+                () => {
+
+                    try{
+
+                        recognition.start();
+
+                    }catch(error){}
+
+                },
+                300
+            );
+
+        }
+
+    };
+
+}
+
+
+/* =========================================================
+   SPRACHMODUS EIN/AUS
+========================================================= */
+
+function toggleVoice(){
 
     if(!recognition){
 
-        showMessage(
-            "Dieser Browser unterstützt keine Sprachsteuerung.",
-            "system"
-        );
+        const text =
+            "Die Spracherkennung wird " +
+            "von diesem Browser nicht unterstützt.";
+
+        show(text);
+
+        speak(text);
 
         return;
 
     }
 
-    if(state.listening){
 
-        window.__jarvisVoiceMode = false;
+    voiceMode = !voiceMode;
 
-        recognition.stop();
 
-        state.listening = false;
-
-        micButton.classList.remove(
-            "active"
-        );
-
-        showMessage(
-            "Sprachmodus beendet.",
-            "system"
-        );
-
-    }else{
-
-        window.__jarvisVoiceMode = true;
+    if(voiceMode){
 
         try{
 
             recognition.start();
 
-            showMessage(
-                "Ich höre zu. Du kannst einfach weiter sprechen.",
-                "system"
-            );
+        }catch(error){}
 
-        }catch(error){
 
-            console.warn(error);
+        const text =
+            "Sprachmodus aktiviert. " +
+            "Ich höre dir zu.";
+
+        show(text);
+
+        speak(text);
+
+    }else{
+
+        try{
+
+            recognition.stop();
+
+        }catch(error){}
+
+
+        const text =
+            "Sprachmodus beendet.";
+
+        show(text);
+
+        speak(text);
+
+    }
+
+}
+
+
+/* =========================================================
+   AUTOMATISCHES LERNEN
+========================================================= */
+
+function learn(text){
+
+    if(
+        !data.settings.autoLearn
+    ){
+
+        return;
+
+    }
+
+
+    const patterns = [
+
+        /ich heiße (.+)/i,
+
+        /mein name ist (.+)/i,
+
+        /ich wohne in (.+)/i,
+
+        /ich lebe in (.+)/i,
+
+        /ich arbeite als (.+)/i,
+
+        /ich mag (.+)/i,
+
+        /ich liebe (.+)/i,
+
+        /ich bevorzuge (.+)/i,
+
+        /mein lieblings(.+?) ist (.+)/i,
+
+        /merke dir (.+)/i,
+
+        /merk dir (.+)/i
+
+    ];
+
+
+    for(
+        const pattern of patterns
+    ){
+
+        const match =
+            text.match(pattern);
+
+
+        if(match){
+
+            const memory =
+                match[0]
+                .replace(/[.!?]+$/,"")
+                .trim();
+
+
+            if(
+                !data.memory
+                .includes(memory)
+            ){
+
+                data.memory.push(
+                    memory
+                );
+
+
+                data.memory =
+                    data.memory
+                    .slice(-100);
+
+
+                save();
+
+                updateMemory();
+
+            }
+
+            break;
 
         }
 
@@ -2211,430 +1593,975 @@ function toggleVoiceMode(){
 }
 
 
-/* ============================================================
-   COMMAND ENGINE
-============================================================ */
+/* =========================================================
+   BILDER AUS DEM INTERNET
+   Wikimedia API
+========================================================= */
 
-async function processInput(){
+async function imageSearch(query){
+
+    const url =
+        "https://commons.wikimedia.org/w/api.php" +
+        "?action=query" +
+        "&generator=search" +
+        "&gsrsearch=" +
+        encodeURIComponent(query) +
+        "&gsrnamespace=6" +
+        "&gsrlimit=8" +
+        "&prop=imageinfo" +
+        "&iiprop=url|extmetadata" +
+        "&format=json" +
+        "&origin=*";
+
+
+    try{
+
+        const response =
+            await fetch(url);
+
+
+        const json =
+            await response.json();
+
+
+        return Object
+            .values(
+                json.query?.pages || {}
+            )
+            .map(page => ({
+
+                title:
+                    page.title,
+
+                url:
+                    page.imageinfo?.[0]?.url
+
+            }))
+            .filter(
+                item => item.url
+            );
+
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+/* =========================================================
+   WIKIPEDIA RECHERCHE
+========================================================= */
+
+async function wikiSearch(query){
+
+    try{
+
+        const response =
+            await fetch(
+
+                "https://de.wikipedia.org/w/api.php" +
+                "?action=query" +
+                "&list=search" +
+                "&srsearch=" +
+                encodeURIComponent(query) +
+                "&srlimit=6" +
+                "&format=json" +
+                "&origin=*"
+
+            );
+
+
+        const json =
+            await response.json();
+
+
+        return (
+            json.query?.search || []
+        );
+
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+/* =========================================================
+   FENSTER ERZEUGEN
+========================================================= */
+
+function openWindow(
+    title,
+    html
+){
+
+    windowCount++;
+
+
+    const windowElement =
+        document.createElement("div");
+
+
+    windowElement.className =
+        "window";
+
+
+    windowElement.style.left =
+        (
+            20 +
+            (windowCount * 43) % 420
+        ) + "px";
+
+
+    windowElement.style.top =
+        (
+            20 +
+            (windowCount * 31) % 220
+        ) + "px";
+
+
+    windowElement.innerHTML = `
+
+        <div class="windowHeader">
+
+            <span>
+                ${escapeHtml(title)}
+            </span>
+
+            <button
+                class="close">
+
+                ✕
+
+            </button>
+
+        </div>
+
+
+        <div class="windowBody">
+
+            ${html}
+
+        </div>
+
+    `;
+
+
+    windowElement
+        .querySelector(".close")
+        .onclick = () =>
+            windowElement.remove();
+
+
+    $("windows")
+        .appendChild(windowElement);
+
+}
+
+
+/* =========================================================
+   BILDERFENSTER
+========================================================= */
+
+async function openImages(query){
+
+    show(
+        "Ich suche passende Bilder."
+    );
+
+
+    const results =
+        await imageSearch(query);
+
+
+    if(!results.length){
+
+        openWindow(
+            "IMAGE SEARCH",
+            `
+
+            <a
+                class="platform"
+                target="_blank"
+                href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}">
+
+                Google Bilder
+
+            </a>
+
+
+            <a
+                class="platform"
+                target="_blank"
+                href="https://www.bing.com/images/search?q=${encodeURIComponent(query)}">
+
+                Bing Bilder
+
+            </a>
+
+            `
+        );
+
+        return;
+
+    }
+
+
+    openWindow(
+
+        "VISUAL INTELLIGENCE / " + query,
+
+        `
+
+        <div class="cardGrid">
+
+        ${results.map(item => `
+
+            <div class="card">
+
+                <img
+                    src="${item.url}"
+                    loading="lazy">
+
+                <div class="mini">
+
+                    ${escapeHtml(item.title)}
+
+                </div>
+
+            </div>
+
+        `).join("")}
+
+        </div>
+
+        `
+
+    );
+
+}
+
+
+/* =========================================================
+   INTERNET-RECHERCHE
+========================================================= */
+
+async function openResearch(query){
+
+    show(
+        "Ich recherchiere kurz."
+    );
+
+
+    const results =
+        await wikiSearch(query);
+
+
+    let html =
+        results
+        .map(item => `
+
+            <div class="result">
+
+                <a
+                    target="_blank"
+                    href="https://de.wikipedia.org/wiki/${encodeURIComponent(
+                        item.title.replaceAll(" ","_")
+                    )}">
+
+                    ${escapeHtml(
+                        item.title
+                    )}
+
+                </a>
+
+
+                <div class="mini">
+
+                    ${escapeHtml(
+                        item.snippet
+                        .replace(
+                            /<[^>]+>/g,
+                            ""
+                        )
+                    )}
+
+                </div>
+
+            </div>
+
+        `)
+        .join("");
+
+
+    html += `
+
+        <div
+            style="
+                margin-top:12px;
+                color:#66818a;
+                font-size:10px;
+            ">
+
+            Weitere Quellen
+
+        </div>
+
+
+        <a
+            class="platform"
+            target="_blank"
+            href="https://www.google.com/search?q=${encodeURIComponent(query)}">
+
+            Web
+
+        </a>
+
+
+        <a
+            class="platform"
+            target="_blank"
+            href="https://www.youtube.com/results?search_query=${encodeURIComponent(query)}">
+
+            YouTube
+
+        </a>
+
+
+        <a
+            class="platform"
+            target="_blank"
+            href="https://www.tiktok.com/search?q=${encodeURIComponent(query)}">
+
+            TikTok
+
+        </a>
+
+
+        <a
+            class="platform"
+            target="_blank"
+            href="https://www.instagram.com/explore/search/keyword/?q=${encodeURIComponent(query)}">
+
+            Instagram
+
+        </a>
+
+    `;
+
+
+    openWindow(
+        "WEB INTELLIGENCE / " + query,
+        html ||
+        `
+        <div class="result">
+
+            Keine direkten Treffer.
+
+            Nutze die Quellen unten.
+
+        </div>
+        `
+    );
+
+}
+
+
+/* =========================================================
+   SOCIAL PLATFORMS
+========================================================= */
+
+function openPlatforms(query){
+
+    openWindow(
+
+        "SOCIAL INTELLIGENCE",
+
+        `
+
+        <div class="result">
+
+            Suche nach:
+
+            <strong>
+                ${escapeHtml(query)}
+            </strong>
+
+        </div>
+
+
+        <a
+            class="platform"
+            target="_blank"
+            href="https://www.youtube.com/results?search_query=${encodeURIComponent(query)}">
+
+            ▶ YouTube
+
+        </a>
+
+
+        <a
+            class="platform"
+            target="_blank"
+            href="https://www.tiktok.com/search?q=${encodeURIComponent(query)}">
+
+            ♪ TikTok
+
+        </a>
+
+
+        <a
+            class="platform"
+            target="_blank"
+            href="https://www.instagram.com/explore/search/keyword/?q=${encodeURIComponent(query)}">
+
+            ◎ Instagram
+
+        </a>
+
+
+        <a
+            class="platform"
+            target="_blank"
+            href="https://www.google.com/search?q=${encodeURIComponent(query)}">
+
+            Web
+
+        </a>
+
+        `
+
+    );
+
+}
+
+
+/* =========================================================
+   LOKALE KI
+========================================================= */
+
+async function askAI(text){
+
+    if(!aiReady){
+
+        return null;
+
+    }
+
+
+    try{
+
+        $("hudCore")
+            .classList
+            .add("thinking");
+
+
+        $("coreState")
+            .textContent =
+            "THINKING";
+
+
+        const memory =
+            data.memory
+            .slice(-15)
+            .join("\n");
+
+
+        const history =
+            data.conversation
+            .slice(-8)
+            .map(
+                item =>
+                    item.role +
+                    ": " +
+                    item.text
+            )
+            .join("\n");
+
+
+        const system = `
+
+Du bist J.A.R.V.I.S.,
+ein intelligentes Unterstützungsprogramm.
+
+Antworte sehr kurz.
+
+Normalerweise maximal zwei Sätze.
+
+Stelle eine kurze Rückfrage,
+wenn etwas unklar ist.
+
+Wenn du aus dem Gesagten
+sinnvoll eine Aufgabe erkennst,
+frage nach, ob du sie übernehmen sollst.
+
+Sei proaktiv,
+aber nicht nervig.
+
+Sprich natürlich.
+
+Antworte auf Deutsch.
+
+Behaupte niemals,
+dass du etwas ausgeführt hast,
+wenn es nicht wirklich ausgeführt wurde.
+
+LOKALE ERINNERUNGEN:
+
+${memory || "keine"}
+
+KONVERSATION:
+
+${history || "keine"}
+
+`;
+
+
+        const result =
+            await engine
+            .chat
+            .completions
+            .create({
+
+                messages:[
+
+                    {
+                        role:"system",
+                        content:system
+                    },
+
+                    {
+                        role:"user",
+                        content:text
+                    }
+
+                ],
+
+                temperature:.65,
+
+                max_tokens:180
+
+            });
+
+
+        return (
+            result
+            ?.choices?.[0]
+            ?.message
+            ?.content
+            || ""
+        )
+        .trim()
+        .replace(
+            /\s+/g,
+            " "
+        );
+
+
+    }catch(error){
+
+        console.warn(
+            "Lokale KI:",
+            error
+        );
+
+        return null;
+
+    }finally{
+
+        $("hudCore")
+            .classList
+            .remove("thinking");
+
+        $("coreState")
+            .textContent =
+            "READY";
+
+    }
+
+}
+
+
+/* =========================================================
+   FALLBACK
+========================================================= */
+
+function fallback(text){
+
+    const x =
+        text.toLowerCase();
+
+
+    if(
+        x.includes("hallo") ||
+        x.includes("hey") ||
+        x.includes("guten")
+    ){
+
+        return (
+            "Hallo. Womit soll ich dich unterstützen?"
+        );
+
+    }
+
+
+    if(
+        x.includes("uhr") ||
+        x.includes("spät")
+    ){
+
+        return (
+            "Es ist " +
+            new Date()
+            .toLocaleTimeString("de-DE") +
+            "."
+        );
+
+    }
+
+
+    if(
+        x.includes("wer bist")
+    ){
+
+        return (
+            "Ich bin J.A.R.V.I.S., " +
+            "dein intelligentes Unterstützungsprogramm."
+        );
+
+    }
+
+
+    if(
+        x.includes("was kannst")
+    ){
+
+        return (
+            "Ich kann zuhören, sprechen, " +
+            "recherchieren und Informationen speichern."
+        );
+
+    }
+
+
+    return (
+        "Verstanden. " +
+        "Soll ich dazu recherchieren " +
+        "oder direkt weitermachen?"
+    );
+
+}
+
+
+/* =========================================================
+   ANTWORT KÜRZEN
+========================================================= */
+
+function shortAnswer(text){
+
+    const sentences =
+        text.match(
+            /[^.!?]+[.!?]+/g
+        );
+
+
+    if(
+        sentences &&
+        sentences.length > 2
+    ){
+
+        return sentences
+            .slice(0,2)
+            .join(" ")
+            .trim();
+
+    }
+
+
+    return text;
+
+}
+
+
+/* =========================================================
+   INTELLIGENTE VISUALISIERUNG
+========================================================= */
+
+function wantsImage(text){
+
+    return /(bild|bilder|foto|zeig mir|visualisiere|wie sieht|grafik)/i
+        .test(text);
+
+}
+
+
+function wantsWeb(text){
+
+    return /(internet|online|aktuell|heute|neueste|news|recherch|suche|youtube|tiktok|instagram)/i
+        .test(text);
+
+}
+
+
+/* =========================================================
+   HAUPTVERARBEITUNG
+========================================================= */
+
+async function process(){
 
     const text =
-        input.value.trim();
+        $("input")
+        .value
+        .trim();
 
-    if(!text)
+
+    if(!text){
+
         return;
-
-    input.value = "";
-
-    state.lastInteraction =
-        Date.now();
-
-    logMessage(
-        "user",
-        text
-    );
-
-    showMessage(
-        text,
-        "user"
-    );
-
-    extractKnowledge(text);
-
-    const command =
-        await executeCommand(text);
-
-    if(command)
-        return;
-
-    let answer =
-        await askLocalAI(text);
-
-    if(!answer)
-        answer =
-            fallbackResponse(text);
-
-    logMessage(
-        "assistant",
-        answer
-    );
-
-    showMessage(
-        answer,
-        "system"
-    );
-
-    if(
-        shouldVisualize(text)
-    ){
-
-        showVisual(
-            "bar"
-        );
 
     }
 
-    speak(answer);
 
-    startProactiveTimer();
+    $("input").value = "";
+
+
+    data.conversation.push({
+
+        role:"user",
+
+        text:text
+
+    });
+
+
+    data.conversation =
+        data.conversation
+        .slice(-80);
+
+
+    learn(text);
+
+    save();
+
+
+    show(text);
+
+
+    /* BILDER */
+
+    if(wantsImage(text)){
+
+        const query =
+            text
+            .replace(
+                /zeig mir|zeige mir|bilder von|bild von|suche bilder|foto von|visualisiere/gi,
+                ""
+            )
+            .trim();
+
+
+        if(query){
+
+            openImages(query);
+
+        }
+
+    }
+
+
+    /* SOCIAL */
+
+    if(
+        /youtube|tiktok|instagram/i
+        .test(text)
+    ){
+
+        openPlatforms(text);
+
+    }
+
+    /* INTERNET */
+
+    else if(wantsWeb(text)){
+
+        const query =
+            text
+            .replace(
+                /recherchiere|suche|im internet|online|aktuell/gi,
+                ""
+            )
+            .trim();
+
+
+        if(query){
+
+            openResearch(query);
+
+        }
+
+    }
+
+
+    /* KI */
+
+    const result =
+        shortAnswer(
+            await askAI(text)
+            ||
+            fallback(text)
+        );
+
+
+    data.conversation.push({
+
+        role:"assistant",
+
+        text:result
+
+    });
+
+
+    data.conversation =
+        data.conversation
+        .slice(-80);
+
+
+    save();
+
+
+    show(result);
+
+    speak(result);
+
+
+    followUp(text);
+
+    resetProactive();
 
 }
 
 
-/* ============================================================
-   COMMANDS
-============================================================ */
+/* =========================================================
+   INTELLIGENTE RÜCKFRAGEN
+========================================================= */
 
-async function executeCommand(text){
+function followUp(text){
 
-    const t =
-        text.toLowerCase().trim();
+    const x =
+        text.toLowerCase();
 
 
-    /* HELP */
-
-    if(
-        t === "hilfe" ||
-        t === "help" ||
-        t.includes("was kannst du")
-    ){
-
-        const response = `
-Ich kann mit dir sprechen, lokale Informationen merken, Sprache erkennen, dir proaktiv Fragen stellen, Timer verwalten und passende Daten visualisieren.
-
-Beispiele:
-„Merke dir, dass ich gerne Science-Fiction mag.“
-„Wie spät ist es?“
-„Zeige mir ein Diagramm.“
-„Aktiviere den Sprachmodus.“
-„Was weißt du über mich?“
-        `.trim();
-
-        showMessage(
-            response,
-            "system"
-        );
-
-        speak(response);
-
-        return true;
-
-    }
-
-
-    /* TIME */
-
-    if(
-        t.includes("wie spät") ||
-        t.includes("uhrzeit")
-    ){
-
-        const response =
-            `Es ist jetzt ${new Date().toLocaleTimeString("de-DE")}.`;
-
-        showMessage(
-            response,
-            "system"
-        );
-
-        speak(response);
-
-        return true;
-
-    }
-
-
-    /* DATE */
-
-    if(
-        t.includes("welches datum") ||
-        t.includes("welcher tag") ||
-        t === "datum"
-    ){
-
-        const response =
-            `Heute ist ${new Date().toLocaleDateString("de-DE")}.`;
-
-        showMessage(
-            response,
-            "system"
-        );
-
-        speak(response);
-
-        return true;
-
-    }
-
-
-    /* MEMORY */
-
-    if(
-        t.includes("was weißt du über mich") ||
-        t.includes("was weißt du von mir") ||
-        t === "memory"
-    ){
-
-        if(!state.memory.length){
-
-            const response =
-                "Mein lokales Gedächtnis ist noch leer.";
-
-            showMessage(
-                response,
-                "system"
-            );
-
-            speak(response);
-
-            return true;
-
-        }
-
-        const memories =
-            state.memory
-                .slice(-8)
-                .map(
-                    item =>
-                        "• " + item.text
-                )
-                .join("\n");
-
-        const response =
-            "Das habe ich lokal gespeichert:\n" +
-            memories;
-
-        showMessage(
-            response,
-            "system"
-        );
-
-        speak(
-            "Ich habe mehrere Informationen über dich gespeichert."
-        );
-
-        return true;
-
-    }
-
-
-    /* EXPLICIT MEMORY */
-
-    const remember =
-        text.match(
-            /^(merke dir|merk dir|speichere)\s+(.+)/i
-        );
-
-    if(remember){
-
-        addMemory(
-            remember[2],
-            "user-command"
-        );
-
-        const response =
-            "Verstanden. Ich habe das lokal gespeichert.";
-
-        showMessage(
-            response,
-            "system"
-        );
-
-        speak(response);
-
-        return true;
-
-    }
-
-
-    /* CLEAR MEMORY */
-
-    if(
-        t === "lösche mein gedächtnis" ||
-        t === "lösche memory"
-    ){
-
-        state.memory = [];
-
-        saveData();
-
-        renderMemory();
-
-        const response =
-            "Das lokale Gedächtnis wurde gelöscht.";
-
-        showMessage(
-            response,
-            "system"
-        );
-
-        speak(response);
-
-        return true;
-
-    }
-
-
-    /* VOICE */
-
-    if(
-        t.includes("sprachmodus aktivieren") ||
-        t.includes("hör zu")
-    ){
-
-        if(!state.listening)
-            toggleVoiceMode();
-
-        return true;
-
-    }
+    let question = null;
 
 
     if(
-        t.includes("sprachmodus deaktivieren") ||
-        t.includes("hör auf")
+        /problem|fehler|geht nicht/.test(x)
     ){
 
-        if(state.listening)
-            toggleVoiceMode();
-
-        return true;
+        question =
+            "Soll ich die Ursache mit dir suchen?";
 
     }
 
-
-    /* VISUAL */
-
-    if(
-        t.includes("zeige ein diagramm") ||
-        t.includes("erstelle ein diagramm") ||
-        t.includes("mach eine grafik")
+    else if(
+        /bauen|programmieren|projekt|erweitern/.test(x)
     ){
 
-        showVisual("bar");
+        question =
+            "Was möchtest du als Nächstes daran ändern?";
 
-        const response =
-            "Ich habe die Information als HUD-Diagramm dargestellt.";
+    }
 
-        showMessage(
-            response,
-            "system"
-        );
+    else if(
+        /kaufen|produkt|angebot/.test(x)
+    ){
 
-        speak(response);
-
-        return true;
+        question =
+            "Soll ich aktuelle Angebote vergleichen?";
 
     }
 
 
-    /* TIMER */
+    if(question){
 
-    const timer =
-        t.match(
-            /timer\s+(\d+)\s*(sekunden|sek|s|minuten|min|m)?/
+        setTimeout(
+
+            () => {
+
+                if(
+                    !speaking &&
+                    !listening
+                ){
+
+                    show(question);
+
+                    speak(question);
+
+                }
+
+            },
+
+            1200
+
         );
-
-    if(timer){
-
-        let amount =
-            parseInt(timer[1],10);
-
-        const unit =
-            timer[2] || "sekunden";
-
-        if(
-            unit.startsWith("min") ||
-            unit === "m"
-        ){
-
-            amount *= 60;
-
-        }
-
-        const response =
-            `Timer auf ${amount} Sekunden gesetzt.`;
-
-        showMessage(
-            response,
-            "system"
-        );
-
-        speak(response);
-
-        setTimeout(() => {
-
-            showMessage(
-                "Timer abgeschlossen.",
-                "system"
-            );
-
-            speak(
-                "Der Timer ist abgelaufen."
-            );
-
-        },amount*1000);
-
-        return true;
 
     }
-
-
-    return false;
 
 }
 
 
-/* ============================================================
-   PROACTIVE INTELLIGENCE
-============================================================ */
+/* =========================================================
+   PROAKTIVES VERHALTEN
+========================================================= */
 
-function startProactiveTimer(){
+function resetProactive(){
 
     clearTimeout(
-        state.proactiveTimer
+        proactiveTimer
     );
 
-    if(
-        !state.settings.proactive
-    )
-        return;
 
-    state.proactiveTimer =
+    proactiveTimer =
         setTimeout(
-            proactiveConversation,
-            CONFIG.proactiveDelay
+            proactive,
+            90000
         );
 
 }
 
 
-async function proactiveConversation(){
+function proactive(){
 
     if(
-        state.speaking ||
-        state.thinking ||
-        state.listening
+        speaking ||
+        listening
     ){
 
-        startProactiveTimer();
+        resetProactive();
 
         return;
 
     }
+
 
     const questions = [
 
-        "Möchtest du, dass wir an etwas weiterarbeiten?",
+        "Möchtest du, dass ich weiterhelfe?",
 
-        "Gibt es eine Aufgabe, bei der ich dich gerade unterstützen kann?",
+        "Soll ich dazu etwas recherchieren?",
 
-        "Soll ich dir etwas erklären oder gemeinsam mit dir planen?",
+        "Möchtest du das gemeinsam planen?",
 
-        "Möchtest du, dass ich mir etwas aus unserem Gespräch merke?",
-
-        "Gibt es etwas, das du heute erledigen möchtest?"
+        "Gibt es etwas, das ich für dich prüfen soll?"
 
     ];
+
 
     const question =
         questions[
@@ -2644,111 +2571,166 @@ async function proactiveConversation(){
             )
         ];
 
-    showMessage(
-        question,
-        "system"
-    );
 
-    logMessage(
-        "assistant",
-        question
-    );
+    show(question);
 
     speak(question);
 
-    startProactiveTimer();
+
+    resetProactive();
 
 }
 
 
-/* ============================================================
-   CLOCK
-============================================================ */
+/* =========================================================
+   BUTTONS
+========================================================= */
 
-function updateClock(){
-
-    $("clock").textContent =
-        new Date()
-            .toLocaleTimeString(
-                "de-DE"
-            );
-
-}
-
-setInterval(
-    updateClock,
-    1000
-);
-
-updateClock();
+$("send")
+    .onclick =
+    process;
 
 
-/* ============================================================
-   EVENT LISTENERS
-============================================================ */
-
-sendButton.addEventListener(
-    "click",
-    processInput
-);
-
-input.addEventListener(
-    "keydown",
+$("input")
+    .onkeydown =
     event => {
 
-        if(event.key === "Enter")
-            processInput();
+        if(
+            event.key === "Enter"
+        ){
 
-    }
+            process();
+
+        }
+
+    };
+
+
+$("mic")
+    .onclick =
+    toggleVoice;
+
+
+/* =========================================================
+   UHR
+========================================================= */
+
+setInterval(
+
+    () => {
+
+        $("clock")
+            .textContent =
+            new Date()
+            .toLocaleTimeString("de-DE");
+
+    },
+
+    1000
+
 );
 
-micButton.addEventListener(
-    "click",
-    toggleVoiceMode
-);
+
+/* =========================================================
+   WEBLLM / LOKALES KI-MODELL
+========================================================= */
+
+try{
+
+    if("gpu" in navigator){
+
+        const webllm =
+            await import(
+                "https://esm.run/@mlc-ai/web-llm"
+            );
 
 
-/* ============================================================
-   INITIALIZATION
-============================================================ */
-
-loadData();
-
-renderMemory();
-
-updateTelemetry();
-
-setupRecognition();
-
-startProactiveTimer();
+        $("aiStatus")
+            .textContent =
+            "LOADING LOCAL AI";
 
 
-/* ============================================================
-   START LOCAL CORE
-============================================================ */
+        engine =
+            await webllm
+            .CreateMLCEngine(
 
-(async () => {
+                "Llama-3.2-1B-Instruct-q4f16_1-MLC",
 
-    const success =
-        await initAI();
+                {
 
-    if(success){
+                    initProgressCallback:
+                        progress => {
 
-        showMessage(
-            "J.A.R.V.I.S ist online. Der lokale Intelligenzkern ist aktiv.",
-            "system"
-        );
+                            if(
+                                progress?.text
+                            ){
+
+                                $("aiStatus")
+                                    .textContent =
+                                    progress.text
+                                    .slice(
+                                        0,
+                                        24
+                                    )
+                                    .toUpperCase();
+
+                            }
+
+                        }
+
+                },
+
+                webllm
+                .prebuiltAppConfig
+
+            );
+
+
+        aiReady = true;
+
+
+        $("aiStatus")
+            .textContent =
+            "LOCAL AI READY";
+
 
     }else{
 
-        showMessage(
-            "J.A.R.V.I.S ist online. Der lokale KI-Kern ist momentan nicht verfügbar; der Offline-Fallback bleibt aktiv.",
-            "system"
-        );
+        $("aiStatus")
+            .textContent =
+            "OFFLINE FALLBACK";
 
     }
 
-})();
+}catch(error){
+
+    console.warn(
+        "WebLLM konnte nicht geladen werden.",
+        error
+    );
+
+
+    $("aiStatus")
+        .textContent =
+        "OFFLINE FALLBACK";
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+setTimeout(
+
+    introduction,
+
+    700
+
+);
+
+
+resetProactive();
 
 </script>
 

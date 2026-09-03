@@ -38,13 +38,19 @@ input[type=range]{width:100%}
 .badge{display:inline-block;padding:3px 7px;border:1px solid var(--line);border-radius:20px;font-size:10px;color:var(--muted);margin:2px}
 @keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.13)}}
 @media(max-width:600px){header{height:56px;padding:0 14px}.logo{font-size:12px}#response{bottom:84px;font-size:15px;max-height:115px}.controls{bottom:10px}.controlButton{width:46px;height:46px}#commandInput{height:46px}}
+
+.hudVisual{position:relative;margin:14px 0;padding:12px;border:1px solid rgba(0,220,255,.28);border-radius:18px;background:radial-gradient(circle at center,rgba(0,220,255,.08),rgba(0,0,0,.15));box-shadow:0 0 28px rgba(0,220,255,.08),inset 0 0 24px rgba(0,220,255,.04);overflow:hidden}
+.hudVisual:before,.hudVisual:after{content:"";position:absolute;inset:8px;border:1px solid rgba(0,220,255,.12);border-radius:14px;pointer-events:none}
+.hudLabel{font:600 11px/1.2 system-ui;letter-spacing:.18em;opacity:.72;text-transform:uppercase;margin-bottom:8px}
+.voiceRow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.voiceRow select,.voiceRow input{background:#081018;color:inherit;border:1px solid rgba(0,220,255,.25);border-radius:10px;padding:8px}
 </style>
 </head>
 <body>
 <header><div class="logo"><span class="logoDot"></span>J.A.R.V.I.S <span style="color:#7893a5">6.0</span></div><div id="systemStatus" class="systemStatus"><span class="statusDot"></span><span id="statusText">STARTING</span></div></header>
 <main>
 <div id="core"><div class="orbit"></div><div class="orbit orbit2"></div><div class="orbit orbit3"></div><div class="coreGlow"></div><div class="core">J</div></div>
-<div id="state">CORE STARTING</div><div id="response">JARVIS 6.0 wird initialisiert …</div>
+<div id="state">CORE STARTING</div><div id="response">JARVIS 7.0 wird initialisiert …</div>
 <div class="controls"><button id="micButton" class="controlButton">🎙️</button><input id="commandInput" placeholder="Befehl an JARVIS …" autocomplete="off"><button id="sendButton" class="controlButton">➤</button><button id="menuButton" class="controlButton">☰</button></div>
 </main>
 
@@ -53,7 +59,13 @@ input[type=range]{width:100%}
 <div class="panelCard"><div class="panelTitle">🧠 KI-KERN</div><div id="aiInfo" class="panelText">Prüfe WebGPU …</div><div class="panelButtons"><button id="loadAI" class="panelButton">KI laden</button><button id="clearCache" class="panelButton">Cache löschen</button></div></div>
 <div class="panelCard"><div class="panelTitle">🎓 LERNEN</div><div class="panelText">Lehre JARVIS mit „Lerne: …“ oder „Merke dir, dass …“. Das Gelernte wird lokal gespeichert.</div><div id="learningInfo" class="panelText"></div><div class="panelButtons"><button id="showLearning" class="panelButton">Gelernte Regeln</button><button id="clearLearning" class="panelButton">Lernen löschen</button></div></div>
 <div class="panelCard"><div class="panelTitle">💾 MEMORY</div><div id="memoryInfo" class="panelText"></div><div class="panelButtons"><button id="showMemory" class="panelButton">Gedächtnis</button><button id="clearMemory" class="panelButton">Löschen</button></div></div>
-<div class="panelCard"><div class="panelTitle">🎨 VISUAL STUDIO</div><div class="panelText">Erstellt Diagramme und SVG-Grafiken direkt im Browser.</div><div class="panelButtons"><button data-command="diagramm Balken 10,20,30,40" class="panelButton">Balkendiagramm</button><button data-command="diagramm Linie 10,30,20,50" class="panelButton">Liniendiagramm</button><button data-command="visualisiere ein futuristisches Herz" class="panelButton">SVG-Idee</button></div></div>
+<div class="panelCard"><div class="panelTitle">⚙️ ADAPTIVE INTELLIGENCE</div>
+<div class="panelText">JARVIS 7.0 lernt deine Regeln, verbessert Texte, merkt sich offene Fragen und kann futuristische HUD-Grafiken erzeugen.</div>
+<div class="panelButtons">
+<button data-command="grammatik: Ich habe ein neue Projekt und möchte es besser machen." class="panelButton">Grammatik</button>
+<button data-command="neugier" class="panelButton">Neugier</button>
+<button data-command="hud diagramm 10,30,20,50" class="panelButton">HUD-Grafik</button>
+</div></div><div class="panelCard"><div class="panelTitle">🎨 VISUAL STUDIO</div><div class="panelText">Erstellt Diagramme und SVG-Grafiken direkt im Browser.</div><div class="panelButtons"><button data-command="diagramm Balken 10,20,30,40" class="panelButton">Balkendiagramm</button><button data-command="diagramm Linie 10,30,20,50" class="panelButton">Liniendiagramm</button><button data-command="visualisiere ein futuristisches Herz" class="panelButton">SVG-Idee</button></div></div>
 <div class="panelCard"><div class="panelTitle">⚙️ TOOLS</div><div class="panelButtons"><button data-command="uhrzeit" class="panelButton">Uhrzeit</button><button data-command="datum" class="panelButton">Datum</button><button data-command="system" class="panelButton">System</button><button data-command="timer 60" class="panelButton">Timer 60s</button><button data-command="notiz" class="panelButton">Notiz</button></div></div>
 <div class="panelCard"><div class="panelTitle">🎛️ DESIGN</div><label class="panelText">Glow</label><input id="glowRange" type="range" min="0" max="100" value="100"><div class="panelButtons"><button id="themeCyan" class="panelButton">Cyan</button><button id="themeGreen" class="panelButton">Grün</button><button id="themePurple" class="panelButton">Violett</button><button id="resetDesign" class="panelButton">Reset</button></div></div>
 <div class="panelCard"><div class="panelTitle">👨‍💻 WORKSHOP</div><div class="panelText">JARVIS kann Code analysieren und eine Vorschau erzeugen. Änderungen werden erst nach deiner Bestätigung übernommen.</div><textarea id="workshopCode" placeholder="Hier HTML/CSS/JS einfügen …"></textarea><div class="panelButtons"><button id="previewCode" class="panelButton">Vorschau</button><button id="downloadCode" class="panelButton">HTML exportieren</button></div></div>
@@ -77,21 +89,49 @@ function status(t,on=false,err=false){$("systemStatus").className="systemStatus"
 function state(t){$("state").textContent=t}
 function reply(t){$("response").textContent=t}
 function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2400)}
-function speak(t){if(!data.settings.voice||!("speechSynthesis"in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="de-DE";u.rate=.95;document.body.classList.add("speaking");u.onend=()=>document.body.classList.remove("speaking");speechSynthesis.speak(u)}
+function speak(t){
+  if(!data.settings.voice||!("speechSynthesis"in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang="de-DE";
+  const sel=document.getElementById("voiceSelect");
+  if(sel && sel.value){
+    const v=speechSynthesis.getVoices().find(x=>x.voiceURI===sel.value);
+    if(v)u.voice=v;
+  }
+  const rate=document.getElementById("voiceRate");
+  u.rate=rate?Number(rate.value):.95;
+  document.body.classList.add("speaking");
+  u.onend=()=>document.body.classList.remove("speaking");
+  speechSynthesis.speak(u);
+}
 function updateUI(){$("memoryInfo").textContent=data.memory.length+" Erinnerungen lokal gespeichert.";$("learningInfo").textContent=data.teachings.length+" gelernte Regeln lokal gespeichert."}
 function remember(t){data.memory.push({text:t,time:new Date().toISOString()});data.memory=data.memory.slice(-100);save();updateUI()}
 function teach(t){data.teachings.push({text:t,time:new Date().toISOString()});data.teachings=data.teachings.slice(-100);save();updateUI();log("Neue Lernregel gespeichert.")}
 function forgetTeach(t){const n=data.teachings.length;data.teachings=data.teachings.filter(x=>!x.text.toLowerCase().includes(t.toLowerCase()));save();updateUI();return n-data.teachings.length}
-function systemPrompt(){return `Du bist JARVIS 6.0, ein persönlicher Assistent. Antworte auf Deutsch, präzise und freundlich. Du darfst nie behaupten, etwas ausgeführt zu haben, was die Webseite nicht wirklich ausgeführt hat. Du hast keinen freien Zugriff auf Internet, andere Apps oder Geräte. Gelernte Regeln des Benutzers: ${data.teachings.slice(-30).map(x=>x.text).join(" | ")||"keine"}. Erinnerungen: ${data.memory.slice(-20).map(x=>x.text).join(" | ")||"keine"}.`}
+function systemPrompt(){return `Du bist JARVIS 7.0, ein adaptiver persönlicher KI-Assistent. Antworte auf Deutsch, direkt, natürlich, grammatikalisch sauber und möglichst schnell. Sei neugierig: stelle sinnvolle Rückfragen, wenn Wissen fehlt, und schlage Lernpunkte vor. Behaupte niemals, etwas ausgeführt zu haben, wenn die Webseite es nicht wirklich ausgeführt hat. Du darfst nie behaupten, etwas ausgeführt zu haben, was die Webseite nicht wirklich ausgeführt hat. Du hast keinen freien Zugriff auf Internet, andere Apps oder Geräte. Gelernte Regeln des Benutzers: ${data.teachings.slice(-30).map(x=>x.text).join(" | ")||"keine"}. Erinnerungen: ${data.memory.slice(-20).map(x=>x.text).join(" | ")||"keine"}.`}
 async function checkGPU(){try{if(!navigator.gpu)throw Error("WebGPU nicht verfügbar");const a=await navigator.gpu.requestAdapter();if(!a)throw Error("Kein GPU-Adapter");$("aiInfo").textContent="✓ WebGPU verfügbar";log("WebGPU OK.");return true}catch(e){$("aiInfo").textContent="❌ "+e.message;log(e.message);return false}}
 function chooseModel(){const list=prebuiltAppConfig?.model_list||[];return (list.find(x=>x.model_id?.includes("Llama-3.2-1B-Instruct"))||list.find(x=>x.model_id?.includes("Qwen3-1.7B"))||list.find(x=>/1B|1\.5B|1-1B/i.test(x.model_id||""))||list[0])?.model_id||"Llama-3.2-1B-Instruct-q4f32_1-MLC"}
-async function loadAI(){if(engine||loadingAI)return;loadingAI=true;$("loadAI").disabled=true;status("KI WIRD GELADEN");state("AI CORE INITIALIZING");reply("Lokales KI-Gehirn wird geladen …");try{if(!(await checkGPU()))throw Error("WebGPU fehlt");const model=chooseModel();log("WebLLM Modell: "+model);engine=await CreateMLCEngine(model,{appConfig:{...prebuiltAppConfig,cacheBackend:"indexeddb"},initProgressCallback:p=>{reply(p?.text||"Modell wird geladen …")}});status("LOCAL AI ONLINE",true);state("CORE ONLINE");reply("Lokales KI-Gehirn ist online.");toast("KI ist online.");log("KI geladen.")}catch(e){engine=null;status("KI FEHLER",false,true);state("CORE DIAGNOSTIC");reply("Die lokale KI konnte nicht geladen werden. Nutze die Diagnose.");log("KI FEHLER: "+(e.stack||e.message||e));}finally{loadingAI=false;$("loadAI").disabled=false}}
-async function askAI(text){if(!engine)return null;document.body.classList.add("thinking");state("THINKING");try{const messages=[{role:"system",content:systemPrompt()},...data.short.slice(-10),{role:"user",content:text}];const r=await engine.chat.completions.create({messages,temperature:.65,max_tokens:350});const a=r?.choices?.[0]?.message?.content?.trim();if(a){data.short.push({role:"user",content:text},{role:"assistant",content:a});data.short=data.short.slice(-12);save()}return a||null}catch(e){log("AI Antwortfehler: "+e.message);return null}finally{document.body.classList.remove("thinking");state("CORE ONLINE")}}
+async function loadAI(){if(engine||loadingAI)return;loadingAI=true;$("loadAI").disabled=true;status("KI WIRD GELADEN");state("AI CORE INITIALIZING");reply("Lokales KI-Gehirn wird geladen …");try{if(!(await checkGPU()))throw Error("WebGPU fehlt");const model=chooseModel();log("WebLLM Modell: "+model);engine=await CreateMLCEngine(model,{appConfig:{...prebuiltAppConfig,cacheBackend:"indexeddb"},initProgressCallback:p=>{reply(p?.text||"Modell wird geladen …")}});status("ADAPTIVE AI ONLINE",true);state("CORE ONLINE");reply("Lokales KI-Gehirn ist online.");toast("KI ist online.");log("KI geladen.")}catch(e){engine=null;status("KI FEHLER",false,true);state("CORE DIAGNOSTIC");reply("Die lokale KI konnte nicht geladen werden. Nutze die Diagnose.");log("KI FEHLER: "+(e.stack||e.message||e));}finally{loadingAI=false;$("loadAI").disabled=false}}
+async function askAI(text){if(!engine)return null;document.body.classList.add("thinking");state("THINKING");try{const messages=[{role:"system",content:systemPrompt()},...data.short.slice(-10),{role:"user",content:text}];const r=await engine.chat.completions.create({messages,temperature:.58,max_tokens:240});const a=r?.choices?.[0]?.message?.content?.trim();if(a){data.short.push({role:"user",content:text},{role:"assistant",content:a});data.short=data.short.slice(-12);save()}return a||null}catch(e){log("AI Antwortfehler: "+e.message);return null}finally{document.body.classList.remove("thinking");state("CORE ONLINE")}}
 
 function parseNums(s){return (s.match(/-?\d+(?:[.,]\d+)?/g)||[]).map(x=>Number(x.replace(",",".")))}
 function makeChart(type,nums){if(nums.length<2)nums=[10,20,30,40];const w=700,h=320,p=50,max=Math.max(...nums,1),step=(w-2*p)/(nums.length-1);let svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="100%" height="320"><rect width="100%" height="100%" rx="18" fill="#020811"/><g stroke="rgba(98,220,255,.18)">`;for(let i=0;i<5;i++){const y=p+i*(h-2*p)/4;svg+=`<line x1="${p}" y1="${y}" x2="${w-p}" y2="${y}"/>`}svg+=`</g><g fill="#62dcff">`;if(type==="balken"){const bw=Math.max(10,(w-2*p)/nums.length*.65);nums.forEach((v,i)=>{const bh=(v/max)*(h-2*p);const x=p+i*(w-2*p)/nums.length+(w-2*p)/nums.length/2-bw/2;svg+=`<rect x="${x}" y="${h-p-bh}" width="${bw}" height="${bh}" rx="5"/>`})}else{const pts=nums.map((v,i)=>`${p+i*step},${h-p-(v/max)*(h-2*p)}`).join(" ");svg+=`<polyline points="${pts}" fill="none" stroke="#62dcff" stroke-width="4"/>`;nums.forEach((v,i)=>{const x=p+i*step,y=h-p-(v/max)*(h-2*p);svg+=`<circle cx="${x}" cy="${y}" r="5"/>`})}svg+=`</g><g fill="#7893a5" font-family="sans-serif" font-size="12">`;nums.forEach((v,i)=>{const x=type==="balken"?p+i*(w-2*p)/nums.length+(w-2*p)/nums.length/2:p+i*step;svg+=`<text x="${x}" y="${h-18}" text-anchor="middle">${v}</text>`});return svg+`</g></svg>`}
 function showVisual(title,svg){currentSVG=svg;$("visualTitle").textContent=title;$("visualCanvas").innerHTML=svg;$("visual").classList.add("open")}
-function localCommand(c){const q=c.trim().toLowerCase();
+function localCommand(c){
+
+  if(/^grammatik\s*:/i.test(c)){
+    return grammarFix(c.replace(/^grammatik\s*:/i,""));
+  }
+  if(/^neugier$/i.test(c) || /^sei neugierig$/i.test(c)){
+    return curiosity();
+  }
+  if(/^hud diagramm/i.test(c)){
+    const nums=parseNums(c);
+    showVisual("JARVIS HUD // DATA",makeHudChart(nums));
+    return "HUD-Grafik erstellt.";
+  }
+const q=c.trim().toLowerCase();
 if(/^lerne[: ]/i.test(c)||/^ich bringe dir bei, dass /i.test(c)){const t=c.replace(/^lerne[: ]/i,"").replace(/^ich bringe dir bei, dass /i,"").trim();if(!t)return"Was möchtest du mir beibringen?";teach(t);return"Verstanden. Ich habe diese Regel gelernt und speichere sie lokal."}
 if(q==="was hast du gelernt"||q==="gelernte regeln"||q==="lernen"){return data.teachings.length?data.teachings.slice(-10).map((x,i)=>(i+1)+". "+x.text).join("\n"):"Ich habe noch keine Regeln gelernt."}
 if(q.startsWith("vergiss lernregel ")){const n=forgetTeach(c.slice(16).trim());return n?"Lernregel gelöscht.":"Keine passende Lernregel gefunden."}
@@ -100,13 +140,57 @@ if(q.startsWith("vergiss ")){const t=c.slice(8).trim();const n=data.memory.lengt
 if(q==="gedächtnis"||q==="memory")return data.memory.length?data.memory.slice(-8).map((x,i)=>(i+1)+". "+x.text).join("\n"):"Mein Gedächtnis ist leer."
 if(q==="uhrzeit"||q.includes("wie spät"))return"Es ist "+new Date().toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})+" Uhr."
 if(q==="datum"||q.includes("welcher tag"))return"Heute ist "+new Date().toLocaleDateString("de-DE",{weekday:"long",day:"2-digit",month:"long",year:"numeric"})+"."
-if(q==="system"||q==="systemstatus")return"JARVIS 6.0. WebGPU: "+(navigator.gpu?"verfügbar":"nicht verfügbar")+". Erinnerungen: "+data.memory.length+". Lernregeln: "+data.teachings.length+"."
+if(q==="system"||q==="systemstatus")return"JARVIS 7.0. WebGPU: "+(navigator.gpu?"verfügbar":"nicht verfügbar")+". Erinnerungen: "+data.memory.length+". Lernregeln: "+data.teachings.length+"."
 if(q.startsWith("timer")){let s=Number(q.split(/\s+/)[1]);if(!Number.isFinite(s))s=60;s=Math.max(1,Math.floor(s));setTimeout(()=>{reply("Timer beendet.");speak("Timer beendet.");toast("Timer beendet.")},s*1000);return"Timer für "+s+" Sekunden gestartet."}
 if(q==="notiz"){const n=prompt("Was soll ich speichern?");if(!n)return"Keine Notiz gespeichert.";remember("Notiz: "+n);return"Notiz gespeichert."}
 if(q.startsWith("diagramm")){const type=q.includes("linie")?"linie":"balken";const nums=parseNums(c);showVisual(type==="linie"?"LINIENDIAGRAMM":"BALKENDIAGRAMM",makeChart(type,nums));return"Diagramm erstellt."}
 if(q.startsWith("visualisiere")){const t=c.replace(/^visualisiere/i,"").trim()||"futuristische Form";const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 320" width="100%" height="320"><rect width="700" height="320" rx="18" fill="#020811"/><circle cx="350" cy="160" r="82" fill="none" stroke="#62dcff" stroke-width="3"/><circle cx="350" cy="160" r="55" fill="none" stroke="#64f0aa" stroke-width="2" stroke-dasharray="7 9"/><path d="M350 58V262M248 160H452M278 88L422 232M422 88L278 232" stroke="#62dcff" opacity=".6"/><text x="350" y="302" text-anchor="middle" fill="#7893a5" font-family="sans-serif" font-size="15">${t.replace(/[<>&"]/g,"")}</text></svg>`;showVisual("SVG VISUALISIERUNG",svg);return"Eine lokale SVG-Visualisierung wurde erstellt."}
 if(q==="diagnose"){ $("panel").classList.add("open");checkGPU();return"Diagnose geöffnet."}
 return null}
+
+
+function grammarFix(s){
+  const original=s.trim();
+  let x=original;
+  const replacements=[
+    [/\beine neue Projekt\b/gi,"ein neues Projekt"],
+    [/\beine neue\b/gi,"eine neue"],
+    [/\bein neue\b/gi,"ein neues"],
+    [/\bIch habe ein neues Projekt und möchte es besser machen\./gi,"Ich habe ein neues Projekt und möchte es verbessern."]
+  ];
+  for(const [a,b] of replacements)x=x.replace(a,b);
+  // Lightweight punctuation/capitalization cleanup, deliberately not pretending to be a full grammar model.
+  x=x.replace(/\s+/g," ").replace(/\s+([,.!?])/g,"$1").trim();
+  if(x && /^[a-zäöüß]/.test(x))x=x[0].toUpperCase()+x.slice(1);
+  return x===original ? "Grammatikprüfung: Der Text ist bereits sauber genug.\\n\\n"+x : "Verbesserte Fassung:\\n\\n"+x;
+}
+
+function makeHudChart(nums){
+  nums=(nums||[]).slice(0,12);
+  if(!nums.length)nums=[10,30,20,50];
+  const W=720,H=330,pad=55,max=Math.max(...nums,1),barW=(W-pad*2)/nums.length*.62;
+  const bars=nums.map((n,i)=>{
+    const h=Math.max(4,(n/max)*(H-pad*2));
+    const x=pad+i*((W-pad*2)/nums.length)+(((W-pad*2)/nums.length)-barW)/2;
+    const y=H-pad-h;
+    return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="7" fill="none" stroke="currentColor" stroke-width="3"/><text x="${(x+barW/2).toFixed(1)}" y="${(y-9).toFixed(1)}" text-anchor="middle" fill="currentColor" font-size="14">${n}</text>`;
+  }).join("");
+  return `<div class="hudVisual"><div class="hudLabel">JARVIS // TACTICAL DATA VISUALIZATION</div>
+  <svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="HUD Balkendiagramm">
+  <g opacity=".22" stroke="currentColor"><path d="M${pad} ${pad}H${W-pad}M${pad} ${(H/2).toFixed(0)}H${W-pad}M${pad} ${H-pad}H${W-pad}"/><path d="M${pad} ${pad}V${H-pad}M${W-pad} ${pad}V${H-pad}"/></g>
+  <g>${bars}</g><text x="${W/2}" y="25" text-anchor="middle" fill="currentColor" font-size="15" letter-spacing="3">CORE ANALYSIS</text></svg></div>`;
+}
+
+function curiosity(){
+  const teachings=data.teachings||[], memory=data.memory||[];
+  const prompts=[
+    "Welche Fähigkeit möchtest du mir als Nächstes beibringen?",
+    "Welche Regel soll ich über deinen bevorzugten Antwortstil lernen?",
+    "Welches deiner Projekte soll ich als Nächstes visualisieren?"
+  ];
+  const idx=(teachings.length+memory.length)%prompts.length;
+  return "Neugier-Modus aktiviert. Meine nächste Frage an dich:\\n\\n"+prompts[idx];
+}
 
 async function processCommand(c){c=c.trim();if(!c)return;reply("Verarbeitung …");state("PROCESSING");const l=localCommand(c);if(l){reply(l);speak(l);return}if(!engine){const m="Mein lokales KI-Gehirn ist noch nicht verfügbar. Öffne das Systemmenü und lade die KI.";reply(m);speak(m);state("AI OFFLINE");return}const a=await askAI(c);const m=a||"Ich konnte die Anfrage nicht verarbeiten.";reply(m);speak(m)}
 $("sendButton").onclick=()=>{const t=$("commandInput").value;$("commandInput").value="";processCommand(t)}
@@ -132,7 +216,20 @@ $("downloadCode").onclick=()=>{const code=$("workshopCode").value.trim();if(code
 $("diagnoseButton").onclick=async()=>{await checkGPU();log("Browser: "+navigator.userAgent);log("Online: "+navigator.onLine);log("Platform: "+navigator.platform);log("AI Engine: "+(engine?"ONLINE":"OFFLINE"));toast("Diagnose aktualisiert.")}
 $("exportButton").onclick=()=>download("index.html","<!DOCTYPE html>\n"+document.documentElement.outerHTML,"text/html")
 window.addEventListener("error",e=>log("JavaScript Fehler: "+e.message));window.addEventListener("unhandledrejection",e=>log("Promise Fehler: "+e.reason))
-updateUI();status("SYSTEM READY",true);state("CORE ONLINE");reply("JARVIS 6.0 bereit.");log("JARVIS 6.0 gestartet.");checkGPU().then(()=>setTimeout(loadAI,700))
+updateUI();status("SYSTEM READY",true);state("CORE ONLINE");reply("JARVIS 7.0 bereit.");log("JARVIS 7.0 gestartet.");checkGPU().then(()=>setTimeout(loadAI,700))
+
+function loadVoices(){
+  const sel=document.getElementById("voiceSelect");
+  if(!sel || !("speechSynthesis" in window))return;
+  const voices=speechSynthesis.getVoices().filter(v=>/de|en/i.test(v.lang));
+  sel.innerHTML="";
+  voices.forEach(v=>{const o=document.createElement("option");o.value=v.voiceURI;o.textContent=`${v.name} — ${v.lang}`;sel.appendChild(o)});
+}
+if("speechSynthesis" in window){
+  speechSynthesis.addEventListener("voiceschanged",loadVoices);
+  setTimeout(loadVoices,100);
+}
+
 </script>
 </body>
 </html>

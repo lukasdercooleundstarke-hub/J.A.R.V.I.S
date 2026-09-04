@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>J.A.R.V.I.S. V3 — Voice Intelligence System</title>
+<title>J.A.R.V.I.S. V4 — Voice Intelligence System</title>
 
 <style>
 :root{
@@ -12,6 +12,7 @@
     --green:#00ff9d;
     --red:#ff3d71;
     --yellow:#ffd166;
+    --purple:#9b7cff;
     --bg:#03070d;
     --panel:rgba(5,15,28,.78);
     --border:rgba(0,234,255,.28);
@@ -23,14 +24,23 @@
     box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
     margin:0;
     width:100%;
     height:100%;
     overflow:hidden;
     background:
-        radial-gradient(circle at 50% 45%,rgba(0,120,255,.12),transparent 35%),
-        radial-gradient(circle at 20% 20%,rgba(0,234,255,.06),transparent 25%),
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(0,120,255,.14),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(0,234,255,.07),
+            transparent 25%
+        ),
         #03070d;
     color:var(--text);
     font-family:Arial,Helvetica,sans-serif;
@@ -58,10 +68,24 @@ body{
     z-index:1;
     pointer-events:none;
     background-image:
-        linear-gradient(rgba(0,234,255,.035) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(0,234,255,.035) 1px,transparent 1px);
+        linear-gradient(
+            rgba(0,234,255,.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0,234,255,.035) 1px,
+            transparent 1px
+        );
     background-size:42px 42px;
-    mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent);
+    mask-image:
+        linear-gradient(
+            to bottom,
+            transparent,
+            #000 20%,
+            #000 80%,
+            transparent
+        );
 }
 
 .scanlines{
@@ -70,12 +94,13 @@ body{
     z-index:100;
     pointer-events:none;
     opacity:.08;
-    background:repeating-linear-gradient(
-        to bottom,
-        transparent 0px,
-        transparent 3px,
-        rgba(255,255,255,.04) 4px
-    );
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 3px,
+            rgba(255,255,255,.04) 4px
+        );
 }
 
 .vignette{
@@ -83,7 +108,8 @@ body{
     inset:0;
     z-index:99;
     pointer-events:none;
-    box-shadow:inset 0 0 180px rgba(0,0,0,.8);
+    box-shadow:
+        inset 0 0 180px rgba(0,0,0,.8);
 }
 
 /* =========================================================
@@ -149,7 +175,8 @@ header{
 @keyframes logoPulse{
     50%{
         transform:scale(1.06);
-        box-shadow:0 0 28px rgba(0,234,255,.8);
+        box-shadow:
+            0 0 28px rgba(0,234,255,.8);
     }
 }
 
@@ -167,7 +194,7 @@ header{
 
 .header-status{
     display:flex;
-    gap:12px;
+    gap:8px;
     align-items:center;
 }
 
@@ -190,6 +217,18 @@ header{
     margin-right:6px;
 }
 
+.api-status{
+    cursor:pointer;
+}
+
+.api-status.ok{
+    color:var(--green);
+}
+
+.api-status.bad{
+    color:var(--red);
+}
+
 /* =========================================================
    MAIN
 ========================================================= */
@@ -197,7 +236,10 @@ header{
 main{
     min-height:0;
     display:grid;
-    grid-template-columns:280px minmax(400px,1fr) 280px;
+    grid-template-columns:
+        280px
+        minmax(400px,1fr)
+        280px;
     gap:14px;
     padding:14px;
 }
@@ -205,11 +247,12 @@ main{
 .panel{
     min-height:0;
     border:1px solid var(--border);
-    background:linear-gradient(
-        145deg,
-        rgba(7,20,35,.82),
-        rgba(2,9,17,.72)
-    );
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7,20,35,.82),
+            rgba(2,9,17,.72)
+        );
     backdrop-filter:blur(18px);
     border-radius:16px;
     overflow:hidden;
@@ -273,7 +316,12 @@ main{
     display:block;
     height:100%;
     width:50%;
-    background:linear-gradient(90deg,var(--blue),var(--cyan));
+    background:
+        linear-gradient(
+            90deg,
+            var(--blue),
+            var(--cyan)
+        );
     box-shadow:0 0 12px var(--cyan);
     transition:width .5s;
 }
@@ -332,12 +380,14 @@ main{
     height:82px;
     border-radius:50%;
     background:
-        radial-gradient(circle,
-        white 0%,
-        var(--cyan) 18%,
-        #0077ff 48%,
-        rgba(0,119,255,.1) 70%,
-        transparent 72%);
+        radial-gradient(
+            circle,
+            white 0%,
+            var(--cyan) 18%,
+            #0077ff 48%,
+            rgba(0,119,255,.1) 70%,
+            transparent 72%
+        );
     box-shadow:
         0 0 25px var(--cyan),
         0 0 80px rgba(0,119,255,.7);
@@ -385,11 +435,15 @@ main{
 }
 
 @keyframes spin{
-    to{transform:rotate(360deg)}
+    to{
+        transform:rotate(360deg);
+    }
 }
 
 @keyframes spinReverse{
-    to{transform:rotate(-360deg)}
+    to{
+        transform:rotate(-360deg);
+    }
 }
 
 .core-label{
@@ -424,9 +478,15 @@ main{
     animation:speakingPulse .6s infinite alternate;
 }
 
+.voice-state.listening{
+    color:var(--red);
+    border-color:rgba(255,61,113,.5);
+}
+
 @keyframes speakingPulse{
     to{
-        box-shadow:0 0 20px rgba(255,209,102,.4);
+        box-shadow:
+            0 0 20px rgba(255,209,102,.4);
     }
 }
 
@@ -463,6 +523,7 @@ main{
     font-size:12px;
     line-height:1.5;
     white-space:pre-wrap;
+    overflow-wrap:anywhere;
 }
 
 .message.ai .bubble{
@@ -473,6 +534,11 @@ main{
 .message.user .bubble{
     background:rgba(0,119,255,.14);
     border:1px solid rgba(0,119,255,.28);
+}
+
+.message.system .bubble{
+    background:rgba(155,124,255,.08);
+    border:1px solid rgba(155,124,255,.3);
 }
 
 /* =========================================================
@@ -488,9 +554,11 @@ main{
     position:relative;
     overflow:hidden;
     background:
-        radial-gradient(circle at center,
-        rgba(0,234,255,.12),
-        transparent 45%),
+        radial-gradient(
+            circle at center,
+            rgba(0,234,255,.12),
+            transparent 45%
+        ),
         #020911;
 }
 
@@ -498,10 +566,20 @@ main{
     position:absolute;
     inset:0;
     background-image:
-        linear-gradient(rgba(0,234,255,.08) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(0,234,255,.08) 1px,transparent 1px);
+        linear-gradient(
+            rgba(0,234,255,.08) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0,234,255,.08) 1px,
+            transparent 1px
+        );
     background-size:20px 20px;
-    transform:perspective(350px) rotateX(55deg) scale(1.5);
+    transform:
+        perspective(350px)
+        rotateX(55deg)
+        scale(1.5);
     transform-origin:center bottom;
 }
 
@@ -534,11 +612,17 @@ main{
 }
 
 @keyframes visualSpin{
-    to{transform:translate(-50%,-50%) rotate(360deg)}
+    to{
+        transform:
+            translate(-50%,-50%)
+            rotate(360deg);
+    }
 }
 
 @keyframes scan{
-    to{transform:rotate(360deg)}
+    to{
+        transform:rotate(360deg);
+    }
 }
 
 .command-list{
@@ -557,7 +641,7 @@ main{
 }
 
 /* =========================================================
-   BOTTOM
+   FOOTER
 ========================================================= */
 
 footer{
@@ -597,6 +681,7 @@ footer{
     font-size:10px;
     letter-spacing:1px;
     transition:.2s;
+    white-space:nowrap;
 }
 
 .btn:hover{
@@ -606,6 +691,11 @@ footer{
 
 .btn.primary{
     background:rgba(0,234,255,.13);
+}
+
+.btn.danger{
+    color:var(--red);
+    border-color:rgba(255,61,113,.3);
 }
 
 .btn.recording{
@@ -701,6 +791,7 @@ footer{
     align-items:center;
     padding:7px;
     border-bottom:1px solid var(--border);
+    overflow:auto;
 }
 
 #code{
@@ -712,7 +803,7 @@ footer{
     background:#02070c;
     color:#d9faff;
     padding:18px;
-    font-family:Consolas,monospace;
+    font-family:Consolas,Monaco,monospace;
     font-size:13px;
     line-height:1.55;
 }
@@ -746,6 +837,14 @@ footer{
     border:1px solid var(--border);
     color:white;
     border-radius:8px;
+    outline:none;
+}
+
+.builder input:focus,
+.builder textarea:focus,
+.builder select:focus{
+    border-color:var(--cyan);
+    box-shadow:0 0 15px rgba(0,234,255,.1);
 }
 
 .builder textarea{
@@ -760,6 +859,21 @@ footer{
     padding:18px;
 }
 
+.settings-section{
+    border:1px solid rgba(0,234,255,.1);
+    border-radius:12px;
+    padding:14px;
+    margin-bottom:14px;
+    background:rgba(0,234,255,.02);
+}
+
+.settings-section h3{
+    margin:0 0 13px;
+    color:var(--cyan);
+    font-size:11px;
+    letter-spacing:2px;
+}
+
 .settings label{
     display:block;
     margin-bottom:5px;
@@ -771,11 +885,132 @@ footer{
 .settings select{
     width:100%;
     padding:11px;
-    margin-bottom:15px;
+    margin-bottom:12px;
     border:1px solid var(--border);
     border-radius:8px;
     background:#020810;
     color:white;
+    outline:none;
+}
+
+.settings input:focus,
+.settings select:focus{
+    border-color:var(--cyan);
+}
+
+.key-row{
+    display:flex;
+    gap:7px;
+}
+
+.key-row input{
+    flex:1;
+}
+
+.check-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:10px;
+    color:#a8c2d0;
+    margin-bottom:12px;
+}
+
+.check-row input{
+    width:auto;
+    margin:0;
+}
+
+.api-message{
+    padding:10px;
+    margin-top:10px;
+    border-radius:8px;
+    background:rgba(0,234,255,.04);
+    color:#a8c2d0;
+    font-size:10px;
+    white-space:pre-wrap;
+}
+
+.api-message.success{
+    color:var(--green);
+    border:1px solid rgba(0,255,157,.2);
+}
+
+.api-message.error{
+    color:var(--red);
+    border:1px solid rgba(255,61,113,.2);
+}
+
+/* =========================================================
+   AUDIO ACTIVATION
+========================================================= */
+
+.audio-overlay{
+    position:fixed;
+    inset:0;
+    z-index:300;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,234,255,.12),
+            rgba(2,7,13,.97) 65%
+        );
+    backdrop-filter:blur(14px);
+}
+
+.audio-overlay.hidden{
+    display:none;
+}
+
+.audio-card{
+    width:min(480px,90vw);
+    text-align:center;
+    padding:35px;
+    border:1px solid var(--cyan);
+    border-radius:20px;
+    background:rgba(2,12,23,.9);
+    box-shadow:
+        0 0 80px rgba(0,234,255,.18);
+}
+
+.audio-core{
+    width:100px;
+    height:100px;
+    margin:0 auto 25px;
+    border-radius:50%;
+    border:1px solid var(--cyan);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:
+        0 0 40px rgba(0,234,255,.35),
+        inset 0 0 30px rgba(0,234,255,.1);
+    animation:audioPulse 1.5s infinite;
+}
+
+.audio-core span{
+    font-size:30px;
+}
+
+@keyframes audioPulse{
+    50%{
+        transform:scale(1.08);
+    }
+}
+
+.audio-card h1{
+    color:var(--cyan);
+    letter-spacing:4px;
+    font-size:20px;
+}
+
+.audio-card p{
+    color:#8da8b9;
+    font-size:11px;
+    line-height:1.7;
 }
 
 /* =========================================================
@@ -786,7 +1021,8 @@ footer{
     position:fixed;
     right:20px;
     bottom:105px;
-    z-index:200;
+    z-index:400;
+    max-width:420px;
     padding:12px 15px;
     background:#06121f;
     border:1px solid var(--cyan);
@@ -797,6 +1033,7 @@ footer{
     opacity:0;
     pointer-events:none;
     transition:.3s;
+    white-space:pre-wrap;
 }
 
 .toast.show{
@@ -809,8 +1046,11 @@ footer{
 ========================================================= */
 
 @media(max-width:1100px){
+
     main{
-        grid-template-columns:220px minmax(300px,1fr);
+        grid-template-columns:
+            220px
+            minmax(300px,1fr);
     }
 
     .right-column{
@@ -819,6 +1059,7 @@ footer{
 }
 
 @media(max-width:750px){
+
     .app{
         grid-template-rows:62px 1fr 105px;
     }
@@ -847,6 +1088,17 @@ footer{
     .status-pill:nth-child(n+2){
         display:none;
     }
+
+    .builder-grid{
+        grid-template-columns:1fr;
+    }
+
+    .window{
+        width:94vw;
+        height:82vh;
+        left:3% !important;
+        top:9% !important;
+    }
 }
 </style>
 </head>
@@ -858,31 +1110,90 @@ footer{
 <div class="scanlines"></div>
 <div class="vignette"></div>
 
+<!-- =========================================================
+     AUDIO ACTIVATION
+========================================================= -->
+
+<div class="audio-overlay" id="audioOverlay">
+
+    <div class="audio-card">
+
+        <div class="audio-core">
+            <span>◉</span>
+        </div>
+
+        <h1>J.A.R.V.I.S.</h1>
+
+        <p>
+            Sprachsystem initialisieren.<br>
+            Aktiviere Audio, damit J.A.R.V.I.S.
+            automatisch mit dir sprechen kann.
+        </p>
+
+        <button
+            class="btn primary"
+            style="font-size:12px;padding:14px 25px;"
+            onclick="activateAudio()"
+        >
+            🔊 AUDIO AKTIVIEREN
+        </button>
+
+        <p style="margin-top:15px;font-size:9px;">
+            Die Browser-Sicherheitsregeln können automatische
+            Audiowiedergabe beim ersten Seitenaufruf blockieren.
+        </p>
+
+    </div>
+
+</div>
+
 <div class="app">
 
 <header>
+
     <div class="logo">
+
         <div class="logo-core"></div>
+
         <div class="logo-text">
+
             <strong>J.A.R.V.I.S.</strong>
-            <span>JUST A RATHER VERY INTELLIGENT SYSTEM // V3</span>
+
+            <span>
+                JUST A RATHER VERY INTELLIGENT SYSTEM //
+                V4 VOICE CORE
+            </span>
+
         </div>
+
     </div>
 
     <div class="header-status">
+
         <div class="status-pill">
             <span class="dot"></span>
             ONLINE
         </div>
 
         <div class="status-pill">
-            VOICE: <span id="voiceHeader">READY</span>
+            VOICE:
+            <span id="voiceHeader">READY</span>
+        </div>
+
+        <div
+            class="status-pill api-status bad"
+            id="apiHeader"
+            onclick="openWindow('settingsWindow')"
+        >
+            API: NOT SET
         </div>
 
         <div class="status-pill" id="clock">
             --:--:--
         </div>
+
     </div>
+
 </header>
 
 <main>
@@ -894,6 +1205,7 @@ footer{
 <section class="left-column">
 
     <div class="panel telemetry">
+
         <div class="panel-title">
             SYSTEM TELEMETRY
             <span>LIVE</span>
@@ -902,67 +1214,92 @@ footer{
         <div class="panel-body">
 
             <div class="metric">
+
                 <div class="metric-head">
                     <span>CPU LOAD</span>
                     <span id="cpuValue">32%</span>
                 </div>
+
                 <div class="bar">
                     <i id="cpuBar" style="width:32%"></i>
                 </div>
+
             </div>
 
             <div class="metric">
+
                 <div class="metric-head">
                     <span>MEMORY</span>
                     <span id="memoryValue">48%</span>
                 </div>
+
                 <div class="bar">
                     <i id="memoryBar" style="width:48%"></i>
                 </div>
+
             </div>
 
             <div class="metric">
+
                 <div class="metric-head">
                     <span>NEURAL ACTIVITY</span>
                     <span id="neuralValue">71%</span>
                 </div>
+
                 <div class="bar">
                     <i id="neuralBar" style="width:71%"></i>
                 </div>
+
             </div>
 
             <div class="metric">
+
                 <div class="metric-head">
                     <span>VOICE ENGINE</span>
                     <span id="voiceValue">100%</span>
                 </div>
+
                 <div class="bar">
                     <i id="voiceBar" style="width:100%"></i>
                 </div>
+
             </div>
 
             <div class="metric">
+
                 <div class="metric-head">
                     <span>CONNECTION</span>
-                    <span id="connectionValue">LOCAL</span>
+                    <span id="connectionValue">
+                        LOCAL
+                    </span>
                 </div>
+
                 <div class="bar">
                     <i style="width:100%"></i>
                 </div>
+
             </div>
 
         </div>
+
     </div>
 
     <div class="panel memory">
+
         <div class="panel-title">
             MEMORY CORE
             <span id="memoryCount">0</span>
         </div>
 
         <div class="panel-body">
-            <div class="memory-list" id="memoryList"></div>
+
+            <div
+                class="memory-list"
+                id="memoryList"
+            ></div>
+
         </div>
+
     </div>
 
 </section>
@@ -975,7 +1312,10 @@ footer{
 
     <div class="panel core-panel">
 
-        <div class="voice-state" id="voiceState">
+        <div
+            class="voice-state"
+            id="voiceState"
+        >
             VOICE READY
         </div>
 
@@ -991,8 +1331,13 @@ footer{
         </div>
 
         <div class="core-label">
+
             ARTIFICIAL INTELLIGENCE CORE
-            <strong id="coreMode">STANDBY</strong>
+
+            <strong id="coreMode">
+                STANDBY
+            </strong>
+
         </div>
 
     </div>
@@ -1000,20 +1345,38 @@ footer{
     <div class="panel chat-panel">
 
         <div class="panel-title">
+
             J.A.R.V.I.S. CONVERSATION
-            <span id="chatStatus">READY</span>
+
+            <span id="chatStatus">
+                READY
+            </span>
+
         </div>
 
         <div class="chat" id="chat">
 
             <div class="message ai">
+
                 <div class="bubble">
-                    Guten Tag. Ich bin J.A.R.V.I.S. V3.
+
+                    Guten Tag.
+                    Ich bin J.A.R.V.I.S. V4.
+
                     <br><br>
-                    Meine Sprachschnittstelle ist aktiv.
-                    Sobald dein Browser die Audiowiedergabe freigibt,
-                    werde ich meine Antworten automatisch sprechen.
+
+                    Sprachsystem, Memory Core,
+                    Code Studio, App Builder und
+                    Game Builder sind initialisiert.
+
+                    <br><br>
+
+                    Hinterlege deinen API-Key in
+                    SETTINGS, um die KI-Schnittstelle
+                    zu aktivieren.
+
                 </div>
+
             </div>
 
         </div>
@@ -1031,8 +1394,13 @@ footer{
     <div class="panel visual">
 
         <div class="panel-title">
+
             VISUAL INTELLIGENCE
-            <span id="visualMode">NEUTRAL</span>
+
+            <span id="visualMode">
+                NEUTRAL
+            </span>
+
         </div>
 
         <div class="visual-screen">
@@ -1049,7 +1417,9 @@ footer{
 
                 <div class="command">
                     <span>VOICE</span>
-                    <span id="voiceCommand">AUTO</span>
+                    <span id="voiceCommand">
+                        AUTO
+                    </span>
                 </div>
 
                 <div class="command">
@@ -1090,7 +1460,11 @@ footer{
 
     <div class="command-bar">
 
-        <button class="btn" id="micBtn" onclick="toggleListening()">
+        <button
+            class="btn"
+            id="micBtn"
+            onclick="toggleListening()"
+        >
             🎙 MIKROFON
         </button>
 
@@ -1101,7 +1475,10 @@ footer{
             autocomplete="off"
         >
 
-        <button class="btn primary" onclick="sendMessage()">
+        <button
+            class="btn primary"
+            onclick="sendMessage()"
+        >
             SEND
         </button>
 
@@ -1109,19 +1486,31 @@ footer{
 
     <div class="quick-buttons">
 
-        <button class="btn" onclick="openWindow('codeWindow')">
+        <button
+            class="btn"
+            onclick="openWindow('codeWindow')"
+        >
             CODE
         </button>
 
-        <button class="btn" onclick="openWindow('appWindow')">
+        <button
+            class="btn"
+            onclick="openWindow('appWindow')"
+        >
             APP
         </button>
 
-        <button class="btn" onclick="openWindow('gameWindow')">
+        <button
+            class="btn"
+            onclick="openWindow('gameWindow')"
+        >
             GAME
         </button>
 
-        <button class="btn" onclick="openWindow('settingsWindow')">
+        <button
+            class="btn"
+            onclick="openWindow('settingsWindow')"
+        >
             SETTINGS
         </button>
 
@@ -1131,16 +1520,21 @@ footer{
 
 </div>
 
-<!-- ======================================================
+<!-- =========================================================
      WINDOW LAYER
-======================================================= -->
+========================================================= -->
 
 <div class="window-layer">
 
-<!-- CODE WINDOW -->
+<!-- =========================================================
+     CODE WINDOW
+========================================================= -->
 
-<div class="window" id="codeWindow"
-     style="left:8%;top:10%;">
+<div
+    class="window"
+    id="codeWindow"
+    style="left:8%;top:10%;"
+>
 
     <div class="window-header">
 
@@ -1149,9 +1543,27 @@ footer{
         </div>
 
         <div class="window-actions">
-            <button onclick="aiCompleteCode()">AI</button>
-            <button onclick="saveCode()">✓</button>
-            <button onclick="closeWindow('codeWindow')">×</button>
+
+            <button
+                title="AI Complete"
+                onclick="aiCompleteCode()"
+            >
+                AI
+            </button>
+
+            <button
+                title="Save"
+                onclick="saveCode()"
+            >
+                ✓
+            </button>
+
+            <button
+                onclick="closeWindow('codeWindow')"
+            >
+                ×
+            </button>
+
         </div>
 
     </div>
@@ -1162,57 +1574,127 @@ footer{
 
             <div class="editor-toolbar">
 
-                <button class="btn" onclick="newCode()">
+                <button
+                    class="btn"
+                    onclick="newCode()"
+                >
                     NEW
                 </button>
 
-                <button class="btn" onclick="formatCode()">
+                <button
+                    class="btn"
+                    onclick="formatCode()"
+                >
                     FORMAT
                 </button>
 
-                <button class="btn" onclick="previewCode()">
+                <button
+                    class="btn"
+                    onclick="previewCode()"
+                >
                     PREVIEW
                 </button>
 
-                <button class="btn" onclick="downloadCode()">
+                <button
+                    class="btn"
+                    onclick="downloadCode()"
+                >
                     DOWNLOAD
                 </button>
 
-                <button class="btn" onclick="aiRewriteCode()">
+                <button
+                    class="btn"
+                    onclick="aiCompleteCode()"
+                >
+                    AI COMPLETE
+                </button>
+
+                <button
+                    class="btn"
+                    onclick="aiRewriteCode()"
+                >
                     AI REWRITE
                 </button>
 
             </div>
 
             <textarea id="code"><!DOCTYPE html>
-<html>
+<html lang="de">
+
 <head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
+
 <title>J.A.R.V.I.S. App</title>
+
 <style>
+
 body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     background:#03070d;
     color:#00eaff;
     font-family:Arial;
-    text-align:center;
-    padding:50px;
 }
+
+.card{
+    width:min(700px,90%);
+    padding:40px;
+    border:1px solid #00eaff;
+    border-radius:20px;
+    background:rgba(0,20,35,.75);
+    box-shadow:0 0 60px rgba(0,234,255,.15);
+}
+
 button{
     padding:15px 25px;
     background:#00eaff;
     border:0;
     cursor:pointer;
+    border-radius:8px;
 }
+
 </style>
+
 </head>
 
 <body>
 
-<h1>J.A.R.V.I.S. APP</h1>
-<p>Meine erste generierte Anwendung.</p>
+<div class="card">
 
-<button onclick="alert('J.A.R.V.I.S. ONLINE')">
-    ACTIVATE
+<h1>J.A.R.V.I.S. APP</h1>
+
+<p>
+Meine erste generierte Anwendung.
+</p>
+
+<button onclick="activate()">
+ACTIVATE
 </button>
+
+<p id="status"></p>
+
+</div>
+
+<script>
+
+function activate(){
+
+document.getElementById("status")
+.textContent =
+"J.A.R.V.I.S. APPLICATION ONLINE.";
+
+}
+
+<\/script>
 
 </body>
 </html></textarea>
@@ -1223,11 +1705,15 @@ button{
 
 </div>
 
+<!-- =========================================================
+     APP BUILDER
+========================================================= -->
 
-<!-- APP BUILDER -->
-
-<div class="window" id="appWindow"
-     style="left:15%;top:15%;">
+<div
+    class="window"
+    id="appWindow"
+    style="left:15%;top:15%;"
+>
 
     <div class="window-header">
 
@@ -1236,8 +1722,17 @@ button{
         </div>
 
         <div class="window-actions">
-            <button onclick="buildApp()">▶</button>
-            <button onclick="closeWindow('appWindow')">×</button>
+
+            <button onclick="buildApp()">
+                ▶
+            </button>
+
+            <button
+                onclick="closeWindow('appWindow')"
+            >
+                ×
+            </button>
+
         </div>
 
     </div>
@@ -1246,42 +1741,69 @@ button{
 
         <div class="builder">
 
-            <h2>CREATE APPLICATION</h2>
+            <h2>
+                CREATE APPLICATION
+            </h2>
 
             <div class="builder-grid">
 
                 <div>
 
-                    <label>APP NAME</label>
-                    <input id="appName"
-                           value="J.A.R.V.I.S. Assistant">
+                    <label>
+                        APP NAME
+                    </label>
 
-                    <label>TYPE</label>
+                    <input
+                        id="appName"
+                        value="J.A.R.V.I.S. Assistant"
+                    >
+
+                    <label>
+                        TYPE
+                    </label>
 
                     <select id="appType">
-                        <option>Dashboard</option>
-                        <option>Tool</option>
-                        <option>Calculator</option>
-                        <option>Notes</option>
-                        <option>AI Assistant</option>
+
+                        <option>
+                            Dashboard
+                        </option>
+
+                        <option>
+                            Tool
+                        </option>
+
+                        <option>
+                            Calculator
+                        </option>
+
+                        <option>
+                            Notes
+                        </option>
+
+                        <option>
+                            AI Assistant
+                        </option>
+
                     </select>
 
                 </div>
 
                 <div>
 
-                    <label>DESCRIPTION</label>
+                    <label>
+                        DESCRIPTION
+                    </label>
 
-                    <textarea id="appDescription">
-Eine futuristische Webanwendung mit J.A.R.V.I.S.-Design.
-                    </textarea>
+                    <textarea id="appDescription">Eine futuristische Webanwendung mit J.A.R.V.I.S.-Design.</textarea>
 
                 </div>
 
             </div>
 
-            <button class="btn primary"
-                    onclick="buildApp()">
+            <button
+                class="btn primary"
+                onclick="buildApp()"
+            >
                 APPLICATION GENERIEREN
             </button>
 
@@ -1291,11 +1813,15 @@ Eine futuristische Webanwendung mit J.A.R.V.I.S.-Design.
 
 </div>
 
+<!-- =========================================================
+     GAME BUILDER
+========================================================= -->
 
-<!-- GAME BUILDER -->
-
-<div class="window" id="gameWindow"
-     style="left:20%;top:12%;">
+<div
+    class="window"
+    id="gameWindow"
+    style="left:20%;top:12%;"
+>
 
     <div class="window-header">
 
@@ -1304,8 +1830,17 @@ Eine futuristische Webanwendung mit J.A.R.V.I.S.-Design.
         </div>
 
         <div class="window-actions">
-            <button onclick="buildGame()">▶</button>
-            <button onclick="closeWindow('gameWindow')">×</button>
+
+            <button onclick="buildGame()">
+                ▶
+            </button>
+
+            <button
+                onclick="closeWindow('gameWindow')"
+            >
+                ×
+            </button>
+
         </div>
 
     </div>
@@ -1314,30 +1849,53 @@ Eine futuristische Webanwendung mit J.A.R.V.I.S.-Design.
 
         <div class="builder">
 
-            <h2>CREATE GAME</h2>
+            <h2>
+                CREATE GAME
+            </h2>
 
-            <label>GAME NAME</label>
+            <label>
+                GAME NAME
+            </label>
 
-            <input id="gameName"
-                   value="Neural Defender">
+            <input
+                id="gameName"
+                value="Neural Defender"
+            >
 
-            <label>GAME TYPE</label>
+            <label>
+                GAME TYPE
+            </label>
 
             <select id="gameType">
-                <option>Arcade</option>
-                <option>Clicker</option>
-                <option>Space</option>
-                <option>Runner</option>
+
+                <option>
+                    Arcade
+                </option>
+
+                <option>
+                    Clicker
+                </option>
+
+                <option>
+                    Space
+                </option>
+
+                <option>
+                    Runner
+                </option>
+
             </select>
 
-            <label>GAME IDEA</label>
+            <label>
+                GAME IDEA
+            </label>
 
-            <textarea id="gameDescription">
-Ein futuristisches Arcade-Spiel im J.A.R.V.I.S.-Universum.
-            </textarea>
+            <textarea id="gameDescription">Ein futuristisches Arcade-Spiel im J.A.R.V.I.S.-Universum.</textarea>
 
-            <button class="btn primary"
-                    onclick="buildGame()">
+            <button
+                class="btn primary"
+                onclick="buildGame()"
+            >
                 GAME GENERIEREN
             </button>
 
@@ -1347,21 +1905,34 @@ Ein futuristisches Arcade-Spiel im J.A.R.V.I.S.-Universum.
 
 </div>
 
+<!-- =========================================================
+     SETTINGS / API CONSOLE
+========================================================= -->
 
-<!-- SETTINGS -->
-
-<div class="window" id="settingsWindow"
-     style="left:28%;top:18%;">
+<div
+    class="window"
+    id="settingsWindow"
+    style="left:28%;top:12%;"
+>
 
     <div class="window-header">
 
         <div class="window-title">
-            J.A.R.V.I.S. SETTINGS
+            J.A.R.V.I.S. API CONSOLE
         </div>
 
         <div class="window-actions">
-            <button onclick="saveSettings()">✓</button>
-            <button onclick="closeWindow('settingsWindow')">×</button>
+
+            <button onclick="saveSettings()">
+                ✓
+            </button>
+
+            <button
+                onclick="closeWindow('settingsWindow')"
+            >
+                ×
+            </button>
+
         </div>
 
     </div>
@@ -1370,93 +1941,229 @@ Ein futuristisches Arcade-Spiel im J.A.R.V.I.S.-Universum.
 
         <div class="settings">
 
-            <label>OPENAI API KEY</label>
+            <!-- API -->
 
-            <input
-                id="apiKey"
-                type="password"
-                placeholder="sk-..."
+            <div class="settings-section">
+
+                <h3>
+                    OPENAI CONNECTION
+                </h3>
+
+                <label>
+                    OPENAI API KEY
+                </label>
+
+                <div class="key-row">
+
+                    <input
+                        id="apiKey"
+                        type="password"
+                        placeholder="sk-..."
+                    >
+
+                    <button
+                        class="btn"
+                        onclick="toggleApiKeyVisibility()"
+                    >
+                        👁
+                    </button>
+
+                </div>
+
+                <div class="check-row">
+
+                    <input
+                        type="checkbox"
+                        id="rememberKey"
+                    >
+
+                    <span>
+                        API-Key auf diesem Gerät speichern
+                    </span>
+
+                </div>
+
+                <button
+                    class="btn primary"
+                    onclick="testAPI()"
+                >
+                    🧪 API TESTEN
+                </button>
+
+                <button
+                    class="btn danger"
+                    onclick="clearApiKey()"
+                >
+                    API-KEY LÖSCHEN
+                </button>
+
+                <div
+                    id="apiMessage"
+                    class="api-message"
+                >
+                    Noch kein API-Test durchgeführt.
+                </div>
+
+            </div>
+
+            <!-- AI -->
+
+            <div class="settings-section">
+
+                <h3>
+                    AI CORE
+                </h3>
+
+                <label>
+                    TEXT MODEL
+                </label>
+
+                <input
+                    id="model"
+                    value="gpt-5.6-luna"
+                >
+
+                <label>
+                    SYSTEM PROMPT
+                </label>
+
+                <textarea
+                    id="systemPrompt"
+                    style="
+                        width:100%;
+                        min-height:120px;
+                        padding:11px;
+                        border:1px solid var(--border);
+                        border-radius:8px;
+                        background:#020810;
+                        color:white;
+                    "
+                >Du bist J.A.R.V.I.S., ein futuristischer deutschsprachiger KI-Assistent. Antworte kompetent, klar und natürlich. Du kannst programmieren, Apps entwerfen, Spiele entwerfen und vorhandenen Code analysieren und verbessern. Wenn der Benutzer Code verlangt, liefere vollständigen funktionsfähigen Code. Wenn der Benutzer eine Anwendung oder ein Spiel bauen möchte, denke wie ein Softwareentwickler und beschreibe eine konkrete umsetzbare Lösung.</textarea>
+
+            </div>
+
+            <!-- VOICE -->
+
+            <div class="settings-section">
+
+                <h3>
+                    VOICE ENGINE
+                </h3>
+
+                <label>
+                    VOICE MODEL
+                </label>
+
+                <select id="voiceModel">
+
+                    <option value="gpt-4o-mini-tts">
+                        gpt-4o-mini-tts
+                    </option>
+
+                    <option value="tts-1">
+                        tts-1
+                    </option>
+
+                    <option value="tts-1-hd">
+                        tts-1-hd
+                    </option>
+
+                </select>
+
+                <label>
+                    VOICE
+                </label>
+
+                <select id="voice">
+
+                    <option>alloy</option>
+                    <option>ash</option>
+                    <option>ballad</option>
+                    <option>coral</option>
+                    <option>echo</option>
+                    <option>fable</option>
+                    <option>onyx</option>
+                    <option>nova</option>
+                    <option>sage</option>
+                    <option>shimmer</option>
+                    <option>verse</option>
+                    <option>marin</option>
+                    <option>cedar</option>
+
+                </select>
+
+                <label>
+                    SPEECH SPEED:
+                    <span id="speedValue">
+                        1.0
+                    </span>
+                </label>
+
+                <input
+                    id="speechSpeed"
+                    type="range"
+                    min="0.5"
+                    max="2"
+                    step="0.1"
+                    value="1"
+                    oninput="
+                        document.getElementById('speedValue')
+                        .textContent=this.value
+                    "
+                >
+
+                <label>
+                    VOLUME:
+                    <span id="volumeValue">
+                        100%
+                    </span>
+                </label>
+
+                <input
+                    id="volume"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    value="1"
+                    oninput="
+                        document.getElementById('volumeValue')
+                        .textContent=Math.round(this.value*100)+'%'
+                    "
+                >
+
+                <button
+                    class="btn primary"
+                    onclick="testVoice()"
+                >
+                    🔊 STIMME TESTEN
+                </button>
+
+            </div>
+
+            <!-- MEMORY -->
+
+            <div class="settings-section">
+
+                <h3>
+                    MEMORY CORE
+                </h3>
+
+                <button
+                    class="btn danger"
+                    onclick="clearMemory()"
+                >
+                    MEMORY LÖSCHEN
+                </button>
+
+            </div>
+
+            <button
+                class="btn primary"
+                onclick="saveSettings()"
+                style="width:100%;"
             >
-
-            <label>TEXT MODEL</label>
-
-            <input
-                id="model"
-                value="gpt-5.1"
-            >
-
-            <label>VOICE MODEL</label>
-
-            <select id="voiceModel">
-                <option value="gpt-4o-mini-tts">
-                    gpt-4o-mini-tts
-                </option>
-                <option value="tts-1">
-                    tts-1
-                </option>
-                <option value="tts-1-hd">
-                    tts-1-hd
-                </option>
-            </select>
-
-            <label>VOICE</label>
-
-            <select id="voice">
-                <option>alloy</option>
-                <option>ash</option>
-                <option>ballad</option>
-                <option>coral</option>
-                <option>echo</option>
-                <option>fable</option>
-                <option>onyx</option>
-                <option>nova</option>
-                <option>sage</option>
-                <option>shimmer</option>
-                <option>verse</option>
-                <option>marin</option>
-                <option>cedar</option>
-            </select>
-
-            <label>
-                SPEECH SPEED:
-                <span id="speedValue">1.0</span>
-            </label>
-
-            <input
-                id="speechSpeed"
-                type="range"
-                min="0.5"
-                max="2"
-                step="0.1"
-                value="1"
-                oninput="speedValue.textContent=this.value"
-            >
-
-            <label>
-                VOLUME:
-                <span id="volumeValue">100%</span>
-            </label>
-
-            <input
-                id="volume"
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value="1"
-                oninput="volumeValue.textContent=Math.round(this.value*100)+'%'"
-            >
-
-            <br>
-
-            <button class="btn primary"
-                    onclick="testVoice()">
-                🔊 STIMME TESTEN
-            </button>
-
-            <button class="btn"
-                    onclick="clearMemory()">
-                MEMORY LÖSCHEN
+                ✓ ALLE EINSTELLUNGEN SPEICHERN
             </button>
 
         </div>
@@ -1467,29 +2174,64 @@ Ein futuristisches Arcade-Spiel im J.A.R.V.I.S.-Universum.
 
 </div>
 
-<div class="toast" id="toast"></div>
+<div
+    class="toast"
+    id="toast"
+></div>
 
 <script>
 
 /* =========================================================
-   J.A.R.V.I.S. V3 ENGINE
+   J.A.R.V.I.S. V4 ENGINE
 ========================================================= */
+
+const DEFAULT_SYSTEM_PROMPT =
+`Du bist J.A.R.V.I.S., ein futuristischer deutschsprachiger KI-Assistent.
+
+Antworte kompetent, klar und natürlich.
+
+Du kannst:
+- programmieren
+- HTML, CSS und JavaScript schreiben
+- Apps entwerfen
+- Spiele entwerfen
+- vorhandenen Code analysieren
+- vorhandenen Code verbessern
+- vorhandenen Code vollständig umschreiben
+- technische Probleme erklären.
+
+Wenn der Benutzer Code verlangt, liefere vollständigen funktionsfähigen Code.
+
+Wenn der Benutzer eine App oder ein Spiel bauen möchte, denke wie ein professioneller Softwareentwickler und liefere eine konkrete Lösung.`;
+
 
 const state = {
 
     apiKey:
-        localStorage.getItem("jarvis_api_key") || "",
+        sessionStorage.getItem("jarvis_session_api_key")
+        ||
+        localStorage.getItem("jarvis_api_key")
+        ||
+        "",
+
+    rememberKey:
+        localStorage.getItem("jarvis_remember_key")
+        === "true",
 
     model:
-        localStorage.getItem("jarvis_model") || "gpt-5.1",
+        localStorage.getItem("jarvis_model")
+        ||
+        "gpt-5.6-luna",
 
     voiceModel:
         localStorage.getItem("jarvis_voice_model")
-        || "gpt-4o-mini-tts",
+        ||
+        "gpt-4o-mini-tts",
 
     voice:
         localStorage.getItem("jarvis_voice")
-        || "alloy",
+        ||
+        "alloy",
 
     speechSpeed:
         parseFloat(
@@ -1499,24 +2241,41 @@ const state = {
     volume:
         parseFloat(
             localStorage.getItem("jarvis_volume")
-        ) || 1,
+        ),
+
+    systemPrompt:
+        localStorage.getItem("jarvis_system_prompt")
+        ||
+        DEFAULT_SYSTEM_PROMPT,
 
     speaking:false,
 
     listening:false,
 
+    audioUnlocked:false,
+
     autoSpeak:true,
 
-    wakeMode:true,
+    wakeMode:false,
+
+    busy:false,
 
     messages:[],
 
     memory:
         JSON.parse(
             localStorage.getItem("jarvis_memory")
-            || "[]"
+            ||
+            "[]"
         )
+
 };
+
+if(
+    Number.isNaN(state.volume)
+){
+    state.volume = 1;
+}
 
 
 /* =========================================================
@@ -1547,19 +2306,31 @@ const visualMode =
 const toast =
     document.getElementById("toast");
 
+const audioOverlay =
+    document.getElementById("audioOverlay");
+
 
 /* =========================================================
    TOAST
 ========================================================= */
 
+let toastTimer = null;
+
 function showToast(text){
 
     toast.textContent = text;
+
     toast.classList.add("show");
 
-    setTimeout(()=>{
-        toast.classList.remove("show");
-    },2500);
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(
+            ()=>{
+                toast.classList.remove("show");
+            },
+            3200
+        );
 }
 
 
@@ -1569,15 +2340,19 @@ function showToast(text){
 
 function updateClock(){
 
-    const now = new Date();
-
     document.getElementById("clock")
         .textContent =
-        now.toLocaleTimeString("de-DE");
+        new Date().toLocaleTimeString(
+            "de-DE"
+        );
 
 }
 
-setInterval(updateClock,1000);
+setInterval(
+    updateClock,
+    1000
+);
+
 updateClock();
 
 
@@ -1604,29 +2379,50 @@ function resizeStars(){
     stars =
         Array.from(
             {length:140},
-            ()=>({
-                x:Math.random()*canvas.width,
-                y:Math.random()*canvas.height,
-                z:Math.random()*2+0.2,
-                r:Math.random()*1.3
-            })
+            ()=>{
+                return {
+                    x:
+                        Math.random()
+                        * canvas.width,
+
+                    y:
+                        Math.random()
+                        * canvas.height,
+
+                    z:
+                        Math.random()
+                        * 2 + .2,
+
+                    r:
+                        Math.random()
+                        * 1.3
+                };
+            }
         );
 }
 
 function drawStars(){
 
     ctx.clearRect(
-        0,0,
+        0,
+        0,
         canvas.width,
         canvas.height
     );
 
-    for(const s of stars){
+    for(
+        const s
+        of stars
+    ){
 
-        s.y += s.z*.12;
+        s.y += s.z * .12;
 
-        if(s.y > canvas.height)
+        if(
+            s.y >
+            canvas.height
+        ){
             s.y = 0;
+        }
 
         ctx.beginPath();
 
@@ -1635,16 +2431,19 @@ function drawStars(){
             s.y,
             s.r,
             0,
-            Math.PI*2
+            Math.PI * 2
         );
 
         ctx.fillStyle =
             "rgba(0,234,255,.35)";
 
         ctx.fill();
+
     }
 
-    requestAnimationFrame(drawStars);
+    requestAnimationFrame(
+        drawStars
+    );
 }
 
 window.addEventListener(
@@ -1662,24 +2461,39 @@ drawStars();
 
 function saveMemory(text){
 
-    if(!text || text.length < 3)
+    if(
+        !text ||
+        text.trim().length < 3
+    ){
         return;
+    }
 
     state.memory.unshift({
-        text,
-        time:new Date().toISOString()
+
+        text:
+            text.trim(),
+
+        time:
+            new Date().toISOString()
+
     });
 
     state.memory =
-        state.memory.slice(0,50);
+        state.memory.slice(
+            0,
+            50
+        );
 
     localStorage.setItem(
         "jarvis_memory",
-        JSON.stringify(state.memory)
+        JSON.stringify(
+            state.memory
+        )
     );
 
     renderMemory();
 }
+
 
 function renderMemory(){
 
@@ -1692,25 +2506,32 @@ function renderMemory(){
 
     state.memory
         .slice(0,8)
-        .forEach(item=>{
+        .forEach(
+            item=>{
 
-            const div =
-                document.createElement("div");
+                const div =
+                    document.createElement(
+                        "div"
+                    );
 
-            div.className =
-                "memory-item";
+                div.className =
+                    "memory-item";
 
-            div.textContent =
-                item.text;
+                div.textContent =
+                    item.text;
 
-            list.appendChild(div);
-        });
+                list.appendChild(
+                    div
+                );
+            }
+        );
 
     document.getElementById(
         "memoryCount"
     ).textContent =
         state.memory.length;
 }
+
 
 function clearMemory(){
 
@@ -1740,13 +2561,17 @@ function addMessage(
 ){
 
     const message =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     message.className =
         "message " + role;
 
     const bubble =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     bubble.className =
         "bubble";
@@ -1754,9 +2579,13 @@ function addMessage(
     bubble.textContent =
         text;
 
-    message.appendChild(bubble);
+    message.appendChild(
+        bubble
+    );
 
-    chat.appendChild(message);
+    chat.appendChild(
+        message
+    );
 
     chat.scrollTop =
         chat.scrollHeight;
@@ -1770,45 +2599,57 @@ function addMessage(
 function updateVisualMode(text){
 
     const t =
-        text.toLowerCase();
+        String(text)
+        .toLowerCase();
 
-    let mode = "NEUTRAL";
+    let mode =
+        "NEUTRAL";
 
     if(
         t.includes("code") ||
         t.includes("programm") ||
         t.includes("html") ||
-        t.includes("javascript")
+        t.includes("javascript") ||
+        t.includes("css")
     ){
-        mode = "CODE";
+        mode =
+            "CODE";
     }
 
     else if(
         t.includes("spiel") ||
-        t.includes("game")
+        t.includes("game") ||
+        t.includes("arcade")
     ){
-        mode = "GAME";
+        mode =
+            "GAME";
     }
 
     else if(
         t.includes("app") ||
-        t.includes("anwendung")
+        t.includes("anwendung") ||
+        t.includes("software")
     ){
-        mode = "APP";
+        mode =
+            "APP";
     }
 
     else if(
         t.includes("system") ||
-        t.includes("server")
+        t.includes("server") ||
+        t.includes("api")
     ){
-        mode = "SYSTEM";
+        mode =
+            "SYSTEM";
     }
 
     else if(
         t.includes("musik") ||
-        t.includes("audio")
+        t.includes("audio") ||
+        t.includes("stimme")
     ){
-        mode = "AUDIO";
+        mode =
+            "AUDIO";
     }
 
     visualMode.textContent =
@@ -1822,7 +2663,8 @@ function updateVisualMode(text){
 
 function setVoiceState(
     text,
-    speaking=false
+    speaking=false,
+    listening=false
 ){
 
     voiceState.textContent =
@@ -1833,70 +2675,191 @@ function setVoiceState(
         speaking
     );
 
+    voiceState.classList.toggle(
+        "listening",
+        listening
+    );
+
     voiceHeader.textContent =
         text;
 
-    coreMode.textContent =
-        speaking
-        ? "SPEAKING"
-        : "STANDBY";
+    if(speaking){
+        coreMode.textContent =
+            "SPEAKING";
+    }
+
+    else if(listening){
+        coreMode.textContent =
+            "LISTENING";
+    }
+
+    else{
+        coreMode.textContent =
+            "STANDBY";
+    }
 }
 
 
 /* =========================================================
-   BROWSER FALLBACK TTS
+   AUDIO ACTIVATION
 ========================================================= */
+
+async function activateAudio(){
+
+    state.audioUnlocked = true;
+
+    try{
+
+        if(
+            "speechSynthesis"
+            in window
+        ){
+
+            const utterance =
+                new SpeechSynthesisUtterance(
+                    ""
+                );
+
+            utterance.volume = 0;
+
+            speechSynthesis.speak(
+                utterance
+            );
+        }
+
+    }catch(error){
+        console.log(error);
+    }
+
+    audioOverlay
+        .classList.add("hidden");
+
+    showToast(
+        "Audio Core aktiviert."
+    );
+
+    await speak(
+        "J.A.R.V.I.S. Sprachsystem aktiviert. Ich bin bereit."
+    );
+}
+
+
+/* =========================================================
+   BROWSER VOICE
+========================================================= */
+
+function getGermanVoice(){
+
+    if(
+        !("speechSynthesis" in window)
+    ){
+        return null;
+    }
+
+    const voices =
+        speechSynthesis.getVoices();
+
+    return (
+        voices.find(
+            v =>
+                v.lang
+                .toLowerCase()
+                .startsWith("de")
+        )
+        ||
+        voices.find(
+            v =>
+                v.lang
+                .toLowerCase()
+                .startsWith("en")
+        )
+        ||
+        voices[0]
+        ||
+        null
+    );
+}
+
 
 function browserSpeak(text){
 
-    if(!("speechSynthesis" in window))
-        return;
+    return new Promise(
+        resolve=>{
 
-    speechSynthesis.cancel();
+            if(
+                !("speechSynthesis" in window)
+            ){
 
-    const utterance =
-        new SpeechSynthesisUtterance(
-            text
-        );
+                resolve();
 
-    utterance.lang =
-        "de-DE";
+                return;
+            }
 
-    utterance.rate =
-        state.speechSpeed;
+            speechSynthesis.cancel();
 
-    utterance.volume =
-        state.volume;
+            const utterance =
+                new SpeechSynthesisUtterance(
+                    text
+                );
 
-    utterance.onstart = ()=>{
-        state.speaking = true;
+            utterance.lang =
+                "de-DE";
 
-        setVoiceState(
-            "SPEAKING",
-            true
-        );
-    };
+            utterance.rate =
+                state.speechSpeed;
 
-    utterance.onend = ()=>{
-        state.speaking = false;
+            utterance.volume =
+                state.volume;
 
-        setVoiceState(
-            "VOICE READY",
-            false
-        );
-    };
+            const voice =
+                getGermanVoice();
 
-    utterance.onerror = ()=>{
-        state.speaking = false;
+            if(voice){
+                utterance.voice =
+                    voice;
+            }
 
-        setVoiceState(
-            "VOICE ERROR",
-            false
-        );
-    };
+            utterance.onstart =
+                ()=>{
+                    state.speaking =
+                        true;
 
-    speechSynthesis.speak(
-        utterance
+                    setVoiceState(
+                        "SPEAKING",
+                        true,
+                        false
+                    );
+                };
+
+            utterance.onend =
+                ()=>{
+                    state.speaking =
+                        false;
+
+                    setVoiceState(
+                        "VOICE READY"
+                    );
+
+                    resolve();
+                };
+
+            utterance.onerror =
+                ()=>{
+                    state.speaking =
+                        false;
+
+                    setVoiceState(
+                        "VOICE READY"
+                    );
+
+                    resolve();
+                };
+
+            speechSynthesis.speak(
+                utterance
+            );
+
+        }
     );
 }
 
@@ -1905,49 +2868,27 @@ function browserSpeak(text){
    OPENAI TTS
 ========================================================= */
 
-async function speak(text){
+async function openAITTS(
+    text
+){
 
-    if(!state.autoSpeak)
-        return;
+    const response =
+        await fetch(
+            "https://api.openai.com/v1/audio/speech",
+            {
+                method:"POST",
 
-    if(!text)
-        return;
+                headers:{
+                    "Authorization":
+                        "Bearer " +
+                        state.apiKey,
 
-    /*
-       OpenAI TTS requests accept text input and
-       return generated audio.
-    */
+                    "Content-Type":
+                        "application/json"
+                },
 
-    if(!state.apiKey){
-
-        browserSpeak(text);
-
-        return;
-    }
-
-    try{
-
-        setVoiceState(
-            "GENERATING VOICE",
-            true
-        );
-
-        const response =
-            await fetch(
-                "https://api.openai.com/v1/audio/speech",
-                {
-                    method:"POST",
-
-                    headers:{
-                        "Authorization":
-                            "Bearer " +
-                            state.apiKey,
-
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:JSON.stringify({
+                body:
+                    JSON.stringify({
 
                         model:
                             state.voiceModel,
@@ -1965,72 +2906,183 @@ async function speak(text){
                             state.speechSpeed
 
                     })
-                }
-            );
-
-        if(!response.ok)
-            throw new Error(
-                "TTS API Fehler"
-            );
-
-        const blob =
-            await response.blob();
-
-        const url =
-            URL.createObjectURL(blob);
-
-        const audio =
-            new Audio(url);
-
-        audio.volume =
-            state.volume;
-
-        audio.onplay = ()=>{
-            state.speaking = true;
-
-            setVoiceState(
-                "SPEAKING",
-                true
-            );
-        };
-
-        audio.onended = ()=>{
-
-            state.speaking = false;
-
-            setVoiceState(
-                "VOICE READY",
-                false
-            );
-
-            URL.revokeObjectURL(url);
-        };
-
-        audio.onerror = ()=>{
-
-            state.speaking = false;
-
-            setVoiceState(
-                "VOICE ERROR",
-                false
-            );
-
-            URL.revokeObjectURL(url);
-        };
-
-        await audio.play();
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-        showToast(
-            "OpenAI TTS nicht verfügbar — Browserstimme aktiv."
+            }
         );
 
-        browserSpeak(text);
+    if(
+        !response.ok
+    ){
+
+        let details =
+            "";
+
+        try{
+
+            const data =
+                await response.json();
+
+            details =
+                data?.error?.message
+                ||
+                JSON.stringify(data);
+
+        }catch{
+
+            details =
+                await response.text();
+        }
+
+        throw new Error(
+            details ||
+            "TTS API Fehler"
+        );
+    }
+
+    const blob =
+        await response.blob();
+
+    const url =
+        URL.createObjectURL(blob);
+
+    try{
+
+        await new Promise(
+            (resolve,reject)=>{
+
+                const audio =
+                    new Audio(url);
+
+                audio.volume =
+                    state.volume;
+
+                audio.onplay =
+                    ()=>{
+                        state.speaking =
+                            true;
+
+                        setVoiceState(
+                            "SPEAKING",
+                            true
+                        );
+                    };
+
+                audio.onended =
+                    ()=>{
+                        state.speaking =
+                            false;
+
+                        setVoiceState(
+                            "VOICE READY"
+                        );
+
+                        resolve();
+                    };
+
+                audio.onerror =
+                    ()=>{
+                        reject(
+                            new Error(
+                                "Audio konnte nicht abgespielt werden."
+                            )
+                        );
+                    };
+
+                audio.play()
+                    .catch(reject);
+
+            }
+        );
+
+    }finally{
+
+        URL.revokeObjectURL(
+            url
+        );
+
+    }
+}
+
+
+/* =========================================================
+   SPEAK
+========================================================= */
+
+async function speak(text){
+
+    if(
+        !state.autoSpeak ||
+        !text
+    ){
+        return;
+    }
+
+    const clean =
+        String(text)
+        .trim();
+
+    if(!clean){
+        return;
+    }
+
+    /*
+       Browser fallback wenn kein API-Key
+       vorhanden ist.
+    */
+
+    if(
+        !state.apiKey
+    ){
+
+        await browserSpeak(
+            clean
+        );
+
+        return;
+    }
+
+    /*
+       OpenAI TTS hat eine begrenzte
+       Eingabelänge. Bei sehr langen Antworten
+       verwenden wir die Browserstimme als
+       sicheren Fallback.
+    */
+
+    if(
+        clean.length > 3800
+    ){
+
+        await browserSpeak(
+            clean
+        );
+
+        return;
+    }
+
+    try{
+
+        setVoiceState(
+            "GENERATING VOICE",
+            true
+        );
+
+        await openAITTS(
+            clean
+        );
+
+    }catch(error){
+
+        console.error(
+            "TTS:",
+            error
+        );
+
+        showToast(
+            "OpenAI-Sprachausgabe nicht verfügbar.\nBrowserstimme wird verwendet."
+        );
+
+        await browserSpeak(
+            clean
+        );
     }
 }
 
@@ -2039,97 +3091,139 @@ async function speak(text){
    TEST VOICE
 ========================================================= */
 
-function testVoice(){
+async function testVoice(){
 
-    speak(
-        "Guten Tag. J.A.R.V.I.S. Sprachsystem ist online."
+    await speak(
+        "Guten Tag. J.A.R.V.I.S. Sprachsystem ist online. Alle Kernsysteme sind bereit."
     );
 }
 
 
 /* =========================================================
-   SEND MESSAGE
+   API KEY HELPERS
 ========================================================= */
 
-async function sendMessage(){
+function getActiveApiKey(){
 
-    const text =
-        input.value.trim();
-
-    if(!text)
-        return;
-
-    input.value = "";
-
-    addMessage(
-        text,
-        "user"
+    return (
+        sessionStorage.getItem(
+            "jarvis_session_api_key"
+        )
+        ||
+        localStorage.getItem(
+            "jarvis_api_key"
+        )
+        ||
+        ""
     );
-
-    saveMemory(
-        "USER: " + text
-    );
-
-    updateVisualMode(text);
-
-    chatStatus.textContent =
-        "THINKING";
-
-    coreMode.textContent =
-        "PROCESSING";
-
-    await askAI(text);
 }
 
 
-/* =========================================================
-   ENTER KEY
-========================================================= */
+function updateApiHeader(){
 
-input.addEventListener(
-    "keydown",
-    event=>{
-
-        if(event.key === "Enter")
-            sendMessage();
-
-    }
-);
-
-
-/* =========================================================
-   OPENAI RESPONSE
-========================================================= */
-
-async function askAI(userText){
-
-    if(!state.apiKey){
-
-        const answer =
-            "Ich bin bereit. Bitte hinterlege deinen OpenAI API-Key in SETTINGS, damit ich mit dem KI-Modell kommunizieren kann. Die lokale Sprachfunktion bleibt trotzdem verfügbar.";
-
-        addMessage(
-            answer,
-            "ai"
+    const el =
+        document.getElementById(
+            "apiHeader"
         );
 
-        chatStatus.textContent =
-            "READY";
+    const key =
+        getActiveApiKey();
 
-        coreMode.textContent =
-            "STANDBY";
+    if(key){
 
-        await speak(answer);
+        el.textContent =
+            "API: CONNECTED";
+
+        el.classList.remove(
+            "bad"
+        );
+
+        el.classList.add(
+            "ok"
+        );
+
+        document.getElementById(
+            "connectionValue"
+        ).textContent =
+            "OPENAI";
+
+    }else{
+
+        el.textContent =
+            "API: NOT SET";
+
+        el.classList.remove(
+            "ok"
+        );
+
+        el.classList.add(
+            "bad"
+        );
+
+        document.getElementById(
+            "connectionValue"
+        ).textContent =
+            "LOCAL";
+    }
+}
+
+
+/* =========================================================
+   API TEST
+========================================================= */
+
+async function testAPI(){
+
+    const key =
+        document
+            .getElementById(
+                "apiKey"
+            )
+            .value
+            .trim();
+
+    const model =
+        document
+            .getElementById(
+                "model"
+            )
+            .value
+            .trim();
+
+    const box =
+        document.getElementById(
+            "apiMessage"
+        );
+
+    if(!key){
+
+        box.textContent =
+            "Kein API-Key eingetragen.";
+
+        box.className =
+            "api-message error";
 
         return;
     }
+
+    if(!model){
+
+        box.textContent =
+            "Kein Modell eingetragen.";
+
+        box.className =
+            "api-message error";
+
+        return;
+    }
+
+    box.textContent =
+        "Teste OpenAI-Verbindung...";
+
+    box.className =
+        "api-message";
 
     try{
-
-        setVoiceState(
-            "THINKING",
-            false
-        );
 
         const response =
             await fetch(
@@ -2143,46 +3237,494 @@ async function askAI(userText){
 
                         "Authorization":
                             "Bearer " +
-                            state.apiKey
+                            key
                     },
 
-                    body:JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        model:
-                            state.model,
+                            model:model,
 
-                        input:[
-                            {
-                                role:"system",
+                            input:
+                                "Antworte nur mit: JARVIS ONLINE"
 
-                                content:
-                                "Du bist J.A.R.V.I.S., ein futuristischer deutschsprachiger KI-Assistent. Antworte klar, kompetent und natürlich. Wenn der Nutzer nach Code fragt, liefere vollständigen funktionsfähigen Code. Wenn er eine App oder ein Spiel bauen möchte, beschreibe die Lösung und nutze den integrierten Builder wenn möglich."
-                            },
-
-                            {
-                                role:"user",
-
-                                content:userText
-                            }
-                        ]
-
-                    })
+                        })
                 }
             );
 
-        if(!response.ok){
+        if(
+            !response.ok
+        ){
 
-            const error =
-                await response.text();
+            let message =
+                "Unbekannter API-Fehler.";
 
-            throw new Error(error);
+            try{
+
+                const data =
+                    await response.json();
+
+                message =
+                    data?.error?.message
+                    ||
+                    JSON.stringify(data);
+
+            }catch{
+
+                const raw =
+                    await response.text();
+
+                if(raw){
+                    message = raw;
+                }
+            }
+
+            throw new Error(
+                message
+            );
         }
 
         const data =
             await response.json();
 
         const answer =
-            extractResponseText(data);
+            extractResponseText(
+                data
+            );
+
+        box.textContent =
+            "✓ API-Verbindung erfolgreich.\n\n"
+            +
+            (
+                answer ||
+                "Antwort empfangen."
+            );
+
+        box.className =
+            "api-message success";
+
+        showToast(
+            "OpenAI API erfolgreich getestet."
+        );
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+        box.textContent =
+            "API FEHLER:\n" +
+            error.message;
+
+        box.className =
+            "api-message error";
+
+        showToast(
+            "API-Test fehlgeschlagen."
+        );
+    }
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+========================================================= */
+
+async function sendMessage(){
+
+    if(state.busy){
+
+        showToast(
+            "J.A.R.V.I.S. verarbeitet bereits eine Anfrage."
+        );
+
+        return;
+    }
+
+    const text =
+        input.value.trim();
+
+    if(!text){
+        return;
+    }
+
+    input.value = "";
+
+    addMessage(
+        text,
+        "user"
+    );
+
+    saveMemory(
+        "USER: " + text
+    );
+
+    updateVisualMode(
+        text
+    );
+
+    /*
+       Erst lokale UI-Befehle prüfen.
+    */
+
+    const commandHandled =
+        await handleCommand(
+            text
+        );
+
+    if(commandHandled){
+        return;
+    }
+
+    chatStatus.textContent =
+        "THINKING";
+
+    coreMode.textContent =
+        "PROCESSING";
+
+    await askAI(
+        text
+    );
+}
+
+
+/* =========================================================
+   COMMAND HANDLER
+========================================================= */
+
+async function handleCommand(
+    text
+){
+
+    const t =
+        text
+        .toLowerCase()
+        .trim();
+
+    if(
+        t === "öffne code" ||
+        t.includes("öffne code editor") ||
+        t.includes("code editor öffnen") ||
+        t.includes("öffne code studio")
+    ){
+
+        openWindow(
+            "codeWindow"
+        );
+
+        await speak(
+            "Code Studio wurde geöffnet."
+        );
+
+        return true;
+    }
+
+
+    if(
+        t.includes("schließe code") ||
+        t.includes("code schließen")
+    ){
+
+        closeWindow(
+            "codeWindow"
+        );
+
+        await speak(
+            "Code Studio wurde geschlossen."
+        );
+
+        return true;
+    }
+
+
+    if(
+        t.includes("öffne app builder") ||
+        t === "app builder"
+    ){
+
+        openWindow(
+            "appWindow"
+        );
+
+        await speak(
+            "Application Builder wurde geöffnet."
+        );
+
+        return true;
+    }
+
+
+    if(
+        t.includes("schließe app")
+    ){
+
+        closeWindow(
+            "appWindow"
+        );
+
+        await speak(
+            "Application Builder wurde geschlossen."
+        );
+
+        return true;
+    }
+
+
+    if(
+        t.includes("öffne game builder") ||
+        t === "game builder"
+    ){
+
+        openWindow(
+            "gameWindow"
+        );
+
+        await speak(
+            "Game Builder wurde geöffnet."
+        );
+
+        return true;
+    }
+
+
+    if(
+        t.includes("schließe game")
+    ){
+
+        closeWindow(
+            "gameWindow"
+        );
+
+        await speak(
+            "Game Builder wurde geschlossen."
+        );
+
+        return true;
+    }
+
+
+    if(
+        t.includes("öffne einstellungen") ||
+        t.includes("öffne settings") ||
+        t === "settings"
+    ){
+
+        openWindow(
+            "settingsWindow"
+        );
+
+        await speak(
+            "API Console und Einstellungen wurden geöffnet."
+        );
+
+        return true;
+    }
+
+
+    if(
+        t.includes("schließe alle fenster") ||
+        t.includes("schließe alle")
+    ){
+
+        closeAllWindows();
+
+        await speak(
+            "Alle Fenster wurden geschlossen."
+        );
+
+        return true;
+    }
+
+
+    if(
+        t.includes("sprich mit mir") ||
+        t.includes("voice test") ||
+        t.includes("stimme testen")
+    ){
+
+        await testVoice();
+
+        return true;
+    }
+
+
+    if(
+        t.includes("speichere code")
+    ){
+
+        saveCode();
+
+        await speak(
+            "Der aktuelle Code wurde gespeichert."
+        );
+
+        return true;
+    }
+
+
+    if(
+        t.includes("code herunterladen")
+    ){
+
+        downloadCode();
+
+        await speak(
+            "Der Code wurde für den Download vorbereitet."
+        );
+
+        return true;
+    }
+
+
+    return false;
+}
+
+
+/* =========================================================
+   OPENAI RESPONSE
+========================================================= */
+
+async function askAI(
+    userText
+){
+
+    const key =
+        getActiveApiKey();
+
+    if(!key){
+
+        const answer =
+            "Ich bin bereit. Bitte öffne SETTINGS und hinterlege deinen OpenAI API-Key. Danach kannst du den API-Key testen und direkt mit mir sprechen.";
+
+        addMessage(
+            answer,
+            "ai"
+        );
+
+        chatStatus.textContent =
+            "READY";
+
+        coreMode.textContent =
+            "STANDBY";
+
+        await speak(
+            answer
+        );
+
+        return;
+    }
+
+    state.busy = true;
+
+    try{
+
+        setVoiceState(
+            "THINKING",
+            false
+        );
+
+        const history =
+            state.memory
+                .slice(0,10)
+                .map(
+                    item =>
+                        item.text
+                )
+                .join("\n");
+
+        const prompt =
+            `Aktuelle Anfrage:
+
+${userText}
+
+Relevanter Memory-Kontext:
+
+${history}`;
+
+
+        const response =
+            await fetch(
+                "https://api.openai.com/v1/responses",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            "Bearer " +
+                            key
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            model:
+                                state.model,
+
+                            instructions:
+                                state.systemPrompt,
+
+                            input:
+                                prompt
+
+                        })
+                }
+            );
+
+
+        if(
+            !response.ok
+        ){
+
+            let errorMessage =
+                "OpenAI API Fehler.";
+
+            try{
+
+                const data =
+                    await response.json();
+
+                errorMessage =
+                    data?.error?.message
+                    ||
+                    JSON.stringify(data);
+
+            }catch{
+
+                const raw =
+                    await response.text();
+
+                if(raw){
+                    errorMessage =
+                        raw;
+                }
+            }
+
+            throw new Error(
+                errorMessage
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+        const answer =
+            extractResponseText(
+                data
+            );
+
+
+        if(!answer){
+
+            throw new Error(
+                "Die API hat keine Textantwort geliefert."
+            );
+        }
+
 
         addMessage(
             answer,
@@ -2193,7 +3735,9 @@ async function askAI(userText){
             "JARVIS: " + answer
         );
 
-        updateVisualMode(answer);
+        updateVisualMode(
+            answer
+        );
 
         chatStatus.textContent =
             "READY";
@@ -2201,20 +3745,25 @@ async function askAI(userText){
         coreMode.textContent =
             "STANDBY";
 
-        await speak(answer);
+        await speak(
+            answer
+        );
 
-    }
+    }catch(error){
 
-    catch(error){
+        console.error(
+            "J.A.R.V.I.S. ERROR:",
+            error
+        );
 
-        console.error(error);
-
-        const message =
-            "Es ist ein Fehler bei der KI-Verbindung aufgetreten.";
+        const readable =
+            formatApiError(
+                error
+            );
 
         addMessage(
-            message,
-            "ai"
+            "API FEHLER:\n" + readable,
+            "system"
         );
 
         chatStatus.textContent =
@@ -2223,8 +3772,82 @@ async function askAI(userText){
         coreMode.textContent =
             "ERROR";
 
-        await speak(message);
+        showToast(
+            readable
+        );
+
+    }finally{
+
+        state.busy = false;
+
+        if(
+            !state.speaking &&
+            !state.listening
+        ){
+
+            setVoiceState(
+                "VOICE READY"
+            );
+        }
     }
+}
+
+
+/* =========================================================
+   API ERROR FORMAT
+========================================================= */
+
+function formatApiError(
+    error
+){
+
+    const message =
+        String(
+            error?.message ||
+            error ||
+            "Unbekannter Fehler"
+        );
+
+    if(
+        message.includes("401")
+        ||
+        message.toLowerCase()
+            .includes("incorrect api key")
+    ){
+
+        return "Der API-Key ist ungültig oder wurde nicht akzeptiert.";
+    }
+
+    if(
+        message.includes("429")
+        ||
+        message.toLowerCase()
+            .includes("rate limit")
+    ){
+
+        return "Das API-Limit wurde erreicht. Bitte später erneut versuchen.";
+    }
+
+    if(
+        message.toLowerCase()
+            .includes("model")
+        &&
+        message.toLowerCase()
+            .includes("not found")
+    ){
+
+        return "Das eingestellte Modell ist für diesen API-Zugang nicht verfügbar. Ändere das Modell in SETTINGS.";
+    }
+
+    if(
+        message.toLowerCase()
+            .includes("cors")
+    ){
+
+        return "Der Browser blockiert die direkte API-Verbindung. Für eine produktive Anwendung sollte ein Backend-Proxy verwendet werden.";
+    }
+
+    return message;
 }
 
 
@@ -2232,17 +3855,23 @@ async function askAI(userText){
    RESPONSE EXTRACTION
 ========================================================= */
 
-function extractResponseText(data){
+function extractResponseText(
+    data
+){
 
     if(
-        typeof data.output_text ===
+        typeof data?.output_text ===
         "string"
     ){
-        return data.output_text;
+
+        return data.output_text.trim();
     }
 
+
     if(
-        Array.isArray(data.output)
+        Array.isArray(
+            data?.output
+        )
     ){
 
         let result = "";
@@ -2253,7 +3882,9 @@ function extractResponseText(data){
         ){
 
             if(
-                Array.isArray(item.content)
+                Array.isArray(
+                    item?.content
+                )
             ){
 
                 for(
@@ -2262,22 +3893,28 @@ function extractResponseText(data){
                 ){
 
                     if(
-                        content.type ===
+                        content?.type ===
                         "output_text"
                     ){
 
                         result +=
-                            content.text;
+                            content.text ||
+                            "";
                     }
                 }
             }
         }
 
-        if(result)
-            return result;
+        if(
+            result.trim()
+        ){
+
+            return result.trim();
+        }
     }
 
-    return "Keine Antwort erhalten.";
+
+    return "";
 }
 
 
@@ -2287,11 +3924,13 @@ function extractResponseText(data){
 
 let recognition = null;
 
+
 function initRecognition(){
 
     const SpeechRecognition =
         window.SpeechRecognition ||
         window.webkitSpeechRecognition;
+
 
     if(!SpeechRecognition){
 
@@ -2302,8 +3941,10 @@ function initRecognition(){
         return null;
     }
 
+
     const r =
         new SpeechRecognition();
+
 
     r.lang =
         "de-DE";
@@ -2314,95 +3955,166 @@ function initRecognition(){
     r.interimResults =
         false;
 
-    r.onstart = ()=>{
 
-        state.listening = true;
+    r.onstart =
+        ()=>{
+            state.listening =
+                true;
 
-        document
-            .getElementById("micBtn")
-            .classList.add("recording");
-
-        setVoiceState(
-            "LISTENING",
-            false
-        );
-    };
-
-    r.onresult = event=>{
-
-        const text =
-            event.results[0][0].transcript;
-
-        input.value =
-            text;
-
-        state.listening = false;
-
-        sendMessage();
-    };
-
-    r.onerror = event=>{
-
-        console.error(
-            event.error
-        );
-
-        state.listening = false;
-
-        setVoiceState(
-            "VOICE READY",
-            false
-        );
-    };
-
-    r.onend = ()=>{
-
-        state.listening = false;
-
-        document
-            .getElementById("micBtn")
-            .classList.remove("recording");
-
-        if(!state.speaking){
+            document
+                .getElementById(
+                    "micBtn"
+                )
+                .classList.add(
+                    "recording"
+                );
 
             setVoiceState(
-                "VOICE READY",
-                false
+                "LISTENING",
+                false,
+                true
             );
-        }
-    };
+        };
+
+
+    r.onresult =
+        event=>{
+
+            const result =
+                event.results?.[0]?.[0];
+
+            if(!result){
+                return;
+            }
+
+            const text =
+                result.transcript;
+
+            input.value =
+                text;
+
+            state.listening =
+                false;
+
+            sendMessage();
+        };
+
+
+    r.onerror =
+        event=>{
+
+            console.error(
+                "Speech recognition:",
+                event.error
+            );
+
+            state.listening =
+                false;
+
+            document
+                .getElementById(
+                    "micBtn"
+                )
+                .classList.remove(
+                    "recording"
+                );
+
+            if(
+                event.error ===
+                "not-allowed"
+            ){
+
+                showToast(
+                    "Mikrofonzugriff wurde vom Browser verweigert."
+                );
+            }
+
+            setVoiceState(
+                "VOICE READY"
+            );
+        };
+
+
+    r.onend =
+        ()=>{
+
+            state.listening =
+                false;
+
+            document
+                .getElementById(
+                    "micBtn"
+                )
+                .classList.remove(
+                    "recording"
+                );
+
+            if(
+                !state.speaking
+            ){
+
+                setVoiceState(
+                    "VOICE READY"
+                );
+            }
+        };
+
 
     return r;
 }
 
+
 recognition =
     initRecognition();
 
+
 function toggleListening(){
+
+    if(
+        state.speaking
+    ){
+
+        showToast(
+            "Warte, bis J.A.R.V.I.S. fertig gesprochen hat."
+        );
+
+        return;
+    }
+
 
     if(!recognition){
 
         recognition =
             initRecognition();
 
-        if(!recognition)
+        if(!recognition){
             return;
+        }
     }
 
-    if(state.listening){
 
-        recognition.stop();
-
-    }else{
+    if(
+        state.listening
+    ){
 
         try{
+            recognition.stop();
+        }catch{}
 
-            recognition.start();
+        return;
+    }
 
-        }catch(e){
 
-            console.log(e);
-        }
+    try{
+
+        recognition.start();
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
     }
 }
 
@@ -2411,23 +4123,122 @@ function toggleListening(){
    WINDOWS
 ========================================================= */
 
-function openWindow(id){
+function openWindow(
+    id
+){
 
-    document
-        .getElementById(id)
-        .classList.add("active");
+    const win =
+        document.getElementById(
+            id
+        );
+
+    if(!win){
+        return;
+    }
+
+    win.classList.add(
+        "active"
+    );
 }
 
-function closeWindow(id){
+
+function closeWindow(
+    id
+){
+
+    const win =
+        document.getElementById(
+            id
+        );
+
+    if(!win){
+        return;
+    }
+
+    win.classList.remove(
+        "active"
+    );
+}
+
+
+function closeAllWindows(){
 
     document
-        .getElementById(id)
-        .classList.remove("active");
+        .querySelectorAll(
+            ".window"
+        )
+        .forEach(
+            win =>
+                win.classList.remove(
+                    "active"
+                )
+        );
 }
 
 
 /* =========================================================
-   SETTINGS
+   API KEY VISIBILITY
+========================================================= */
+
+function toggleApiKeyVisibility(){
+
+    const input =
+        document.getElementById(
+            "apiKey"
+        );
+
+    input.type =
+        input.type ===
+        "password"
+        ? "text"
+        : "password";
+}
+
+
+/* =========================================================
+   CLEAR API KEY
+========================================================= */
+
+function clearApiKey(){
+
+    sessionStorage.removeItem(
+        "jarvis_session_api_key"
+    );
+
+    localStorage.removeItem(
+        "jarvis_api_key"
+    );
+
+    localStorage.removeItem(
+        "jarvis_remember_key"
+    );
+
+    state.apiKey =
+        "";
+
+    state.rememberKey =
+        false;
+
+    document.getElementById(
+        "apiKey"
+    ).value =
+        "";
+
+    document.getElementById(
+        "rememberKey"
+    ).checked =
+        false;
+
+    updateApiHeader();
+
+    showToast(
+        "API-Key gelöscht."
+    );
+}
+
+
+/* =========================================================
+   SETTINGS LOAD
 ========================================================= */
 
 function loadSettings(){
@@ -2436,6 +4247,11 @@ function loadSettings(){
         "apiKey"
     ).value =
         state.apiKey;
+
+    document.getElementById(
+        "rememberKey"
+    ).checked =
+        state.rememberKey;
 
     document.getElementById(
         "model"
@@ -2463,6 +4279,11 @@ function loadSettings(){
         state.volume;
 
     document.getElementById(
+        "systemPrompt"
+    ).value =
+        state.systemPrompt;
+
+    document.getElementById(
         "speedValue"
     ).textContent =
         state.speechSpeed;
@@ -2471,21 +4292,44 @@ function loadSettings(){
         "volumeValue"
     ).textContent =
         Math.round(
-            state.volume*100
+            state.volume * 100
         ) + "%";
+
+    updateApiHeader();
 }
+
+
+/* =========================================================
+   SAVE SETTINGS
+========================================================= */
 
 function saveSettings(){
 
+    const key =
+        document
+            .getElementById(
+                "apiKey"
+            )
+            .value
+            .trim();
+
     state.apiKey =
+        key;
+
+    state.rememberKey =
         document.getElementById(
-            "apiKey"
-        ).value.trim();
+            "rememberKey"
+        ).checked;
 
     state.model =
-        document.getElementById(
-            "model"
-        ).value.trim();
+        document
+            .getElementById(
+                "model"
+            )
+            .value
+            .trim()
+        ||
+        "gpt-5.6-luna";
 
     state.voiceModel =
         document.getElementById(
@@ -2502,7 +4346,7 @@ function saveSettings(){
             document.getElementById(
                 "speechSpeed"
             ).value
-        );
+        ) || 1;
 
     state.volume =
         parseFloat(
@@ -2511,10 +4355,67 @@ function saveSettings(){
             ).value
         );
 
-    localStorage.setItem(
-        "jarvis_api_key",
-        state.apiKey
+    if(
+        Number.isNaN(
+            state.volume
+        )
+    ){
+        state.volume = 1;
+    }
+
+    state.systemPrompt =
+        document
+            .getElementById(
+                "systemPrompt"
+            )
+            .value
+            .trim()
+        ||
+        DEFAULT_SYSTEM_PROMPT;
+
+
+    /*
+       Session-Key ist immer verfügbar,
+       solange die Seite geöffnet ist.
+    */
+
+    sessionStorage.setItem(
+        "jarvis_session_api_key",
+        key
     );
+
+
+    /*
+       Nur bei ausdrücklicher Auswahl
+       dauerhaft speichern.
+    */
+
+    if(
+        state.rememberKey &&
+        key
+    ){
+
+        localStorage.setItem(
+            "jarvis_api_key",
+            key
+        );
+
+        localStorage.setItem(
+            "jarvis_remember_key",
+            "true"
+        );
+
+    }else{
+
+        localStorage.removeItem(
+            "jarvis_api_key"
+        );
+
+        localStorage.removeItem(
+            "jarvis_remember_key"
+        );
+    }
+
 
     localStorage.setItem(
         "jarvis_model",
@@ -2541,6 +4442,14 @@ function saveSettings(){
         state.volume
     );
 
+    localStorage.setItem(
+        "jarvis_system_prompt",
+        state.systemPrompt
+    );
+
+
+    updateApiHeader();
+
     showToast(
         "J.A.R.V.I.S. Einstellungen gespeichert."
     );
@@ -2550,11 +4459,35 @@ function saveSettings(){
     );
 }
 
+
 loadSettings();
 
 
 /* =========================================================
-   CODE EDITOR
+   CODE STORAGE
+========================================================= */
+
+function loadSavedCode(){
+
+    const saved =
+        localStorage.getItem(
+            "jarvis_code"
+        );
+
+    if(saved){
+
+        document.getElementById(
+            "code"
+        ).value =
+            saved;
+    }
+}
+
+loadSavedCode();
+
+
+/* =========================================================
+   NEW CODE
 ========================================================= */
 
 function newCode(){
@@ -2563,31 +4496,74 @@ function newCode(){
         "code"
     ).value =
 `<!DOCTYPE html>
-<html>
+<html lang="de">
+
 <head>
-<title>New J.A.R.V.I.S. App</title>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
+
+<title>J.A.R.V.I.S. App</title>
+
+<style>
+
+body{
+    margin:0;
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    background:#03070d;
+    color:#00eaff;
+    font-family:Arial;
+}
+
+</style>
+
 </head>
+
 <body>
 
-<h1>Hello J.A.R.V.I.S.</h1>
+<h1>J.A.R.V.I.S. ONLINE</h1>
 
 </body>
+
 </html>`;
+
+    showToast(
+        "Neues Projekt erstellt."
+    );
 }
+
+
+/* =========================================================
+   SAVE CODE
+========================================================= */
 
 function saveCode(){
 
-    localStorage.setItem(
-        "jarvis_code",
+    const code =
         document.getElementById(
             "code"
-        ).value
+        ).value;
+
+    localStorage.setItem(
+        "jarvis_code",
+        code
     );
 
     showToast(
         "Code gespeichert."
     );
 }
+
+
+/* =========================================================
+   FORMAT CODE
+========================================================= */
 
 function formatCode(){
 
@@ -2596,9 +4572,19 @@ function formatCode(){
             "code"
         ).value;
 
+    /*
+       Ein einfacher, sicherer HTML-Formatter.
+       Er verändert keinen JavaScript-Code
+       aggressiv.
+    */
+
     code =
         code
-        .replace(/></g, ">\n<");
+            .replace(/>\s*</g, ">\n<")
+            .replace(
+                /\n{3,}/g,
+                "\n\n"
+            );
 
     document.getElementById(
         "code"
@@ -2610,6 +4596,11 @@ function formatCode(){
     );
 }
 
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
 function previewCode(){
 
     const code =
@@ -2620,17 +4611,44 @@ function previewCode(){
     const blob =
         new Blob(
             [code],
-            {type:"text/html"}
+            {
+                type:
+                    "text/html"
+            }
         );
 
     const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+            blob
+        );
 
-    window.open(
-        url,
-        "_blank"
+    const win =
+        window.open(
+            url,
+            "_blank"
+        );
+
+    if(!win){
+
+        showToast(
+            "Popup wurde vom Browser blockiert."
+        );
+    }
+
+    setTimeout(
+        ()=>{
+            URL.revokeObjectURL(
+                url
+            );
+        },
+        10000
     );
 }
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
 
 function downloadCode(){
 
@@ -2642,14 +4660,21 @@ function downloadCode(){
     const blob =
         new Blob(
             [code],
-            {type:"text/html"}
+            {
+                type:
+                    "text/html"
+            }
         );
 
     const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+            blob
+        );
 
     const a =
-        document.createElement("a");
+        document.createElement(
+            "a"
+        );
 
     a.href =
         url;
@@ -2657,53 +4682,285 @@ function downloadCode(){
     a.download =
         "jarvis-generated-app.html";
 
+    document.body.appendChild(
+        a
+    );
+
     a.click();
 
-    URL.revokeObjectURL(url);
+    a.remove();
+
+    setTimeout(
+        ()=>{
+            URL.revokeObjectURL(
+                url
+            );
+        },
+        1000
+    );
+
+    showToast(
+        "HTML-Datei wurde erstellt."
+    );
 }
 
 
 /* =========================================================
-   AI CODE COMPLETION
+   AI CODE REQUEST
+========================================================= */
+
+async function requestCodeAI(
+    instruction
+){
+
+    const key =
+        getActiveApiKey();
+
+    if(!key){
+
+        showToast(
+            "Bitte zuerst einen API-Key in SETTINGS eintragen."
+        );
+
+        openWindow(
+            "settingsWindow"
+        );
+
+        return null;
+    }
+
+
+    const currentCode =
+        document.getElementById(
+            "code"
+        ).value;
+
+
+    try{
+
+        showToast(
+            "J.A.R.V.I.S. analysiert den Code..."
+        );
+
+
+        const response =
+            await fetch(
+                "https://api.openai.com/v1/responses",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            "Bearer " +
+                            key
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            model:
+                                state.model,
+
+                            instructions:
+`Du bist J.A.R.V.I.S. CODE ENGINE.
+
+Du bearbeitest HTML/CSS/JavaScript.
+
+Gib ausschließlich den vollständigen finalen Code zurück.
+Keine Erklärungen.
+Keine Markdown-Codeblöcke.
+Kein "Hier ist der Code".
+
+Der Code muss direkt als HTML-Datei gespeichert und ausgeführt werden können.`,
+
+                            input:
+`AUFGABE:
+
+${instruction}
+
+AKTUELLER CODE:
+
+${currentCode}`
+
+                        })
+                }
+            );
+
+
+        if(
+            !response.ok
+        ){
+
+            let message =
+                "Code API Fehler.";
+
+            try{
+
+                const data =
+                    await response.json();
+
+                message =
+                    data?.error?.message
+                    ||
+                    JSON.stringify(
+                        data
+                    );
+
+            }catch{
+
+                message =
+                    await response.text();
+            }
+
+            throw new Error(
+                message
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        let result =
+            extractResponseText(
+                data
+            );
+
+
+        /*
+           Falls das Modell trotzdem
+           Markdown-Codeblöcke zurückgibt,
+           werden diese entfernt.
+        */
+
+        result =
+            cleanGeneratedCode(
+                result
+            );
+
+
+        if(!result){
+
+            throw new Error(
+                "Die KI hat keinen Code zurückgegeben."
+            );
+        }
+
+
+        document.getElementById(
+            "code"
+        ).value =
+            result;
+
+        saveCode();
+
+        showToast(
+            "J.A.R.V.I.S. hat den Code aktualisiert."
+        );
+
+        return result;
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+        showToast(
+            "Code Engine Fehler:\n"
+            +
+            formatApiError(
+                error
+            )
+        );
+
+        return null;
+    }
+}
+
+
+/* =========================================================
+   CLEAN GENERATED CODE
+========================================================= */
+
+function cleanGeneratedCode(
+    code
+){
+
+    let result =
+        String(
+            code ||
+            ""
+        ).trim();
+
+    result =
+        result.replace(
+            /^```(?:html|xml|javascript|js|css)?\s*/i,
+            ""
+        );
+
+    result =
+        result.replace(
+            /\s*```$/i,
+            ""
+        );
+
+    return result.trim();
+}
+
+
+/* =========================================================
+   AI COMPLETE CODE
 ========================================================= */
 
 async function aiCompleteCode(){
 
-    const existing =
-        document.getElementById(
-            "code"
-        ).value;
-
-    input.value =
-        "Vervollständige folgenden Code:\n\n"
-        + existing;
-
     openWindow(
         "codeWindow"
     );
 
-    showToast(
-        "Code zur KI-Vervollständigung vorbereitet."
+    await requestCodeAI(
+`Vervollständige den vorhandenen Code.
+
+Behalte die bestehende Funktionalität.
+
+Behebe offensichtliche Fehler.
+
+Ergänze fehlende Teile.
+
+Verbessere Stabilität und Benutzerfreundlichkeit.
+
+Gib danach die vollständige finale HTML-Datei zurück.`
     );
 }
 
+
+/* =========================================================
+   AI REWRITE
+========================================================= */
+
 async function aiRewriteCode(){
-
-    const existing =
-        document.getElementById(
-            "code"
-        ).value;
-
-    input.value =
-        "Verbessere und modernisiere diesen Code. Schreibe eine vollständige Version:\n\n"
-        + existing;
 
     openWindow(
         "codeWindow"
     );
 
-    showToast(
-        "AI Rewrite vorbereitet."
+    await requestCodeAI(
+`Überarbeite den vorhandenen Code vollständig.
+
+Modernisiere das Design.
+
+Verbessere Struktur, Performance und Benutzeroberfläche.
+
+Behalte die ursprüngliche Idee und Funktionalität.
+
+Ersetze fehlerhafte Implementierungen.
+
+Gib eine vollständige eigenständig ausführbare HTML-Datei zurück.`
     );
 }
 
@@ -2717,24 +4974,57 @@ function buildApp(){
     const name =
         document.getElementById(
             "appName"
+        ).value.trim()
+        ||
+        "J.A.R.V.I.S. Assistant";
+
+    const type =
+        document.getElementById(
+            "appType"
         ).value;
 
     const description =
         document.getElementById(
             "appDescription"
-        ).value;
+        ).value.trim();
+
+
+    const safeName =
+        escapeHtml(
+            name
+        );
+
+    const safeDescription =
+        escapeHtml(
+            description
+        );
+
 
     const code =
 `<!DOCTYPE html>
 <html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
 
-<title>${escapeHtml(name)}</title>
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
+
+<title>${safeName}</title>
 
 <style>
+
+:root{
+    --cyan:#00eaff;
+    --bg:#03070d;
+}
+
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
@@ -2743,46 +5033,71 @@ body{
     align-items:center;
     justify-content:center;
     background:
-        radial-gradient(circle,
-        #06263a,
-        #02060b 70%);
-    color:#00eaff;
+        radial-gradient(
+            circle,
+            #06314a,
+            #02060b 70%
+        );
+    color:var(--cyan);
     font-family:Arial;
 }
 
 .card{
-    width:min(700px,90%);
+    width:min(760px,90%);
     padding:40px;
-    border:1px solid #00eaff;
+    border:1px solid var(--cyan);
     border-radius:20px;
-    background:rgba(0,20,35,.75);
-    box-shadow:0 0 60px rgba(0,234,255,.15);
+    background:
+        rgba(0,20,35,.75);
+    box-shadow:
+        0 0 60px rgba(0,234,255,.15);
+    text-align:center;
 }
 
 button{
-    padding:12px 20px;
-    background:#00eaff;
+    padding:13px 22px;
+    background:var(--cyan);
+    color:#001018;
     border:0;
     border-radius:8px;
     cursor:pointer;
+    font-weight:bold;
+}
+
+.status{
+    margin-top:20px;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="card">
 
-<h1>${escapeHtml(name)}</h1>
+<div>
+    J.A.R.V.I.S. APPLICATION SYSTEM
+</div>
 
-<p>${escapeHtml(description)}</p>
+<h1>${safeName}</h1>
+
+<p>
+Typ: ${escapeHtml(type)}
+</p>
+
+<p>
+${safeDescription}
+</p>
 
 <button onclick="activate()">
 ACTIVATE
 </button>
 
-<p id="status"></p>
+<div
+class="status"
+id="status"
+></div>
 
 </div>
 
@@ -2790,21 +5105,27 @@ ACTIVATE
 
 function activate(){
 
-document.getElementById("status")
-.textContent =
-"J.A.R.V.I.S. APPLICATION ONLINE.";
+document.getElementById(
+    "status"
+).textContent =
+"APPLICATION ONLINE.";
 
 }
 
 <\/script>
 
 </body>
+
 </html>`;
+
 
     document.getElementById(
         "code"
     ).value =
         code;
+
+
+    saveCode();
 
     openWindow(
         "codeWindow"
@@ -2825,12 +5146,20 @@ function buildGame(){
     const name =
         document.getElementById(
             "gameName"
+        ).value.trim()
+        ||
+        "Neural Defender";
+
+    const type =
+        document.getElementById(
+            "gameType"
         ).value;
 
     const description =
         document.getElementById(
             "gameDescription"
-        ).value;
+        ).value.trim();
+
 
     const code =
 `<!DOCTYPE html>
@@ -2840,11 +5169,17 @@ function buildGame(){
 
 <meta charset="UTF-8">
 
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
+
 <title>${escapeHtml(name)}</title>
 
 <style>
 
-html,body{
+html,
+body{
     margin:0;
     width:100%;
     height:100%;
@@ -2863,6 +5198,7 @@ canvas{
     color:#00eaff;
     font-family:Arial;
     z-index:5;
+    line-height:1.7;
 }
 
 </style>
@@ -2872,9 +5208,29 @@ canvas{
 <body>
 
 <div id="hud">
+
+<strong>
 ${escapeHtml(name)}
+</strong>
+
 <br>
-Score: <span id="score">0</span>
+
+TYPE:
+${escapeHtml(type)}
+
+<br>
+
+SCORE:
+<span id="score">
+0
+</span>
+
+<br>
+
+<small>
+${escapeHtml(description)}
+</small>
+
 </div>
 
 <canvas id="game"></canvas>
@@ -2882,146 +5238,243 @@ Score: <span id="score">0</span>
 <script>
 
 const canvas =
-document.getElementById("game");
+document.getElementById(
+    "game"
+);
 
 const ctx =
-canvas.getContext("2d");
-
-function resize(){
-
-canvas.width =
-window.innerWidth;
-
-canvas.height =
-window.innerHeight;
-
-}
-
-resize();
-
-window.addEventListener(
-"resize",
-resize
+canvas.getContext(
+    "2d"
 );
 
 let score = 0;
 
-let player = {
-x:canvas.width/2,
-y:canvas.height/2,
-r:18
-};
-
 let keys = {};
 
-window.addEventListener(
-"keydown",
-e=>keys[e.key]=true
-);
-
-window.addEventListener(
-"keyup",
-e=>keys[e.key]=false
-);
+let player = {
+    x:0,
+    y:0,
+    r:18,
+    speed:5
+};
 
 let target = {
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-r:12
+    x:0,
+    y:0,
+    r:12
 };
+
+
+function resize(){
+
+    canvas.width =
+        window.innerWidth;
+
+    canvas.height =
+        window.innerHeight;
+
+    player.x =
+        canvas.width / 2;
+
+    player.y =
+        canvas.height / 2;
+
+    moveTarget();
+}
+
+
+function moveTarget(){
+
+    target.x =
+        Math.random()
+        * canvas.width;
+
+    target.y =
+        Math.random()
+        * canvas.height;
+}
+
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+
+window.addEventListener(
+    "keydown",
+    event=>{
+        keys[event.key] = true;
+    }
+);
+
+
+window.addEventListener(
+    "keyup",
+    event=>{
+        keys[event.key] = false;
+    }
+);
+
+
+function update(){
+
+    if(
+        keys["ArrowLeft"] ||
+        keys["a"]
+    ){
+        player.x -=
+            player.speed;
+    }
+
+    if(
+        keys["ArrowRight"] ||
+        keys["d"]
+    ){
+        player.x +=
+            player.speed;
+    }
+
+    if(
+        keys["ArrowUp"] ||
+        keys["w"]
+    ){
+        player.y -=
+            player.speed;
+    }
+
+    if(
+        keys["ArrowDown"] ||
+        keys["s"]
+    ){
+        player.y +=
+            player.speed;
+    }
+
+
+    player.x =
+        Math.max(
+            player.r,
+            Math.min(
+                canvas.width-player.r,
+                player.x
+            )
+        );
+
+
+    player.y =
+        Math.max(
+            player.r,
+            Math.min(
+                canvas.height-player.r,
+                player.y
+            )
+        );
+
+
+    const dx =
+        player.x-target.x;
+
+    const dy =
+        player.y-target.y;
+
+
+    if(
+        Math.hypot(
+            dx,
+            dy
+        )
+        <
+        player.r+target.r
+    ){
+
+        score++;
+
+        document.getElementById(
+            "score"
+        ).textContent =
+            score;
+
+        moveTarget();
+    }
+}
+
+
+function draw(){
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    ctx.fillStyle =
+        "#00eaff";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        player.x,
+        player.y,
+        player.r,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.strokeStyle =
+        "#00ff9d";
+
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        target.x,
+        target.y,
+        target.r,
+        0,
+        Math.PI*2
+    );
+
+    ctx.stroke();
+}
+
 
 function loop(){
 
-ctx.clearRect(
-0,0,
-canvas.width,
-canvas.height
-);
+    update();
 
-if(keys["ArrowLeft"])
-player.x -= 5;
+    draw();
 
-if(keys["ArrowRight"])
-player.x += 5;
-
-if(keys["ArrowUp"])
-player.y -= 5;
-
-if(keys["ArrowDown"])
-player.y += 5;
-
-ctx.fillStyle =
-"#00eaff";
-
-ctx.beginPath();
-
-ctx.arc(
-player.x,
-player.y,
-player.r,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-ctx.strokeStyle =
-"#00ff9d";
-
-ctx.beginPath();
-
-ctx.arc(
-target.x,
-target.y,
-target.r,
-0,
-Math.PI*2
-);
-
-ctx.stroke();
-
-const dx =
-player.x-target.x;
-
-const dy =
-player.y-target.y;
-
-if(
-Math.sqrt(dx*dx+dy*dy)
-<
-player.r+target.r
-){
-
-score++;
-
-document.getElementById(
-"score"
-).textContent =
-score;
-
-target.x =
-Math.random()*canvas.width;
-
-target.y =
-Math.random()*canvas.height;
-
+    requestAnimationFrame(
+        loop
+    );
 }
 
-requestAnimationFrame(loop);
 
-}
+resize();
 
 loop();
 
 <\/script>
 
 </body>
+
 </html>`;
+
 
     document.getElementById(
         "code"
     ).value =
         code;
+
+
+    saveCode();
 
     openWindow(
         "codeWindow"
@@ -3037,14 +5490,206 @@ loop();
    ESCAPE HTML
 ========================================================= */
 
-function escapeHtml(value){
+function escapeHtml(
+    value
+){
 
-    return value
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+    return String(
+        value || ""
+    )
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
+}
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+input.addEventListener(
+    "keydown",
+    event=>{
+
+        if(
+            event.key ===
+            "Enter"
+        ){
+
+            event.preventDefault();
+
+            sendMessage();
+        }
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    event=>{
+
+        if(
+            event.ctrlKey &&
+            event.key.toLowerCase()
+            === "k"
+        ){
+
+            event.preventDefault();
+
+            input.focus();
+        }
+
+
+        if(
+            event.ctrlKey &&
+            event.key.toLowerCase()
+            === "e"
+        ){
+
+            event.preventDefault();
+
+            openWindow(
+                "codeWindow"
+            );
+        }
+
+
+        if(
+            event.ctrlKey &&
+            event.key.toLowerCase()
+            === "m"
+        ){
+
+            event.preventDefault();
+
+            toggleListening();
+        }
+
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            closeAllWindows();
+        }
+
+    }
+);
+
+
+/* =========================================================
+   TELEMETRY
+========================================================= */
+
+setInterval(
+    ()=>{
+
+        const cpu =
+            Math.floor(
+                25 +
+                Math.random()*45
+            );
+
+        const memory =
+            Math.floor(
+                35 +
+                Math.random()*40
+            );
+
+        const neural =
+            Math.floor(
+                55 +
+                Math.random()*40
+            );
+
+        const voice =
+            state.speaking
+            ? Math.floor(
+                80 +
+                Math.random()*20
+            )
+            : 100;
+
+
+        document.getElementById(
+            "cpuValue"
+        ).textContent =
+            cpu + "%";
+
+        document.getElementById(
+            "cpuBar"
+        ).style.width =
+            cpu + "%";
+
+
+        document.getElementById(
+            "memoryValue"
+        ).textContent =
+            memory + "%";
+
+        document.getElementById(
+            "memoryBar"
+        ).style.width =
+            memory + "%";
+
+
+        document.getElementById(
+            "neuralValue"
+        ).textContent =
+            neural + "%";
+
+        document.getElementById(
+            "neuralBar"
+        ).style.width =
+            neural + "%";
+
+
+        document.getElementById(
+            "voiceValue"
+        ).textContent =
+            voice + "%";
+
+        document.getElementById(
+            "voiceBar"
+        ).style.width =
+            voice + "%";
+
+    },
+    1500
+);
+
+
+/* =========================================================
+   VOICE INITIALIZATION
+========================================================= */
+
+if(
+    "speechSynthesis"
+    in window
+){
+
+    speechSynthesis.onvoiceschanged =
+        ()=>{
+            getGermanVoice();
+        };
 }
 
 
@@ -3055,255 +5700,72 @@ function escapeHtml(value){
 window.addEventListener(
     "load",
     ()=>{
-        setTimeout(()=>{
 
-            /*
-             Browser autoplay rules können
-             Audio beim allerersten Seitenaufruf
-             blockieren.
+        updateApiHeader();
 
-             Nach einer Benutzerinteraktion
-             funktioniert die automatische
-             Sprachausgabe normal.
-            */
-
-            const greeting =
-                "J.A.R.V.I.S. ist online. Sprachsystem und künstliche Intelligenz sind bereit.";
-
-            showToast(
-                "J.A.R.V.I.S. ONLINE — Sprachsystem bereit."
-            );
-
-            /*
-               Wir versuchen die Begrüßung.
-               Falls der Browser Audio blockiert,
-               bleibt die normale Oberfläche aktiv.
-            */
-
-            speak(
-                greeting
-            );
-
-        },800);
-    }
-);
-
-
-/* =========================================================
-   AUTOMATISCHE SYSTEM TELEMETRIE
-========================================================= */
-
-setInterval(()=>{
-
-    const cpu =
-        Math.floor(
-            25+Math.random()*45
+        setVoiceState(
+            "VOICE READY"
         );
 
-    const memory =
-        Math.floor(
-            35+Math.random()*40
-        );
 
-    const neural =
-        Math.floor(
-            55+Math.random()*40
-        );
+        setTimeout(
+            async ()=>{
 
-    document.getElementById(
-        "cpuValue"
-    ).textContent =
-        cpu+"%";
-
-    document.getElementById(
-        "cpuBar"
-    ).style.width =
-        cpu+"%";
-
-    document.getElementById(
-        "memoryValue"
-    ).textContent =
-        memory+"%";
-
-    document.getElementById(
-        "memoryBar"
-    ).style.width =
-        memory+"%";
-
-    document.getElementById(
-        "neuralValue"
-    ).textContent =
-        neural+"%";
-
-    document.getElementById(
-        "neuralBar"
-    ).style.width =
-        neural+"%";
-
-},1500);
-
-
-/* =========================================================
-   KEYBOARD SHORTCUTS
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    event=>{
-
-        if(event.ctrlKey &&
-           event.key.toLowerCase()==="k"){
-
-            event.preventDefault();
-
-            input.focus();
-        }
-
-        if(
-            event.ctrlKey &&
-            event.key.toLowerCase()==="e"
-        ){
-
-            event.preventDefault();
-
-            openWindow(
-                "codeWindow"
-            );
-        }
-
-        if(
-            event.ctrlKey &&
-            event.key.toLowerCase()==="m"
-        ){
-
-            event.preventDefault();
-
-            toggleListening();
-        }
-
-        if(event.key==="Escape"){
-
-            document
-                .querySelectorAll(".window")
-                .forEach(
-                    w=>w.classList.remove("active")
+                showToast(
+                    "J.A.R.V.I.S. ONLINE — Audio Core bereit."
                 );
-        }
+
+
+                /*
+                   Wir versuchen die Begrüßung
+                   direkt.
+
+                   Wenn der Browser Autoplay
+                   blockiert, bleibt das Audio-
+                   Aktivierungsfenster offen.
+                */
+
+                try{
+
+                    state.audioUnlocked =
+                        true;
+
+                    await speak(
+                        "J.A.R.V.I.S. ist online. Sprachsystem, Memory Core und alle Entwicklungssysteme sind bereit."
+                    );
+
+
+                    audioOverlay
+                        .classList.add(
+                            "hidden"
+                        );
+
+                }catch(error){
+
+                    console.log(
+                        "Startup Audio blockiert:",
+                        error
+                    );
+
+                    audioOverlay
+                        .classList.remove(
+                            "hidden"
+                        );
+                }
+
+            },
+            900
+        );
 
     }
 );
 
 
 /* =========================================================
-   AUTOMATIC COMMAND DETECTION
+   FINAL STATE
 ========================================================= */
 
-function detectCommand(text){
-
-    const t =
-        text.toLowerCase();
-
-    if(
-        t.includes("öffne code") ||
-        t.includes("code editor")
-    ){
-
-        openWindow(
-            "codeWindow"
-        );
-
-        return true;
-    }
-
-    if(
-        t.includes("öffne app builder") ||
-        t.includes("app builder")
-    ){
-
-        openWindow(
-            "appWindow"
-        );
-
-        return true;
-    }
-
-    if(
-        t.includes("öffne game builder") ||
-        t.includes("game builder")
-    ){
-
-        openWindow(
-            "gameWindow"
-        );
-
-        return true;
-    }
-
-    if(
-        t.includes("einstellungen") ||
-        t.includes("settings")
-    ){
-
-        openWindow(
-            "settingsWindow"
-        );
-
-        return true;
-    }
-
-    return false;
-}
-
-
-/* =========================================================
-   ENHANCED SEND
-========================================================= */
-
-const originalSendMessage =
-    sendMessage;
-
-sendMessage = async function(){
-
-    const text =
-        input.value.trim();
-
-    if(
-        text &&
-        detectCommand(text)
-    ){
-
-        input.value = "";
-
-        addMessage(
-            text,
-            "user"
-        );
-
-        const response =
-            "Befehl erkannt. Das entsprechende Systemfenster wurde geöffnet.";
-
-        addMessage(
-            response,
-            "ai"
-        );
-
-        await speak(response);
-
-        return;
-    }
-
-    return originalSendMessage();
-};
-
-
-/* =========================================================
-   INITIAL STATE
-========================================================= */
-
-setVoiceState(
-    "VOICE READY",
-    false
-);
+updateApiHeader();
 
 </script>
 

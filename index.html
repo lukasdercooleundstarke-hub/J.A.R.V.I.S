@@ -1,0 +1,4309 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>J.A.R.V.I.S. — Adaptive AI Builder</title>
+
+<style>
+
+:root{
+    --cyan:#00eaff;
+    --cyan-soft:rgba(0,234,255,.18);
+    --blue:#008cff;
+    --green:#00ff9d;
+    --orange:#ff9d00;
+    --red:#ff4057;
+
+    --bg:#02070b;
+    --panel:rgba(5,18,27,.78);
+    --border:rgba(0,234,255,.25);
+
+    --text:#dffaff;
+    --muted:#71919c;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+
+    background:var(--bg);
+    color:var(--text);
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+body{
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(0,160,255,.10),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(0,234,255,.07),
+            transparent 25%
+        ),
+        #02070b;
+}
+
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.grid{
+    position:fixed;
+    inset:0;
+
+    pointer-events:none;
+
+    background-image:
+        linear-gradient(
+            rgba(0,234,255,.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0,234,255,.035) 1px,
+            transparent 1px
+        );
+
+    background-size:42px 42px;
+
+    mask-image:
+        radial-gradient(
+            circle at center,
+            black,
+            transparent 90%
+        );
+}
+
+.scanline{
+    position:fixed;
+
+    left:0;
+    right:0;
+
+    height:2px;
+
+    top:-10px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(0,234,255,.7),
+            transparent
+        );
+
+    box-shadow:
+        0 0 20px var(--cyan);
+
+    animation:
+        scan 7s linear infinite;
+
+    pointer-events:none;
+
+    opacity:.35;
+}
+
+@keyframes scan{
+
+    from{
+        transform:translateY(0);
+    }
+
+    to{
+        transform:translateY(110vh);
+    }
+
+}
+
+
+/* =========================
+   APP
+========================= */
+
+.app{
+    position:relative;
+
+    z-index:2;
+
+    width:100%;
+    height:100%;
+
+    display:grid;
+
+    grid-template-columns:
+        280px
+        1fr
+        300px;
+
+    grid-template-rows:
+        70px
+        1fr
+        145px;
+
+    gap:10px;
+
+    padding:10px;
+}
+
+
+/* =========================
+   PANELS
+========================= */
+
+.panel{
+
+    position:relative;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,234,255,.035),
+            rgba(0,0,0,.15)
+        ),
+        var(--panel);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:14px;
+
+    backdrop-filter:
+        blur(16px);
+
+    box-shadow:
+        0 0 30px rgba(0,0,0,.35),
+        inset 0 0 30px
+        rgba(0,234,255,.025);
+
+    overflow:hidden;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+
+    grid-column:
+        1 / 4;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:
+        space-between;
+
+    padding:
+        0 18px;
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.logo-core{
+
+    width:36px;
+    height:36px;
+
+    border-radius:50%;
+
+    border:
+        2px solid var(--cyan);
+
+    box-shadow:
+        0 0 10px var(--cyan),
+        inset 0 0 10px var(--cyan);
+
+    display:grid;
+
+    place-items:center;
+}
+
+.logo-core::after{
+
+    content:"";
+
+    width:12px;
+    height:12px;
+
+    border-radius:50%;
+
+    background:
+        var(--cyan);
+
+    box-shadow:
+        0 0 15px var(--cyan);
+}
+
+.logo-title{
+
+    font-size:18px;
+
+    letter-spacing:4px;
+
+    font-weight:700;
+}
+
+.logo-sub{
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    letter-spacing:2px;
+}
+
+.header-status{
+
+    display:flex;
+
+    gap:18px;
+}
+
+.status-item{
+
+    font-size:9px;
+
+    color:var(--muted);
+
+    letter-spacing:1.2px;
+}
+
+.status-value{
+
+    color:var(--cyan);
+
+    margin-left:4px;
+}
+
+
+/* =========================
+   LEFT PANEL
+========================= */
+
+.left,
+.right{
+
+    padding:15px;
+}
+
+.section-title{
+
+    color:var(--cyan);
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    margin-bottom:12px;
+}
+
+.stat{
+
+    margin-bottom:14px;
+}
+
+.stat-head{
+
+    display:flex;
+
+    justify-content:
+        space-between;
+
+    font-size:9px;
+
+    color:var(--muted);
+
+    margin-bottom:6px;
+}
+
+.bar{
+
+    height:4px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border-radius:5px;
+
+    overflow:hidden;
+}
+
+.bar-fill{
+
+    height:100%;
+
+    background:
+        var(--cyan);
+
+    box-shadow:
+        0 0 10px var(--cyan);
+
+    transition:
+        width .5s ease;
+}
+
+.mode{
+
+    border:
+        1px solid var(--border);
+
+    border-radius:9px;
+
+    padding:10px;
+
+    margin-top:14px;
+
+    background:
+        rgba(0,234,255,.025);
+}
+
+.mode-label{
+
+    font-size:8px;
+
+    color:var(--muted);
+
+    letter-spacing:2px;
+}
+
+.mode-value{
+
+    color:var(--green);
+
+    margin-top:5px;
+
+    font-size:12px;
+}
+
+
+/* =========================
+   CENTER
+========================= */
+
+.center{
+
+    display:grid;
+
+    grid-template-rows:
+        220px
+        1fr;
+
+    gap:10px;
+
+    min-width:0;
+}
+
+.core-panel{
+
+    display:grid;
+
+    place-items:center;
+}
+
+.reactor{
+
+    position:relative;
+
+    width:185px;
+    height:185px;
+
+    display:grid;
+
+    place-items:center;
+}
+
+.ring{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    border:
+        1px solid
+        rgba(0,234,255,.5);
+
+    box-shadow:
+        0 0 20px
+        rgba(0,234,255,.15),
+
+        inset 0 0 20px
+        rgba(0,234,255,.08);
+}
+
+.ring:nth-child(1){
+
+    width:175px;
+    height:175px;
+
+    border-style:dashed;
+
+    animation:
+        rotate 18s linear infinite;
+}
+
+.ring:nth-child(2){
+
+    width:138px;
+    height:138px;
+
+    border-color:
+        rgba(0,234,255,.75);
+
+    animation:
+        rotateReverse
+        12s linear infinite;
+}
+
+.ring:nth-child(3){
+
+    width:100px;
+    height:100px;
+
+    border-style:dashed;
+
+    animation:
+        rotate
+        8s linear infinite;
+}
+
+@keyframes rotate{
+
+    to{
+        transform:
+            rotate(360deg);
+    }
+
+}
+
+@keyframes rotateReverse{
+
+    to{
+        transform:
+            rotate(-360deg);
+    }
+
+}
+
+.reactor-core{
+
+    width:58px;
+    height:58px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            white 0%,
+            var(--cyan) 20%,
+            rgba(0,234,255,.2) 50%,
+            transparent 70%
+        );
+
+    box-shadow:
+        0 0 20px var(--cyan),
+        0 0 60px var(--cyan),
+        0 0 110px
+        rgba(0,234,255,.4);
+}
+
+.core-label{
+
+    position:absolute;
+
+    bottom:0;
+
+    text-align:center;
+
+    font-size:8px;
+
+    letter-spacing:3px;
+
+    color:var(--muted);
+}
+
+
+/* =========================
+   CHAT
+========================= */
+
+.chat{
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-height:0;
+}
+
+.chat-header{
+
+    padding:
+        11px 15px;
+
+    border-bottom:
+        1px solid var(--border);
+
+    display:flex;
+
+    justify-content:
+        space-between;
+}
+
+.chat-title{
+
+    color:var(--cyan);
+
+    font-size:9px;
+
+    letter-spacing:2px;
+}
+
+.chat-log{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:14px;
+
+    scrollbar-width:thin;
+
+    scrollbar-color:
+        var(--cyan)
+        transparent;
+}
+
+.message{
+
+    margin-bottom:12px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    max-width:90%;
+}
+
+.message.user{
+
+    align-self:flex-end;
+
+    align-items:flex-end;
+}
+
+.message.jarvis{
+
+    align-items:flex-start;
+}
+
+.message-label{
+
+    font-size:7px;
+
+    letter-spacing:2px;
+
+    color:var(--muted);
+
+    margin-bottom:4px;
+}
+
+.message-body{
+
+    padding:
+        9px 11px;
+
+    border-radius:9px;
+
+    background:
+        rgba(0,234,255,.045);
+
+    border:
+        1px solid
+        rgba(0,234,255,.12);
+
+    font-size:12px;
+
+    line-height:1.5;
+
+    white-space:pre-wrap;
+}
+
+.user .message-body{
+
+    background:
+        rgba(0,140,255,.09);
+
+    border-color:
+        rgba(0,140,255,.25);
+}
+
+
+/* =========================
+   VISUAL
+========================= */
+
+.visual-box{
+
+    height:110px;
+
+    border:
+        1px dashed
+        rgba(0,234,255,.3);
+
+    border-radius:10px;
+
+    display:grid;
+
+    place-items:center;
+
+    overflow:hidden;
+
+    background:
+        rgba(0,0,0,.2);
+}
+
+.visual-box img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+}
+
+.visual-empty{
+
+    color:var(--muted);
+
+    text-align:center;
+
+    font-size:8px;
+
+    letter-spacing:1px;
+
+    padding:12px;
+}
+
+.visual{
+
+    margin-top:15px;
+}
+
+.analysis{
+
+    font-size:10px;
+
+    line-height:1.5;
+
+    color:var(--muted);
+}
+
+
+/* =========================
+   BOTTOM
+========================= */
+
+.bottom{
+
+    grid-column:
+        1 / 4;
+
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        auto;
+
+    gap:10px;
+
+    padding:10px;
+}
+
+.input-area{
+
+    display:flex;
+
+    gap:8px;
+}
+
+textarea,
+input,
+select{
+
+    background:
+        rgba(0,0,0,.28);
+
+    color:var(--text);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:9px;
+
+    outline:none;
+
+    font-family:inherit;
+}
+
+textarea{
+
+    flex:1;
+
+    height:72px;
+
+    resize:none;
+
+    padding:11px;
+}
+
+textarea:focus,
+input:focus,
+select:focus{
+
+    border-color:
+        var(--cyan);
+
+    box-shadow:
+        0 0 15px
+        rgba(0,234,255,.08);
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+button{
+
+    height:38px;
+
+    padding:
+        0 11px;
+
+    border-radius:8px;
+
+    background:
+        rgba(0,234,255,.045);
+
+    color:var(--cyan);
+
+    border:
+        1px solid var(--border);
+
+    cursor:pointer;
+
+    font-size:8px;
+
+    letter-spacing:1px;
+
+    transition:.2s;
+}
+
+button:hover{
+
+    background:
+        rgba(0,234,255,.12);
+
+    box-shadow:
+        0 0 15px
+        rgba(0,234,255,.12);
+}
+
+button.active{
+
+    background:
+        rgba(0,255,157,.1);
+
+    color:var(--green);
+
+    border-color:
+        rgba(0,255,157,.4);
+}
+
+button.danger{
+
+    color:var(--red);
+}
+
+.controls{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    flex-wrap:wrap;
+
+    justify-content:flex-end;
+}
+
+.mic{
+
+    width:52px;
+    height:52px;
+
+    border-radius:50%;
+
+    font-size:16px;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:100;
+
+    display:none;
+
+    place-items:center;
+
+    background:
+        rgba(0,0,0,.72);
+
+    backdrop-filter:
+        blur(8px);
+}
+
+.modal.open{
+
+    display:grid;
+}
+
+.modal-box{
+
+    width:
+        min(900px,94vw);
+
+    max-height:88vh;
+
+    overflow:auto;
+
+    padding:20px;
+
+    background:#061219;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:14px;
+
+    box-shadow:
+        0 0 50px
+        rgba(0,234,255,.12);
+}
+
+.modal-box h2{
+
+    margin:
+        0 0 8px;
+
+    color:var(--cyan);
+
+    letter-spacing:2px;
+
+    font-size:14px;
+}
+
+.modal-box p{
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    line-height:1.5;
+}
+
+.modal-buttons{
+
+    margin-top:12px;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:7px;
+}
+
+
+/* =========================
+   BUILDER TABS
+========================= */
+
+.builder-tabs{
+
+    display:flex;
+
+    gap:6px;
+
+    margin:
+        12px 0;
+}
+
+.builder-pane{
+
+    display:none;
+}
+
+.builder-pane.open{
+
+    display:block;
+}
+
+.code-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap:10px;
+}
+
+.code-grid textarea{
+
+    width:100%;
+
+    height:320px;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Consolas,
+        monospace;
+
+    font-size:11px;
+
+    line-height:1.45;
+}
+
+.builder-actions{
+
+    display:flex;
+
+    gap:6px;
+
+    flex-wrap:wrap;
+
+    margin-top:8px;
+}
+
+.preview{
+
+    width:100%;
+
+    height:350px;
+
+    background:white;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:8px;
+
+    margin-top:8px;
+}
+
+.project-row{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr
+        1fr;
+
+    gap:6px;
+}
+
+.project-row input,
+.project-row select{
+
+    height:36px;
+
+    padding:8px;
+}
+
+.mini-note{
+
+    font-size:9px;
+
+    color:var(--muted);
+
+    margin-top:7px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1050px){
+
+    .app{
+
+        grid-template-columns:
+            210px
+            1fr;
+    }
+
+    .right{
+
+        display:none;
+    }
+
+    .header,
+    .bottom{
+
+        grid-column:
+            1 / 3;
+    }
+}
+
+@media(max-width:700px){
+
+    body{
+        overflow:auto;
+    }
+
+    .app{
+
+        height:auto;
+
+        min-height:100vh;
+
+        grid-template-columns:
+            1fr;
+
+        grid-template-rows:
+            auto
+            auto
+            auto
+            auto;
+
+        overflow:visible;
+    }
+
+    .header,
+    .bottom{
+
+        grid-column:1;
+    }
+
+    .left{
+        display:none;
+    }
+
+    .center{
+
+        grid-row:2;
+
+        grid-template-rows:
+            220px
+            500px;
+    }
+
+    .header-status{
+
+        display:none;
+    }
+
+    .bottom{
+
+        grid-row:4;
+
+        grid-template-columns:1fr;
+    }
+
+    .controls{
+
+        justify-content:center;
+    }
+
+    .code-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .project-row{
+
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="grid"></div>
+<div class="scanline"></div>
+
+
+<div class="app">
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="panel header">
+
+    <div class="logo">
+
+        <div class="logo-core"></div>
+
+        <div>
+
+            <div class="logo-title">
+                J.A.R.V.I.S.
+            </div>
+
+            <div class="logo-sub">
+                JUST A RATHER VERY INTELLIGENT SYSTEM
+                · BUILDER EDITION
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-status">
+
+        <div class="status-item">
+
+            MODEL:
+
+            <span
+                id="modelStatus"
+                class="status-value">
+
+                GPT
+
+            </span>
+
+        </div>
+
+
+        <div class="status-item">
+
+            MODE:
+
+            <span
+                id="modeText"
+                class="status-value">
+
+                READY
+
+            </span>
+
+        </div>
+
+
+        <div class="status-item">
+
+            CORE:
+
+            <span
+                class="status-value">
+
+                ONLINE
+
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     LEFT
+===================================================== -->
+
+<aside class="panel left">
+
+    <div class="section-title">
+        SYSTEM TELEMETRY
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-head">
+
+            <span>CPU</span>
+
+            <span id="cpuValue">
+                42%
+            </span>
+
+        </div>
+
+        <div class="bar">
+
+            <div
+                id="cpuBar"
+                class="bar-fill"
+                style="width:42%">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-head">
+
+            <span>
+                MEMORY CORE
+            </span>
+
+            <span id="memoryValue">
+                68%
+            </span>
+
+        </div>
+
+        <div class="bar">
+
+            <div
+                id="memoryBar"
+                class="bar-fill"
+                style="width:68%">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-head">
+
+            <span>
+                NEURAL LOAD
+            </span>
+
+            <span id="neuralValue">
+                31%
+            </span>
+
+        </div>
+
+        <div class="bar">
+
+            <div
+                id="neuralBar"
+                class="bar-fill"
+                style="width:31%">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="mode">
+
+        <div class="mode-label">
+            ADAPTIVE BEHAVIOR
+        </div>
+
+        <div
+            id="adaptiveMode"
+            class="mode-value">
+
+            OBSERVING
+
+        </div>
+
+    </div>
+
+
+    <div class="mode">
+
+        <div class="mode-label">
+            MEMORY ENTRIES
+        </div>
+
+        <div
+            id="memoryCount"
+            class="mode-value">
+
+            0
+
+        </div>
+
+    </div>
+
+
+    <div class="mode">
+
+        <div class="mode-label">
+            PROJECTS
+        </div>
+
+        <div
+            id="projectCount"
+            class="mode-value">
+
+            0
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     CENTER
+===================================================== -->
+
+<main class="center">
+
+
+<section class="panel core-panel">
+
+    <div class="reactor">
+
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+
+        <div class="reactor-core"></div>
+
+        <div class="core-label">
+            NEURAL CORE
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="panel chat">
+
+    <div class="chat-header">
+
+        <div class="chat-title">
+            J.A.R.V.I.S. COMMUNICATION CHANNEL
+        </div>
+
+        <div class="chat-title">
+            LOCAL
+        </div>
+
+    </div>
+
+
+    <div
+        id="chatLog"
+        class="chat-log">
+
+        <div class="message jarvis">
+
+            <div class="message-label">
+                J.A.R.V.I.S.
+            </div>
+
+            <div class="message-body">
+
+                Guten Tag.
+
+                J.A.R.V.I.S. ist online.
+
+                App Builder,
+                Game Builder und
+                Code Workspace sind bereit.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =====================================================
+     RIGHT
+===================================================== -->
+
+<aside class="panel right">
+
+    <div class="section-title">
+        VISUAL INTELLIGENCE
+    </div>
+
+
+    <div class="visual-box">
+
+        <div
+            id="visualEmpty"
+            class="visual-empty">
+
+            NO VISUAL DATA
+
+            <br><br>
+
+            SCREEN SHARE
+            ODER
+            BILD HOCHLADEN
+
+        </div>
+
+
+        <img
+            id="visualImage"
+            style="display:none"
+            alt="Visual input">
+
+    </div>
+
+
+    <div class="visual">
+
+        <div class="section-title">
+            ANALYSIS
+        </div>
+
+        <div
+            id="visualAnalysis"
+            class="analysis">
+
+            Noch keine visuelle Analyse vorhanden.
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     BOTTOM
+===================================================== -->
+
+<section class="panel bottom">
+
+    <div class="input-area">
+
+        <textarea
+            id="messageInput"
+            placeholder="Sprechen Sie mit J.A.R.V.I.S....">
+
+        </textarea>
+
+    </div>
+
+
+    <div class="controls">
+
+        <button
+            onclick="openBuilder('app')">
+
+            📱 APP BUILDER
+
+        </button>
+
+
+        <button
+            onclick="openBuilder('game')">
+
+            🎮 GAME BUILDER
+
+        </button>
+
+
+        <button
+            onclick="openBuilder('code')">
+
+            ⌘ CODE
+
+        </button>
+
+
+        <button
+            id="screenButton"
+            onclick="toggleScreen()">
+
+            🖥 SCREEN
+
+        </button>
+
+
+        <button
+            onclick="openSettings()">
+
+            ⚙ SETTINGS
+
+        </button>
+
+
+        <button
+            id="micButton"
+            class="mic"
+            onclick="toggleMic()">
+
+            🎙
+
+        </button>
+
+
+        <button
+            onclick="sendMessage()">
+
+            SEND
+
+        </button>
+
+    </div>
+
+</section>
+
+</div>
+
+
+<!-- =====================================================
+     SETTINGS
+===================================================== -->
+
+<div
+    id="settingsModal"
+    class="modal">
+
+    <div class="modal-box">
+
+        <h2>
+            J.A.R.V.I.S. CONFIGURATION
+        </h2>
+
+        <p>
+
+            API-Key und Modell werden lokal
+            gespeichert.
+
+            Für einen echten Serverbetrieb
+            sollte der API-Key nicht im Frontend
+            liegen.
+
+        </p>
+
+
+        <input
+            id="apiKeyInput"
+            style="width:100%;height:38px;padding:9px"
+            type="password"
+            placeholder="API-Key">
+
+
+        <p>
+            Modell:
+        </p>
+
+
+        <input
+            id="modelInput"
+            style="width:100%;height:38px;padding:9px"
+            value="gpt-5.6-luna">
+
+
+        <div class="modal-buttons">
+
+            <button
+                onclick="closeSettings()">
+
+                ABBRECHEN
+
+            </button>
+
+
+            <button
+                onclick="saveSettings()">
+
+                SPEICHERN
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     BUILDER
+===================================================== -->
+
+<div
+    id="builderModal"
+    class="modal">
+
+    <div class="modal-box">
+
+        <h2 id="builderTitle">
+            BUILDER
+        </h2>
+
+
+        <p id="builderDescription">
+
+            Erstelle, bearbeite,
+            teste und exportiere dein Projekt.
+
+        </p>
+
+
+        <div class="builder-tabs">
+
+            <button
+                data-tab="app"
+                onclick="switchBuilderTab('app')">
+
+                APP BUILDER
+
+            </button>
+
+
+            <button
+                data-tab="game"
+                onclick="switchBuilderTab('game')">
+
+                GAME BUILDER
+
+            </button>
+
+
+            <button
+                data-tab="code"
+                onclick="switchBuilderTab('code')">
+
+                CODE WORKSPACE
+
+            </button>
+
+        </div>
+
+
+        <!-- APP BUILDER -->
+
+        <div
+            id="appPane"
+            class="builder-pane">
+
+            <div class="project-row">
+
+                <input
+                    id="appName"
+                    value="JARVIS App"
+                    placeholder="App-Name">
+
+
+                <input
+                    id="appFile"
+                    value="index.html"
+                    placeholder="Dateiname">
+
+
+                <select id="appMode">
+
+                    <option value="single">
+                        Single HTML
+                    </option>
+
+                    <option value="pwa">
+                        PWA Starter
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="builder-actions">
+
+                <button
+                    onclick="aiBuild('app')">
+
+                    🤖 MIT KI BAUEN
+
+                </button>
+
+
+                <button
+                    onclick="previewProject()">
+
+                    ▶ VORSCHAU
+
+                </button>
+
+
+                <button
+                    onclick="downloadProject()">
+
+                    ⬇ HTML EXPORT
+
+                </button>
+
+
+                <button
+                    onclick="saveProject()">
+
+                    💾 PROJEKT SPEICHERN
+
+                </button>
+
+            </div>
+
+
+            <textarea
+                id="appCode"
+                style="
+                    width:100%;
+                    height:300px;
+                    margin-top:8px;
+                    padding:10px;
+                    font-family:monospace;
+                    font-size:11px;
+                "></textarea>
+
+
+            <iframe
+                id="appPreview"
+                class="preview"
+                sandbox="allow-scripts"
+                style="display:none">
+
+            </iframe>
+
+        </div>
+
+
+        <!-- GAME BUILDER -->
+
+        <div
+            id="gamePane"
+            class="builder-pane">
+
+            <div class="project-row">
+
+                <input
+                    id="gameName"
+                    value="Neon Game"
+                    placeholder="Game-Name">
+
+
+                <input
+                    id="gameFile"
+                    value="game.html"
+                    placeholder="Dateiname">
+
+
+                <select id="gameType">
+
+                    <option value="arcade">
+                        Arcade
+                    </option>
+
+                    <option value="platform">
+                        Platformer Starter
+                    </option>
+
+                    <option value="custom">
+                        Custom
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="builder-actions">
+
+                <button
+                    onclick="aiBuild('game')">
+
+                    🤖 GAME MIT KI BAUEN
+
+                </button>
+
+
+                <button
+                    onclick="previewProject()">
+
+                    ▶ VORSCHAU
+
+                </button>
+
+
+                <button
+                    onclick="downloadProject()">
+
+                    ⬇ HTML EXPORT
+
+                </button>
+
+
+                <button
+                    onclick="saveProject()">
+
+                    💾 PROJEKT SPEICHERN
+
+                </button>
+
+            </div>
+
+
+            <textarea
+                id="gameCode"
+                style="
+                    width:100%;
+                    height:300px;
+                    margin-top:8px;
+                    padding:10px;
+                    font-family:monospace;
+                    font-size:11px;
+                "></textarea>
+
+
+            <iframe
+                id="gamePreview"
+                class="preview"
+                sandbox="allow-scripts"
+                style="display:none">
+
+            </iframe>
+
+        </div>
+
+
+        <!-- CODE WORKSPACE -->
+
+        <div
+            id="codePane"
+            class="builder-pane">
+
+            <div class="code-grid">
+
+                <textarea
+                    id="workspaceInput"
+                    placeholder="
+Hier deinen vorhandenen HTML/CSS/JS-Code einfügen...
+                "></textarea>
+
+
+                <textarea
+                    id="workspaceOutput"
+                    placeholder="
+Hier erscheint der ergänzte oder überarbeitete Code...
+                "></textarea>
+
+            </div>
+
+
+            <div class="builder-actions">
+
+                <button
+                    onclick="improveCode(false)">
+
+                    ✨ ERGÄNZEN
+
+                </button>
+
+
+                <button
+                    onclick="improveCode(true)">
+
+                    ♻ ÜBERARBEITEN
+
+                </button>
+
+
+                <button
+                    onclick="previewWorkspace()">
+
+                    ▶ PREVIEW
+
+                </button>
+
+
+                <button
+                    onclick="downloadWorkspace()">
+
+                    ⬇ EXPORT
+
+                </button>
+
+
+                <button
+                    onclick="saveWorkspace()">
+
+                    💾 SPEICHERN
+
+                </button>
+
+            </div>
+
+
+            <div class="mini-note">
+
+                Du kannst vorhandenen Code einfügen.
+                J.A.R.V.I.S. kann ihn anschließend
+                ergänzen oder eine überarbeitete
+                vollständige Version erzeugen.
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                onclick="closeBuilder()">
+
+                SCHLIESSEN
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   STATE
+===================================================== */
+
+const STORAGE_KEY =
+    "JARVIS_ADAPTIVE_BUILDER_V2";
+
+
+let state = {
+
+    apiKey:
+        localStorage.getItem(
+            "JARVIS_API_KEY"
+        ) || "",
+
+    model:
+        localStorage.getItem(
+            "JARVIS_MODEL"
+        ) ||
+        "gpt-5.6-luna",
+
+    history: [],
+
+    memory: [],
+
+    projects: [],
+
+    listening:false,
+
+    speaking:false,
+
+    screenStream:null,
+
+    screenTimer:null,
+
+    lastImage:null,
+
+    currentBuilder:"app"
+
+};
+
+
+/* =====================================================
+   SHORTCUT
+===================================================== */
+
+const $ = id =>
+    document.getElementById(id);
+
+
+/* =====================================================
+   MEMORY
+===================================================== */
+
+function loadState(){
+
+    try{
+
+        const saved =
+            JSON.parse(
+                localStorage.getItem(
+                    STORAGE_KEY
+                ) || "{}"
+            );
+
+        state.history =
+            saved.history || [];
+
+        state.memory =
+            saved.memory || [];
+
+        state.projects =
+            saved.projects || [];
+
+    }catch(error){
+
+        console.warn(
+            "State konnte nicht geladen werden."
+        );
+
+    }
+
+    updateMemoryUI();
+
+}
+
+
+function saveState(){
+
+    localStorage.setItem(
+
+        STORAGE_KEY,
+
+        JSON.stringify({
+
+            history:
+                state.history.slice(-40),
+
+            memory:
+                state.memory.slice(-80),
+
+            projects:
+                state.projects.slice(-30)
+
+        })
+
+    );
+
+    updateMemoryUI();
+
+}
+
+
+function updateMemoryUI(){
+
+    $("memoryCount")
+        .textContent =
+        state.memory.length;
+
+
+    $("projectCount")
+        .textContent =
+        state.projects.length;
+
+}
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+function openSettings(){
+
+    $("settingsModal")
+        .classList.add("open");
+
+    $("apiKeyInput")
+        .value =
+        state.apiKey;
+
+    $("modelInput")
+        .value =
+        state.model;
+
+}
+
+
+function closeSettings(){
+
+    $("settingsModal")
+        .classList.remove("open");
+
+}
+
+
+function saveSettings(){
+
+    state.apiKey =
+        $("apiKeyInput")
+        .value
+        .trim();
+
+    state.model =
+        $("modelInput")
+        .value
+        .trim() ||
+        "gpt-5.6-luna";
+
+
+    localStorage.setItem(
+        "JARVIS_API_KEY",
+        state.apiKey
+    );
+
+
+    localStorage.setItem(
+        "JARVIS_MODEL",
+        state.model
+    );
+
+
+    $("modelStatus")
+        .textContent =
+        state.model;
+
+
+    closeSettings();
+
+
+    addMessage(
+        "jarvis",
+        "Konfiguration gespeichert."
+    );
+
+}
+
+
+/* =====================================================
+   CHAT
+===================================================== */
+
+function addMessage(
+    role,
+    text
+){
+
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+    wrapper.className =
+        "message " + role;
+
+
+    const label =
+        document.createElement(
+            "div"
+        );
+
+    label.className =
+        "message-label";
+
+    label.textContent =
+        role === "user"
+            ? "SIE"
+            : "J.A.R.V.I.S.";
+
+
+    const body =
+        document.createElement(
+            "div"
+        );
+
+    body.className =
+        "message-body";
+
+    body.textContent =
+        text;
+
+
+    wrapper.appendChild(label);
+
+    wrapper.appendChild(body);
+
+
+    $("chatLog")
+        .appendChild(wrapper);
+
+
+    $("chatLog")
+        .scrollTop =
+        $("chatLog").scrollHeight;
+
+}
+
+
+/* =====================================================
+   MODE
+===================================================== */
+
+function setMode(mode){
+
+    $("modeText")
+        .textContent =
+        mode.toUpperCase();
+
+
+    $("adaptiveMode")
+        .textContent =
+        mode.toUpperCase();
+
+}
+
+
+/* =====================================================
+   LEARNING
+===================================================== */
+
+function learnFromMessage(text){
+
+    const patterns = [
+
+        [
+            /ich heiße\s+(.+)/i,
+            "Der Benutzer heißt "
+        ],
+
+        [
+            /mein name ist\s+(.+)/i,
+            "Der Benutzer heißt "
+        ],
+
+        [
+            /ich mag\s+(.+)/i,
+            "Der Benutzer mag "
+        ],
+
+        [
+            /ich liebe\s+(.+)/i,
+            "Der Benutzer liebt "
+        ],
+
+        [
+            /merke dir\s+(.+)/i,
+            ""
+        ],
+
+        [
+            /merk dir\s+(.+)/i,
+            ""
+        ]
+
+    ];
+
+
+    for(
+        const [regex,prefix]
+        of patterns
+    ){
+
+        const match =
+            text.match(regex);
+
+
+        if(!match)
+            continue;
+
+
+        const memory =
+            prefix +
+            match[1].trim();
+
+
+        if(
+            !state.memory
+                .includes(memory)
+        ){
+
+            state.memory.push(
+                memory
+            );
+
+            saveState();
+
+        }
+
+        break;
+
+    }
+
+}
+
+
+/* =====================================================
+   CHAT SEND
+===================================================== */
+
+async function sendMessage(){
+
+    const input =
+        $("messageInput");
+
+
+    const text =
+        input.value.trim();
+
+
+    if(!text)
+        return;
+
+
+    input.value = "";
+
+
+    addMessage(
+        "user",
+        text
+    );
+
+
+    state.history.push({
+
+        role:"user",
+
+        content:text
+
+    });
+
+
+    learnFromMessage(text);
+
+
+    const lower =
+        text.toLowerCase();
+
+
+    /*
+       NATÜRLICHE BUILDER-BEFEHLE
+    */
+
+    if(
+        lower.includes(
+            "app builder"
+        )
+    ){
+
+        openBuilder("app");
+
+        return;
+
+    }
+
+
+    if(
+        lower.includes(
+            "game builder"
+        ) ||
+        lower.includes(
+            "spiel bauen"
+        )
+    ){
+
+        openBuilder("game");
+
+        return;
+
+    }
+
+
+    if(
+        lower.includes("code") &&
+        (
+            lower.includes(
+                "ergänz"
+            ) ||
+            lower.includes(
+                "überschreib"
+            ) ||
+            lower.includes(
+                "workspace"
+            )
+        )
+    ){
+
+        openBuilder("code");
+
+        return;
+
+    }
+
+
+    if(!state.apiKey){
+
+        addMessage(
+
+            "jarvis",
+
+            "Für KI-Antworten bitte zuerst SETTINGS konfigurieren. Die lokalen Builder funktionieren auch ohne API-Key."
+
+        );
+
+        return;
+
+    }
+
+
+    setMode(
+        "thinking"
+    );
+
+
+    try{
+
+        const answer =
+            await askAI(
+                text,
+                state.lastImage
+            );
+
+
+        addMessage(
+            "jarvis",
+            answer
+        );
+
+
+        state.history.push({
+
+            role:"assistant",
+
+            content:answer
+
+        });
+
+
+        saveState();
+
+
+        speak(answer);
+
+
+        setMode(
+            "ready"
+        );
+
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+
+        addMessage(
+
+            "jarvis",
+
+            "Fehler beim KI-Aufruf. Prüfe API-Key, Modell und Netzwerk."
+
+        );
+
+
+        setMode(
+            "error"
+        );
+
+    }
+
+
+    state.lastImage =
+        null;
+
+}
+
+
+/* =====================================================
+   OPENAI
+===================================================== */
+
+async function askAI(
+    text,
+    imageData=null
+){
+
+    const memory =
+        state.memory.join(
+            "\n"
+        ) ||
+        "Keine gespeicherten Informationen.";
+
+
+    const recent =
+        state.history
+            .slice(-12);
+
+
+    const systemPrompt = `
+
+Du bist J.A.R.V.I.S.
+
+Du bist ein deutschsprachiger
+KI-Assistent mit:
+
+- Chat
+- Memory
+- App Builder
+- Game Builder
+- Code Workspace
+- Bildanalyse
+- Screenanalyse
+
+Wenn der Benutzer Code verlangt,
+liefere vollständigen nutzbaren Code.
+
+Wenn der Benutzer eine App verlangt,
+kannst du HTML/CSS/JavaScript erzeugen.
+
+Wenn der Benutzer ein Spiel verlangt,
+kannst du HTML5/Canvas/JavaScript erzeugen.
+
+Wenn der Benutzer vorhandenen Code
+verbessern möchte, sollst du funktionierende
+Teile erhalten und den Code vollständig
+zurückgeben.
+
+Behaupte niemals, dass du eine echte
+Betriebssystem-Aktion durchgeführt hast,
+wenn die Webseite diese Aktion nicht
+tatsächlich durchführen kann.
+
+Gespeicherte Erinnerungen:
+
+${memory}
+
+Gespräch:
+
+${JSON.stringify(recent)}
+
+Aktuelle Anfrage:
+
+${text}
+
+`;
+
+
+    const content = [
+
+        {
+
+            type:
+                "input_text",
+
+            text:
+                systemPrompt
+
+        }
+
+    ];
+
+
+    if(imageData){
+
+        content.push({
+
+            type:
+                "input_image",
+
+            image_url:
+                imageData,
+
+            detail:
+                "high"
+
+        });
+
+    }
+
+
+    const response =
+        await fetch(
+
+            "https://api.openai.com/v1/responses",
+
+            {
+
+                method:
+                    "POST",
+
+                headers:{
+
+                    "Content-Type":
+                        "application/json",
+
+                    "Authorization":
+                        "Bearer " +
+                        state.apiKey
+
+                },
+
+                body:
+                    JSON.stringify({
+
+                        model:
+                            state.model,
+
+                        input:[
+
+                            {
+
+                                role:
+                                    "user",
+
+                                content:
+                                    content
+
+                            }
+
+                        ]
+
+                    })
+
+            }
+
+        );
+
+
+    if(!response.ok){
+
+        throw new Error(
+            await response.text()
+        );
+
+    }
+
+
+    return extractResponseText(
+        await response.json()
+    );
+
+}
+
+
+/* =====================================================
+   RESPONSE
+===================================================== */
+
+function extractResponseText(data){
+
+    if(data.output_text)
+        return data.output_text;
+
+
+    let result = "";
+
+
+    for(
+        const item
+        of data.output || []
+    ){
+
+        for(
+            const part
+            of item.content || []
+        ){
+
+            if(
+                part.type ===
+                "output_text"
+            ){
+
+                result +=
+                    part.text || "";
+
+            }
+
+        }
+
+    }
+
+
+    return result ||
+        "Keine verwertbare Antwort.";
+
+}
+
+
+/* =====================================================
+   SPEECH
+===================================================== */
+
+function speak(text){
+
+    if(
+        !("speechSynthesis" in window)
+    )
+        return;
+
+
+    speechSynthesis.cancel();
+
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+    utterance.lang =
+        "de-DE";
+
+    utterance.rate =
+        1;
+
+    utterance.pitch =
+        .85;
+
+
+    utterance.onstart =
+        () => {
+
+            state.speaking =
+                true;
+
+            setMode(
+                "speaking"
+            );
+
+        };
+
+
+    utterance.onend =
+        () => {
+
+            state.speaking =
+                false;
+
+            setMode(
+                "ready"
+            );
+
+        };
+
+
+    speechSynthesis.speak(
+        utterance
+    );
+
+}
+
+
+/* =====================================================
+   SPEECH RECOGNITION
+===================================================== */
+
+let recognition =
+    null;
+
+
+function createRecognition(){
+
+    const SR =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if(!SR){
+
+        alert(
+            "Dieser Browser unterstützt keine Spracherkennung."
+        );
+
+        return null;
+
+    }
+
+
+    const r =
+        new SR();
+
+
+    r.lang =
+        "de-DE";
+
+    r.continuous =
+        false;
+
+    r.interimResults =
+        false;
+
+
+    r.onstart =
+        () => {
+
+            state.listening =
+                true;
+
+            $("micButton")
+                .classList
+                .add("active");
+
+            setMode(
+                "listening"
+            );
+
+        };
+
+
+    r.onresult =
+        event => {
+
+            $("messageInput")
+                .value =
+                event.results
+                    [0][0]
+                    .transcript;
+
+            sendMessage();
+
+        };
+
+
+    r.onend =
+        () => {
+
+            state.listening =
+                false;
+
+            $("micButton")
+                .classList
+                .remove("active");
+
+            if(
+                !state.speaking
+            ){
+
+                setMode(
+                    "ready"
+                );
+
+            }
+
+        };
+
+
+    r.onerror =
+        () => {
+
+            state.listening =
+                false;
+
+            $("micButton")
+                .classList
+                .remove("active");
+
+            setMode(
+                "ready"
+            );
+
+        };
+
+
+    return r;
+
+}
+
+
+function toggleMic(){
+
+    if(!recognition){
+
+        recognition =
+            createRecognition();
+
+    }
+
+
+    if(!recognition)
+        return;
+
+
+    if(
+        state.listening
+    ){
+
+        recognition.stop();
+
+    }else{
+
+        recognition.start();
+
+    }
+
+}
+
+
+/* =====================================================
+   BUILDER
+===================================================== */
+
+function openBuilder(tab){
+
+    $("builderModal")
+        .classList
+        .add("open");
+
+
+    switchBuilderTab(
+        tab
+    );
+
+}
+
+
+function closeBuilder(){
+
+    $("builderModal")
+        .classList
+        .remove("open");
+
+}
+
+
+function switchBuilderTab(tab){
+
+    state.currentBuilder =
+        tab;
+
+
+    document
+        .querySelectorAll(
+            ".builder-pane"
+        )
+        .forEach(
+            pane =>
+                pane.classList
+                    .remove("open")
+        );
+
+
+    $(tab + "Pane")
+        .classList
+        .add("open");
+
+
+    document
+        .querySelectorAll(
+            ".builder-tabs button"
+        )
+        .forEach(
+            button =>
+                button.classList.toggle(
+                    "active",
+                    button.dataset.tab === tab
+                )
+        );
+
+
+    $("builderTitle")
+        .textContent =
+        tab === "app"
+            ? "APP BUILDER"
+            : tab === "game"
+                ? "GAME BUILDER"
+                : "CODE WORKSPACE";
+
+}
+
+
+/* =====================================================
+   DEFAULT APP
+===================================================== */
+
+function defaultApp(){
+
+return `<!DOCTYPE html>
+
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>JARVIS App</title>
+
+<style>
+
+body{
+
+    margin:0;
+
+    min-height:100vh;
+
+    display:grid;
+
+    place-items:center;
+
+    background:#071019;
+
+    color:#e8fbff;
+
+    font-family:
+        system-ui;
+
+}
+
+.card{
+
+    padding:32px;
+
+    border:
+        1px solid #00eaff;
+
+    border-radius:18px;
+
+    box-shadow:
+        0 0 30px
+        #00eaff33;
+
+}
+
+button{
+
+    padding:
+        10px 16px;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<main class="card">
+
+<h1>
+JARVIS App
+</h1>
+
+<p id="status">
+Deine App läuft direkt als HTML.
+</p>
+
+<button
+onclick="
+document.getElementById('status').textContent =
+'Aktion ausgeführt.'
+">
+
+Test
+
+</button>
+
+</main>
+
+</body>
+
+</html>`;
+
+}
+
+
+/* =====================================================
+   DEFAULT GAME
+===================================================== */
+
+function defaultGame(){
+
+return `<!DOCTYPE html>
+
+<html lang="de">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>Neon Game</title>
+
+<style>
+
+html,
+body{
+
+    margin:0;
+
+    background:#05070c;
+
+    color:white;
+
+    font-family:
+        system-ui;
+
+}
+
+canvas{
+
+    display:block;
+
+    margin:auto;
+
+    background:#0b1520;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<canvas
+id="game"
+width="700"
+height="420">
+</canvas>
+
+
+<script>
+
+const canvas =
+document.getElementById("game");
+
+const ctx =
+canvas.getContext("2d");
+
+
+let player = {
+
+    x:350,
+
+    y:210,
+
+    size:20,
+
+    speed:4
+
+};
+
+
+const keys = {};
+
+
+document.addEventListener(
+"keydown",
+e => keys[e.key] = true
+);
+
+
+document.addEventListener(
+"keyup",
+e => keys[e.key] = false
+);
+
+
+function loop(){
+
+    if(keys.ArrowLeft)
+        player.x -= player.speed;
+
+    if(keys.ArrowRight)
+        player.x += player.speed;
+
+    if(keys.ArrowUp)
+        player.y -= player.speed;
+
+    if(keys.ArrowDown)
+        player.y += player.speed;
+
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    ctx.fillStyle =
+        "#00eaff";
+
+
+    ctx.fillRect(
+        player.x,
+        player.y,
+        player.size,
+        player.size
+    );
+
+
+    requestAnimationFrame(
+        loop
+    );
+
+}
+
+
+loop();
+
+<\/script>
+
+</body>
+
+</html>`;
+
+}
+
+
+/* =====================================================
+   AI BUILDER
+===================================================== */
+
+function aiBuild(kind){
+
+    if(!state.apiKey){
+
+        addMessage(
+            "jarvis",
+            "Kein API-Key vorhanden. Ein lokaler Starter wird geladen."
+        );
+
+
+        if(kind === "app"){
+
+            $("appCode")
+                .value =
+                defaultApp();
+
+        }else{
+
+            $("gameCode")
+                .value =
+                defaultGame();
+
+        }
+
+        return;
+
+    }
+
+
+    const request =
+        kind === "app"
+
+        ?
+
+        `Erzeuge eine vollständige eigenständige HTML5-App namens "${$("appName").value}".
+
+Liefere ausschließlich den vollständigen HTML-Code.
+
+CSS und JavaScript müssen direkt eingebettet sein.
+
+Keine externen Bibliotheken.`
+
+        :
+
+        `Erzeuge ein vollständiges eigenständiges HTML5-Spiel namens "${$("gameName").value}".
+
+Spieltyp:
+${$("gameType").value}
+
+Liefere ausschließlich vollständigen HTML-Code.
+
+CSS und JavaScript direkt einbetten.
+
+Das Spiel muss direkt im Browser funktionieren.
+
+Keine externen Bibliotheken.`;
+
+
+    buildWithAI(
+        request,
+        kind
+    );
+
+}
+
+
+async function buildWithAI(
+    request,
+    kind
+){
+
+    setMode(
+        "building"
+    );
+
+
+    try{
+
+        const result =
+            await askAI(
+                request
+            );
+
+
+        const clean =
+            result
+                .replace(
+                    /^```html?/i,
+                    ""
+                )
+                .replace(
+                    /```$/,
+                    ""
+                )
+                .trim();
+
+
+        if(
+            kind === "app"
+        ){
+
+            $("appCode")
+                .value =
+                clean;
+
+        }else{
+
+            $("gameCode")
+                .value =
+                clean;
+
+        }
+
+
+        saveProject();
+
+
+        previewProject();
+
+
+        addMessage(
+            "jarvis",
+            "Projekt wurde erstellt und in den Builder geladen."
+        );
+
+
+        setMode(
+            "ready"
+        );
+
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+
+        addMessage(
+            "jarvis",
+            "Der KI-Build ist fehlgeschlagen."
+        );
+
+
+        setMode(
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   PREVIEW
+===================================================== */
+
+function previewProject(){
+
+    const kind =
+        state.currentBuilder;
+
+
+    const textarea =
+        $(
+            kind === "app"
+                ? "appCode"
+                : "gameCode"
+        );
+
+
+    const frame =
+        $(
+            kind === "app"
+                ? "appPreview"
+                : "gamePreview"
+        );
+
+
+    if(!textarea.value){
+
+        textarea.value =
+            kind === "app"
+                ? defaultApp()
+                : defaultGame();
+
+    }
+
+
+    frame.srcdoc =
+        textarea.value;
+
+
+    frame.style.display =
+        "block";
+
+}
+
+
+/* =====================================================
+   DOWNLOAD
+===================================================== */
+
+function downloadText(
+    filename,
+    text
+){
+
+    const blob =
+        new Blob(
+            [text],
+            {
+                type:
+                    "text/html"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const a =
+        document.createElement(
+            "a"
+        );
+
+
+    a.href =
+        url;
+
+    a.download =
+        filename ||
+        "project.html";
+
+
+    a.click();
+
+
+    setTimeout(
+        () =>
+            URL.revokeObjectURL(
+                url
+            ),
+        500
+    );
+
+}
+
+
+function downloadProject(){
+
+    const kind =
+        state.currentBuilder;
+
+
+    const code =
+        $(
+            kind === "app"
+                ? "appCode"
+                : "gameCode"
+        ).value;
+
+
+    const filename =
+        kind === "app"
+            ? $("appFile").value
+            : $("gameFile").value;
+
+
+    downloadText(
+        filename,
+        code
+    );
+
+}
+
+
+/* =====================================================
+   SAVE PROJECT
+===================================================== */
+
+function saveProject(){
+
+    const kind =
+        state.currentBuilder;
+
+
+    const code =
+        $(
+            kind === "app"
+                ? "appCode"
+                : "gameCode"
+        ).value;
+
+
+    if(!code)
+        return;
+
+
+    state.projects.push({
+
+        type:
+            kind,
+
+        name:
+            kind === "app"
+                ? $("appName").value
+                : $("gameName").value,
+
+        code:
+            code,
+
+        updated:
+            new Date()
+                .toISOString()
+
+    });
+
+
+    saveState();
+
+}
+
+
+/* =====================================================
+   CODE WORKSPACE
+===================================================== */
+
+async function improveCode(
+    rewrite
+){
+
+    const code =
+        $("workspaceInput")
+        .value
+        .trim();
+
+
+    if(!code)
+        return;
+
+
+    /*
+       Ohne KI:
+       vorhandenen Code
+       direkt übernehmen.
+    */
+
+    if(!state.apiKey){
+
+        $("workspaceOutput")
+            .value =
+            rewrite
+                ? code
+                : code +
+                  "\n\n<!-- J.A.R.V.I.S. CODE WORKSPACE -->";
+
+        return;
+
+    }
+
+
+    const instruction =
+        rewrite
+
+            ?
+
+`Überarbeite und verbessere den folgenden Code.
+
+Behalte funktionierende Bestandteile.
+
+Behebe erkennbare Fehler.
+
+Verbessere Struktur, UI und Funktionalität.
+
+Gib ausschließlich den vollständigen finalen Code zurück.
+
+Keine Markdown-Codeblöcke.`
+
+            :
+
+`Ergänze den folgenden Code.
+
+Behalte den bestehenden Code.
+
+Füge die gewünschte Funktionalität sinnvoll hinzu.
+
+Behebe notwendige Fehler.
+
+Gib ausschließlich den vollständigen finalen Code zurück.
+
+Keine Markdown-Codeblöcke.`;
+
+
+    setMode(
+        "editing"
+    );
+
+
+    try{
+
+        const result =
+            await askAI(
+
+                instruction +
+                "\n\nCODE:\n" +
+                code
+
+            );
+
+
+        $("workspaceOutput")
+            .value =
+            result
+                .replace(
+                    /^```[a-z]*\n?/i,
+                    ""
+                )
+                .replace(
+                    /```$/,
+                    ""
+                )
+                .trim();
+
+
+        setMode(
+            "ready"
+        );
+
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+
+        addMessage(
+            "jarvis",
+            "Code-Bearbeitung fehlgeschlagen."
+        );
+
+
+        setMode(
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CODE PREVIEW
+===================================================== */
+
+function previewWorkspace(){
+
+    const code =
+        $("workspaceOutput")
+            .value ||
+        $("workspaceInput")
+            .value;
+
+
+    if(!code)
+        return;
+
+
+    const preview =
+        window.open(
+            "",
+            "JARVISPreview",
+            "width=1000,height=700"
+        );
+
+
+    if(!preview)
+        return;
+
+
+    preview.document.open();
+
+    preview.document.write(
+        code
+    );
+
+    preview.document.close();
+
+}
+
+
+/* =====================================================
+   CODE EXPORT
+===================================================== */
+
+function downloadWorkspace(){
+
+    const code =
+        $("workspaceOutput")
+            .value ||
+        $("workspaceInput")
+            .value;
+
+
+    downloadText(
+        "jarvis-project.html",
+        code
+    );
+
+}
+
+
+/* =====================================================
+   SAVE WORKSPACE
+===================================================== */
+
+function saveWorkspace(){
+
+    const code =
+        $("workspaceOutput")
+            .value ||
+        $("workspaceInput")
+            .value;
+
+
+    if(!code)
+        return;
+
+
+    state.projects.push({
+
+        type:
+            "workspace",
+
+        name:
+            "Code Workspace",
+
+        code:
+            code,
+
+        updated:
+            new Date()
+                .toISOString()
+
+    });
+
+
+    saveState();
+
+
+    addMessage(
+        "jarvis",
+        "Code-Projekt lokal gespeichert."
+    );
+
+}
+
+
+/* =====================================================
+   SCREEN SHARE
+===================================================== */
+
+async function toggleScreen(){
+
+    if(
+        state.screenStream
+    ){
+
+        stopScreenShare();
+
+        return;
+
+    }
+
+
+    if(
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getDisplayMedia
+    ){
+
+        alert(
+            "Dieser Browser unterstützt keine Bildschirmfreigabe."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const stream =
+            await navigator
+                .mediaDevices
+                .getDisplayMedia({
+
+                    video:true,
+
+                    audio:false
+
+                });
+
+
+        state.screenStream =
+            stream;
+
+
+        $("screenButton")
+            .classList
+            .add("active");
+
+
+        $("screenButton")
+            .textContent =
+            "■ STOP";
+
+
+        const video =
+            document.createElement(
+                "video"
+            );
+
+
+        video.srcObject =
+            stream;
+
+        video.muted =
+            true;
+
+
+        await video.play();
+
+
+        state.screenTimer =
+            setInterval(
+
+                () =>
+                    captureScreen(
+                        video
+                    ),
+
+                4500
+
+            );
+
+
+        captureScreen(
+            video
+        );
+
+
+        stream
+            .getVideoTracks()[0]
+            .addEventListener(
+                "ended",
+                stopScreenShare
+            );
+
+
+        setMode(
+            "observing"
+        );
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+        setMode(
+            "ready"
+        );
+
+    }
+
+}
+
+
+function stopScreenShare(){
+
+    if(
+        state.screenTimer
+    ){
+
+        clearInterval(
+            state.screenTimer
+        );
+
+    }
+
+
+    state.screenTimer =
+        null;
+
+
+    if(
+        state.screenStream
+    ){
+
+        state.screenStream
+            .getTracks()
+            .forEach(
+                track =>
+                    track.stop()
+            );
+
+    }
+
+
+    state.screenStream =
+        null;
+
+
+    $("screenButton")
+        .classList
+        .remove("active");
+
+
+    $("screenButton")
+        .textContent =
+        "🖥 SCREEN";
+
+
+    setMode(
+        "ready"
+    );
+
+}
+
+
+function captureScreen(
+    video
+){
+
+    if(
+        !state.screenStream ||
+        !video.videoWidth
+    )
+        return;
+
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.width =
+        video.videoWidth;
+
+
+    canvas.height =
+        video.videoHeight;
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    ctx.drawImage(
+        video,
+        0,
+        0
+    );
+
+
+    const image =
+        canvas.toDataURL(
+            "image/jpeg",
+            .72
+        );
+
+
+    showVisual(
+        image
+    );
+
+
+    state.lastImage =
+        image;
+
+
+    $("visualAnalysis")
+        .textContent =
+        "Bildschirm-Screenshot aktualisiert. Eine Analyse erfolgt auf Anfrage.";
+
+}
+
+
+/* =====================================================
+   VISUAL
+===================================================== */
+
+function showVisual(
+    image
+){
+
+    $("visualImage")
+        .src =
+        image;
+
+
+    $("visualImage")
+        .style.display =
+        "block";
+
+
+    $("visualEmpty")
+        .style.display =
+        "none";
+
+}
+
+
+/* =====================================================
+   ENTER
+===================================================== */
+
+$("messageInput")
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if(
+                event.key ===
+                "Enter" &&
+                !event.shiftKey
+            ){
+
+                event.preventDefault();
+
+                sendMessage();
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   IMAGE UPLOAD
+===================================================== */
+
+const imageInput =
+    document.createElement(
+        "input"
+    );
+
+imageInput.type =
+    "file";
+
+imageInput.accept =
+    "image/*";
+
+imageInput.style.display =
+    "none";
+
+document.body.appendChild(
+    imageInput
+);
+
+
+imageInput.addEventListener(
+    "change",
+    event => {
+
+        const file =
+            event.target
+                .files[0];
+
+
+        if(!file)
+            return;
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            () => {
+
+                showVisual(
+                    reader.result
+                );
+
+
+                state.lastImage =
+                    reader.result;
+
+            };
+
+
+        reader.readAsDataURL(
+            file
+        );
+
+    }
+);
+
+
+/* =====================================================
+   TELEMETRY
+===================================================== */
+
+setInterval(
+    () => {
+
+        const values = {
+
+            cpu:
+                30 +
+                Math.floor(
+                    Math.random() *
+                    55
+                ),
+
+            memory:
+                50 +
+                Math.floor(
+                    Math.random() *
+                    40
+                ),
+
+            neural:
+                20 +
+                Math.floor(
+                    Math.random() *
+                    75
+                )
+
+        };
+
+
+        for(
+            const key in values
+        ){
+
+            const value =
+                values[key];
+
+
+            $(key+"Value")
+                .textContent =
+                value + "%";
+
+
+            $(key+"Bar")
+                .style.width =
+                value + "%";
+
+        }
+
+    },
+
+    2500
+);
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+loadState();
+
+
+$("modelStatus")
+    .textContent =
+    state.model;
+
+
+$("appCode")
+    .value =
+    defaultApp();
+
+
+$("gameCode")
+    .value =
+    defaultGame();
+
+
+setMode(
+    "ready"
+);
+
+
+console.log(
+    "%cJ.A.R.V.I.S. BUILDER ONLINE",
+    "color:#00eaff;font-size:20px;font-weight:bold"
+);
+
+</script>
+
+</body>
+</html>

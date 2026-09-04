@@ -2,2349 +2,2427 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#050b12">
-<title>J.A.R.V.I.S. — Next Generation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J.A.R.V.I.S. V3 — Voice Intelligence System</title>
 
 <style>
 :root{
-  --bg:#03070c;
-  --panel:rgba(7,17,27,.72);
-  --panel2:rgba(10,25,38,.82);
-  --line:rgba(72,210,255,.20);
-  --cyan:#4de7ff;
-  --blue:#5d8dff;
-  --violet:#9d72ff;
-  --green:#51f5a5;
-  --orange:#ffb45d;
-  --red:#ff5577;
-  --text:#e8f8ff;
-  --muted:#7593a5;
-  --shadow:0 0 45px rgba(77,231,255,.10);
+    --cyan:#00eaff;
+    --blue:#0077ff;
+    --green:#00ff9d;
+    --red:#ff3d71;
+    --yellow:#ffd166;
+    --bg:#03070d;
+    --panel:rgba(5,15,28,.78);
+    --border:rgba(0,234,255,.28);
+    --text:#dffcff;
+    --muted:#6c8a9e;
 }
 
-*{box-sizing:border-box}
+*{
+    box-sizing:border-box;
+}
 
 html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Inter,Segoe UI,Arial,sans-serif;
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 50% 45%,rgba(0,120,255,.12),transparent 35%),
+        radial-gradient(circle at 20% 20%,rgba(0,234,255,.06),transparent 25%),
+        #03070d;
+    color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-  background:
-    radial-gradient(circle at 50% 42%,rgba(30,120,180,.13),transparent 35%),
-    radial-gradient(circle at 10% 90%,rgba(80,80,255,.08),transparent 30%),
-    linear-gradient(135deg,#02050a,#06111b 50%,#02060b);
+    position:relative;
 }
 
-/* BACKGROUND */
+/* =========================================================
+   BACKGROUND
+========================================================= */
 
 #stars{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:.65;
-}
-
-.scanlines{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:999;
-  opacity:.025;
-  background:repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 3px,
-    #fff 4px
-  );
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:0;
 }
 
 .grid{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:.08;
-  background-image:
-    linear-gradient(var(--cyan) 1px,transparent 1px),
-    linear-gradient(90deg,var(--cyan) 1px,transparent 1px);
-  background-size:70px 70px;
-  mask-image:radial-gradient(circle at center,#000,transparent 78%);
+    position:fixed;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    background-image:
+        linear-gradient(rgba(0,234,255,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(0,234,255,.035) 1px,transparent 1px);
+    background-size:42px 42px;
+    mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent);
 }
 
-/* APP */
+.scanlines{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    pointer-events:none;
+    opacity:.08;
+    background:repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        rgba(255,255,255,.04) 4px
+    );
+}
+
+.vignette{
+    position:fixed;
+    inset:0;
+    z-index:99;
+    pointer-events:none;
+    box-shadow:inset 0 0 180px rgba(0,0,0,.8);
+}
+
+/* =========================================================
+   APP
+========================================================= */
 
 .app{
-  position:relative;
-  width:100%;
-  height:100%;
-  display:grid;
-  grid-template-rows:68px 1fr 78px;
+    position:relative;
+    z-index:5;
+    width:100%;
+    height:100%;
+    display:grid;
+    grid-template-rows:72px 1fr 88px;
 }
 
-/* HEADER */
+/* =========================================================
+   HEADER
+========================================================= */
 
-.header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 22px;
-  border-bottom:1px solid var(--line);
-  background:rgba(2,9,15,.72);
-  backdrop-filter:blur(20px);
-  z-index:20;
+header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 24px;
+    border-bottom:1px solid var(--border);
+    background:rgba(2,9,18,.78);
+    backdrop-filter:blur(18px);
 }
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:14px;
+.logo{
+    display:flex;
+    align-items:center;
+    gap:14px;
 }
 
-.brand-core{
-  width:38px;
-  height:38px;
-  border:1px solid var(--cyan);
-  border-radius:50%;
-  position:relative;
-  box-shadow:0 0 20px rgba(77,231,255,.35);
+.logo-core{
+    width:42px;
+    height:42px;
+    border:2px solid var(--cyan);
+    border-radius:50%;
+    position:relative;
+    box-shadow:
+        0 0 15px rgba(0,234,255,.6),
+        inset 0 0 15px rgba(0,234,255,.25);
+    animation:logoPulse 2s infinite;
 }
 
-.brand-core:before,
-.brand-core:after{
-  content:"";
-  position:absolute;
-  inset:7px;
-  border:1px solid var(--cyan);
-  border-radius:50%;
+.logo-core:before,
+.logo-core:after{
+    content:"";
+    position:absolute;
+    inset:8px;
+    border:1px solid var(--cyan);
+    border-radius:50%;
 }
 
-.brand-core:after{
-  inset:13px;
-  background:var(--cyan);
-  box-shadow:0 0 18px var(--cyan);
+.logo-core:after{
+    inset:15px;
+    background:var(--cyan);
+    box-shadow:0 0 18px var(--cyan);
 }
 
-.brand-name{
-  font-size:15px;
-  letter-spacing:5px;
-  font-weight:700;
+@keyframes logoPulse{
+    50%{
+        transform:scale(1.06);
+        box-shadow:0 0 28px rgba(0,234,255,.8);
+    }
 }
 
-.brand-sub{
-  color:var(--muted);
-  font-size:9px;
-  letter-spacing:3px;
-  margin-top:3px;
+.logo-text strong{
+    display:block;
+    letter-spacing:5px;
+    font-size:18px;
+}
+
+.logo-text span{
+    font-size:10px;
+    color:var(--muted);
+    letter-spacing:2px;
 }
 
 .header-status{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  font-size:10px;
-  letter-spacing:2px;
+    display:flex;
+    gap:12px;
+    align-items:center;
 }
 
-.status-dot{
-  width:7px;
-  height:7px;
-  background:var(--green);
-  border-radius:50%;
-  box-shadow:0 0 14px var(--green);
-  display:inline-block;
+.status-pill{
+    border:1px solid var(--border);
+    background:rgba(0,234,255,.04);
+    padding:8px 12px;
+    border-radius:20px;
+    font-size:10px;
+    letter-spacing:1px;
 }
 
-.header-actions{
-  display:flex;
-  gap:8px;
+.dot{
+    display:inline-block;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 10px var(--green);
+    margin-right:6px;
 }
 
-.icon-btn{
-  border:1px solid var(--line);
-  color:var(--muted);
-  background:rgba(255,255,255,.025);
-  width:36px;
-  height:36px;
-  border-radius:10px;
-  cursor:pointer;
-  transition:.2s;
+/* =========================================================
+   MAIN
+========================================================= */
+
+main{
+    min-height:0;
+    display:grid;
+    grid-template-columns:280px minmax(400px,1fr) 280px;
+    gap:14px;
+    padding:14px;
 }
-
-.icon-btn:hover{
-  color:var(--cyan);
-  border-color:var(--cyan);
-  box-shadow:0 0 18px rgba(77,231,255,.15);
-}
-
-/* MAIN */
-
-.main{
-  min-height:0;
-  display:grid;
-  grid-template-columns:280px minmax(400px,1fr) 300px;
-  gap:12px;
-  padding:12px;
-}
-
-/* PANELS */
 
 .panel{
-  min-height:0;
-  border:1px solid var(--line);
-  background:var(--panel);
-  backdrop-filter:blur(22px);
-  border-radius:18px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
+    min-height:0;
+    border:1px solid var(--border);
+    background:linear-gradient(
+        145deg,
+        rgba(7,20,35,.82),
+        rgba(2,9,17,.72)
+    );
+    backdrop-filter:blur(18px);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:
+        inset 0 0 30px rgba(0,234,255,.025),
+        0 15px 60px rgba(0,0,0,.25);
 }
 
 .panel-title{
-  height:43px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 15px;
-  border-bottom:1px solid var(--line);
-  font-size:9px;
-  letter-spacing:3px;
-  color:var(--muted);
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 14px;
+    border-bottom:1px solid rgba(0,234,255,.13);
+    color:var(--cyan);
+    font-size:10px;
+    letter-spacing:2px;
 }
 
 .panel-body{
-  padding:14px;
+    padding:14px;
 }
 
-/* LEFT */
+/* =========================================================
+   LEFT
+========================================================= */
 
-.left{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  min-height:0;
+.left-column,
+.right-column{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    min-height:0;
 }
 
 .telemetry{
-  flex:0 0 auto;
+    flex:1;
 }
 
 .metric{
-  margin-bottom:15px;
+    margin-bottom:17px;
 }
 
-.metric-top{
-  display:flex;
-  justify-content:space-between;
-  font-size:9px;
-  letter-spacing:1px;
-  color:var(--muted);
-  margin-bottom:7px;
-}
-
-.metric-value{
-  color:var(--text);
+.metric-head{
+    display:flex;
+    justify-content:space-between;
+    font-size:10px;
+    color:#8da8b9;
+    margin-bottom:7px;
 }
 
 .bar{
-  height:3px;
-  background:rgba(255,255,255,.06);
-  border-radius:3px;
-  overflow:hidden;
+    height:5px;
+    background:#091520;
+    border-radius:10px;
+    overflow:hidden;
 }
 
 .bar i{
-  display:block;
-  height:100%;
-  width:50%;
-  background:var(--cyan);
-  box-shadow:0 0 10px var(--cyan);
-  transition:width .5s;
+    display:block;
+    height:100%;
+    width:50%;
+    background:linear-gradient(90deg,var(--blue),var(--cyan));
+    box-shadow:0 0 12px var(--cyan);
+    transition:width .5s;
 }
 
 .memory{
-  flex:1;
-  min-height:0;
+    height:250px;
 }
 
 .memory-list{
-  overflow:auto;
-  height:calc(100% - 43px);
-  padding:8px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    max-height:170px;
+    overflow:auto;
 }
 
 .memory-item{
-  padding:10px;
-  border-bottom:1px solid rgba(255,255,255,.05);
-  font-size:10px;
-  color:#aac4d1;
-  line-height:1.5;
+    padding:9px;
+    border-left:2px solid var(--cyan);
+    background:rgba(0,234,255,.035);
+    font-size:10px;
+    color:#a8c2d0;
 }
 
-.memory-item span{
-  display:block;
-  color:var(--cyan);
-  font-size:8px;
-  letter-spacing:1px;
-  margin-bottom:4px;
-}
-
-/* CENTER */
+/* =========================================================
+   CENTER
+========================================================= */
 
 .center{
-  min-width:0;
-  min-height:0;
-  display:flex;
-  flex-direction:column;
-  position:relative;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
 }
 
-.core-area{
-  flex:1;
-  min-height:0;
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-
-.core-halo{
-  position:absolute;
-  width:520px;
-  height:520px;
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(77,231,255,.08),transparent 65%);
-  filter:blur(3px);
+.core-panel{
+    flex:0 0 350px;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
 }
 
 .core{
-  position:relative;
-  width:280px;
-  height:280px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+    width:220px;
+    height:220px;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.core-center{
+    width:82px;
+    height:82px;
+    border-radius:50%;
+    background:
+        radial-gradient(circle,
+        white 0%,
+        var(--cyan) 18%,
+        #0077ff 48%,
+        rgba(0,119,255,.1) 70%,
+        transparent 72%);
+    box-shadow:
+        0 0 25px var(--cyan),
+        0 0 80px rgba(0,119,255,.7);
+    animation:coreBeat 1.5s infinite;
+    z-index:4;
+}
+
+@keyframes coreBeat{
+    50%{
+        transform:scale(1.14);
+    }
 }
 
 .ring{
-  position:absolute;
-  border:1px solid rgba(77,231,255,.28);
-  border-radius:50%;
+    position:absolute;
+    border:1px solid rgba(0,234,255,.55);
+    border-radius:50%;
 }
 
 .r1{
-  width:260px;
-  height:260px;
-  border-top-color:var(--cyan);
-  border-bottom-color:transparent;
-  animation:spin 9s linear infinite;
+    width:130px;
+    height:130px;
+    animation:spin 7s linear infinite;
 }
 
 .r2{
-  width:220px;
-  height:220px;
-  border-left-color:var(--violet);
-  border-right-color:transparent;
-  animation:spinReverse 6s linear infinite;
+    width:175px;
+    height:175px;
+    border-style:dashed;
+    animation:spinReverse 12s linear infinite;
 }
 
 .r3{
-  width:180px;
-  height:180px;
-  border-top-color:var(--cyan);
-  border-right-color:var(--cyan);
-  animation:spin 4s linear infinite;
+    width:220px;
+    height:220px;
+    border-color:rgba(0,119,255,.3);
+    animation:spin 20s linear infinite;
 }
 
 .r4{
-  width:145px;
-  height:145px;
-  border:1px dashed rgba(255,255,255,.28);
-  animation:spinReverse 14s linear infinite;
+    width:255px;
+    height:255px;
+    border-color:rgba(0,234,255,.12);
+    animation:spinReverse 30s linear infinite;
 }
-
-.core-energy{
-  width:82px;
-  height:82px;
-  border-radius:50%;
-  background:
-    radial-gradient(circle,#fff 0 4%,var(--cyan) 14%,rgba(77,231,255,.35) 42%,transparent 70%);
-  box-shadow:
-    0 0 25px var(--cyan),
-    0 0 70px rgba(77,231,255,.5);
-  animation:pulse 2s ease-in-out infinite;
-}
-
-.core-label{
-  position:absolute;
-  bottom:4px;
-  text-align:center;
-  font-size:9px;
-  letter-spacing:4px;
-  color:var(--cyan);
-}
-
-.core-status{
-  position:absolute;
-  top:15px;
-  left:20px;
-  right:20px;
-  display:flex;
-  justify-content:space-between;
-  color:var(--muted);
-  font-size:8px;
-  letter-spacing:2px;
-}
-
-/* CHAT */
-
-.chat{
-  height:255px;
-  border-top:1px solid var(--line);
-  background:rgba(2,8,13,.5);
-  display:flex;
-  flex-direction:column;
-}
-
-.messages{
-  flex:1;
-  overflow:auto;
-  padding:13px 17px;
-}
-
-.message{
-  max-width:85%;
-  margin-bottom:12px;
-  font-size:12px;
-  line-height:1.55;
-}
-
-.message.ai{
-  margin-right:auto;
-}
-
-.message.user{
-  margin-left:auto;
-  text-align:right;
-}
-
-.message-label{
-  font-size:8px;
-  letter-spacing:2px;
-  color:var(--cyan);
-  margin-bottom:3px;
-}
-
-.message.user .message-label{
-  color:var(--violet);
-}
-
-.message-content{
-  color:#c6dce6;
-}
-
-.input-row{
-  display:flex;
-  gap:8px;
-  padding:10px;
-  border-top:1px solid var(--line);
-}
-
-#prompt{
-  flex:1;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:rgba(255,255,255,.025);
-  color:var(--text);
-  padding:11px 13px;
-  outline:none;
-}
-
-#prompt:focus{
-  border-color:var(--cyan);
-  box-shadow:0 0 15px rgba(77,231,255,.1);
-}
-
-.send{
-  width:45px;
-  border:1px solid var(--cyan);
-  color:var(--cyan);
-  background:rgba(77,231,255,.07);
-  border-radius:10px;
-  cursor:pointer;
-}
-
-/* RIGHT */
-
-.right{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  min-height:0;
-}
-
-.visual{
-  height:280px;
-}
-
-.visual-scene{
-  height:calc(100% - 43px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-  overflow:hidden;
-}
-
-.scene-orbit{
-  width:150px;
-  height:150px;
-  border:1px solid rgba(77,231,255,.3);
-  border-radius:50%;
-  transform:rotateX(65deg);
-  animation:spin 10s linear infinite;
-}
-
-.scene-orbit:before{
-  content:"";
-  position:absolute;
-  width:12px;
-  height:12px;
-  background:var(--cyan);
-  border-radius:50%;
-  top:-6px;
-  left:50%;
-  box-shadow:0 0 20px var(--cyan);
-}
-
-.scene-core{
-  position:absolute;
-  width:45px;
-  height:45px;
-  border-radius:50%;
-  background:radial-gradient(circle,#fff,var(--cyan),transparent);
-  box-shadow:0 0 35px var(--cyan);
-}
-
-.scene-text{
-  position:absolute;
-  bottom:15px;
-  text-align:center;
-  font-size:8px;
-  color:var(--muted);
-  letter-spacing:2px;
-}
-
-.quick{
-  flex:1;
-  min-height:0;
-}
-
-.quick-grid{
-  padding:12px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-
-.action{
-  padding:14px 8px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:rgba(255,255,255,.025);
-  color:#a8c4d1;
-  cursor:pointer;
-  font-size:9px;
-  letter-spacing:1px;
-  transition:.2s;
-}
-
-.action:hover{
-  color:var(--cyan);
-  border-color:var(--cyan);
-  transform:translateY(-2px);
-}
-
-/* BOTTOM */
-
-.bottom{
-  display:flex;
-  align-items:center;
-  gap:15px;
-  padding:10px 16px;
-  border-top:1px solid var(--line);
-  background:rgba(2,8,13,.85);
-}
-
-.command{
-  flex:1;
-}
-
-.command-label{
-  font-size:8px;
-  color:var(--muted);
-  letter-spacing:3px;
-  margin-bottom:5px;
-}
-
-.command input{
-  width:100%;
-  background:transparent;
-  border:0;
-  color:var(--cyan);
-  outline:none;
-  font-family:monospace;
-  font-size:12px;
-}
-
-.mode{
-  font-size:8px;
-  letter-spacing:2px;
-  color:var(--green);
-}
-
-/* WINDOWS */
-
-#windowLayer{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:100;
-}
-
-.window{
-  position:absolute;
-  width:720px;
-  max-width:90vw;
-  height:520px;
-  max-height:80vh;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  border:1px solid var(--line);
-  border-radius:16px;
-  background:rgba(3,10,17,.94);
-  box-shadow:0 25px 100px rgba(0,0,0,.65),0 0 50px rgba(77,231,255,.1);
-  backdrop-filter:blur(30px);
-  pointer-events:auto;
-  overflow:hidden;
-}
-
-.window-header{
-  height:43px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 12px 0 15px;
-  border-bottom:1px solid var(--line);
-  background:rgba(255,255,255,.025);
-}
-
-.window-title{
-  font-size:9px;
-  letter-spacing:3px;
-  color:var(--cyan);
-}
-
-.window-buttons{
-  display:flex;
-  gap:5px;
-}
-
-.window-buttons button{
-  width:25px;
-  height:25px;
-  border:1px solid var(--line);
-  background:transparent;
-  color:var(--muted);
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.window-content{
-  height:calc(100% - 43px);
-  overflow:auto;
-}
-
-/* EDITOR */
-
-.editor-wrap{
-  height:100%;
-  display:flex;
-  flex-direction:column;
-}
-
-.editor-toolbar{
-  display:flex;
-  gap:7px;
-  padding:10px;
-  border-bottom:1px solid var(--line);
-  flex-wrap:wrap;
-}
-
-.tool{
-  padding:7px 10px;
-  border:1px solid var(--line);
-  border-radius:7px;
-  background:rgba(255,255,255,.03);
-  color:#9fb9c6;
-  cursor:pointer;
-  font-size:9px;
-}
-
-.tool:hover{
-  border-color:var(--cyan);
-  color:var(--cyan);
-}
-
-#codeEditor{
-  flex:1;
-  width:100%;
-  resize:none;
-  border:0;
-  outline:0;
-  background:#02060a;
-  color:#bfefff;
-  padding:16px;
-  font-family:"Cascadia Code",Consolas,monospace;
-  font-size:12px;
-  line-height:1.6;
-}
-
-/* BUILDER */
-
-.builder{
-  padding:20px;
-}
-
-.builder h2{
-  margin:0 0 5px;
-  font-size:20px;
-  font-weight:400;
-}
-
-.builder p{
-  color:var(--muted);
-  font-size:11px;
-}
-
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:18px;
-}
-
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-}
-
-.field.full{
-  grid-column:1/-1;
-}
-
-.field label{
-  font-size:8px;
-  color:var(--muted);
-  letter-spacing:2px;
-}
-
-.field input,
-.field textarea,
-.field select{
-  background:rgba(255,255,255,.035);
-  color:var(--text);
-  border:1px solid var(--line);
-  border-radius:8px;
-  padding:10px;
-  outline:none;
-}
-
-.field textarea{
-  min-height:85px;
-  resize:vertical;
-}
-
-.builder-actions{
-  margin-top:15px;
-  display:flex;
-  gap:8px;
-}
-
-.primary{
-  padding:10px 17px;
-  border:1px solid var(--cyan);
-  background:rgba(77,231,255,.08);
-  color:var(--cyan);
-  border-radius:8px;
-  cursor:pointer;
-}
-
-.secondary{
-  padding:10px 17px;
-  border:1px solid var(--line);
-  background:transparent;
-  color:var(--muted);
-  border-radius:8px;
-  cursor:pointer;
-}
-
-/* PROJECTS */
-
-.project{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:11px;
-  border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.project-name{
-  font-size:10px;
-}
-
-.project-type{
-  font-size:7px;
-  color:var(--cyan);
-  letter-spacing:1px;
-}
-
-.project button{
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  cursor:pointer;
-}
-
-/* SETTINGS */
-
-.settings{
-  padding:20px;
-}
-
-.settings input{
-  width:100%;
-  margin:8px 0 14px;
-  padding:11px;
-  background:#02060a;
-  color:white;
-  border:1px solid var(--line);
-  border-radius:8px;
-}
-
-.settings small{
-  color:var(--muted);
-}
-
-/* UPDATE */
-
-.update-box{
-  padding:20px;
-}
-
-.update-state{
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:14px;
-  margin:12px 0;
-  background:rgba(255,255,255,.025);
-  font-family:monospace;
-  font-size:11px;
-  white-space:pre-wrap;
-}
-
-/* TOAST */
-
-#toast{
-  position:fixed;
-  bottom:100px;
-  left:50%;
-  transform:translateX(-50%) translateY(20px);
-  opacity:0;
-  padding:10px 18px;
-  border:1px solid var(--cyan);
-  background:rgba(3,12,19,.95);
-  color:var(--cyan);
-  border-radius:9px;
-  font-size:10px;
-  letter-spacing:1px;
-  pointer-events:none;
-  transition:.3s;
-  z-index:500;
-}
-
-#toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-}
-
-/* ANIMATIONS */
 
 @keyframes spin{
-  to{transform:rotate(360deg)}
+    to{transform:rotate(360deg)}
 }
 
 @keyframes spinReverse{
-  to{transform:rotate(-360deg)}
+    to{transform:rotate(-360deg)}
 }
 
-@keyframes pulse{
-  0%,100%{transform:scale(.9);opacity:.75}
-  50%{transform:scale(1.08);opacity:1}
+.core-label{
+    position:absolute;
+    bottom:20px;
+    text-align:center;
+    font-size:10px;
+    color:#7594a7;
+    letter-spacing:3px;
 }
 
-/* RESPONSIVE */
-
-@media(max-width:1050px){
-  .main{
-    grid-template-columns:220px 1fr;
-  }
-  .right{
-    display:none;
-  }
+.core-label strong{
+    display:block;
+    color:var(--cyan);
+    margin-top:5px;
 }
 
-@media(max-width:700px){
-  body{
+.voice-state{
+    position:absolute;
+    top:14px;
+    right:14px;
+    padding:7px 10px;
+    border:1px solid var(--border);
+    border-radius:15px;
+    font-size:9px;
+    color:var(--green);
+}
+
+.voice-state.speaking{
+    color:var(--yellow);
+    border-color:rgba(255,209,102,.5);
+    animation:speakingPulse .6s infinite alternate;
+}
+
+@keyframes speakingPulse{
+    to{
+        box-shadow:0 0 20px rgba(255,209,102,.4);
+    }
+}
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+.chat-panel{
+    min-height:0;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+.chat{
+    flex:1;
     overflow:auto;
-  }
+    padding:14px;
+}
 
-  .app{
-    min-height:100vh;
-    height:auto;
-    grid-template-rows:60px auto auto;
-  }
+.message{
+    display:flex;
+    margin-bottom:13px;
+}
 
-  .main{
-    grid-template-columns:1fr;
-    padding:8px;
-  }
+.message.user{
+    justify-content:flex-end;
+}
 
-  .left{
-    display:none;
-  }
+.bubble{
+    max-width:82%;
+    padding:11px 13px;
+    border-radius:12px;
+    font-size:12px;
+    line-height:1.5;
+    white-space:pre-wrap;
+}
 
-  .center{
-    min-height:calc(100vh - 150px);
-  }
+.message.ai .bubble{
+    background:rgba(0,234,255,.045);
+    border:1px solid rgba(0,234,255,.15);
+}
 
-  .core{
-    transform:scale(.75);
-  }
+.message.user .bubble{
+    background:rgba(0,119,255,.14);
+    border:1px solid rgba(0,119,255,.28);
+}
 
-  .chat{
+/* =========================================================
+   RIGHT
+========================================================= */
+
+.visual{
+    flex:1;
+}
+
+.visual-screen{
     height:230px;
-  }
+    position:relative;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at center,
+        rgba(0,234,255,.12),
+        transparent 45%),
+        #020911;
+}
 
-  .header-status{
+.visual-grid{
+    position:absolute;
+    inset:0;
+    background-image:
+        linear-gradient(rgba(0,234,255,.08) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(0,234,255,.08) 1px,transparent 1px);
+    background-size:20px 20px;
+    transform:perspective(350px) rotateX(55deg) scale(1.5);
+    transform-origin:center bottom;
+}
+
+.visual-circle{
+    position:absolute;
+    width:130px;
+    height:130px;
+    border:1px solid var(--cyan);
+    border-radius:50%;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    box-shadow:
+        0 0 30px rgba(0,234,255,.25),
+        inset 0 0 30px rgba(0,234,255,.1);
+    animation:visualSpin 10s linear infinite;
+}
+
+.visual-circle:before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:3px;
+    height:80px;
+    transform-origin:bottom;
+    background:var(--cyan);
+    box-shadow:0 0 10px var(--cyan);
+    animation:scan 2s linear infinite;
+}
+
+@keyframes visualSpin{
+    to{transform:translate(-50%,-50%) rotate(360deg)}
+}
+
+@keyframes scan{
+    to{transform:rotate(360deg)}
+}
+
+.command-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.command{
+    display:flex;
+    justify-content:space-between;
+    padding:10px;
+    border:1px solid rgba(0,234,255,.1);
+    background:rgba(0,234,255,.025);
+    font-size:10px;
+}
+
+/* =========================================================
+   BOTTOM
+========================================================= */
+
+footer{
+    padding:10px 14px 14px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:12px;
+}
+
+.command-bar{
+    border:1px solid var(--border);
+    background:rgba(2,10,19,.88);
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    padding:8px;
+    gap:8px;
+}
+
+#input{
+    flex:1;
+    border:0;
+    outline:0;
+    background:transparent;
+    color:white;
+    font-size:13px;
+    padding:12px;
+}
+
+.btn{
+    border:1px solid var(--border);
+    background:rgba(0,234,255,.055);
+    color:var(--cyan);
+    border-radius:10px;
+    padding:10px 14px;
+    cursor:pointer;
+    font-size:10px;
+    letter-spacing:1px;
+    transition:.2s;
+}
+
+.btn:hover{
+    background:rgba(0,234,255,.15);
+    box-shadow:0 0 18px rgba(0,234,255,.2);
+}
+
+.btn.primary{
+    background:rgba(0,234,255,.13);
+}
+
+.btn.recording{
+    color:var(--red);
+    border-color:rgba(255,61,113,.5);
+    box-shadow:0 0 18px rgba(255,61,113,.25);
+}
+
+.quick-buttons{
+    display:flex;
+    gap:7px;
+}
+
+/* =========================================================
+   WINDOWS
+========================================================= */
+
+.window-layer{
+    position:fixed;
+    inset:0;
+    z-index:50;
+    pointer-events:none;
+}
+
+.window{
+    position:absolute;
+    width:720px;
+    height:520px;
+    max-width:90vw;
+    max-height:80vh;
+    background:#050d17;
+    border:1px solid var(--cyan);
+    border-radius:14px;
+    box-shadow:0 0 50px rgba(0,234,255,.2);
+    overflow:hidden;
     display:none;
-  }
+    pointer-events:auto;
+}
 
-  .window{
-    width:96vw;
-    height:85vh;
-  }
+.window.active{
+    display:block;
+}
 
-  .form-grid{
-    grid-template-columns:1fr;
-  }
+.window-header{
+    height:42px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 12px;
+    border-bottom:1px solid var(--border);
+    background:rgba(0,234,255,.05);
+}
 
-  .field.full{
-    grid-column:auto;
-  }
+.window-title{
+    font-size:10px;
+    color:var(--cyan);
+    letter-spacing:2px;
+}
+
+.window-actions{
+    display:flex;
+    gap:5px;
+}
+
+.window-actions button{
+    width:25px;
+    height:25px;
+    border:1px solid var(--border);
+    background:transparent;
+    color:var(--cyan);
+    cursor:pointer;
+    border-radius:5px;
+}
+
+.window-content{
+    height:calc(100% - 42px);
+    overflow:auto;
+}
+
+/* =========================================================
+   CODE EDITOR
+========================================================= */
+
+.editor{
+    height:100%;
+    display:grid;
+    grid-template-rows:45px 1fr;
+}
+
+.editor-toolbar{
+    display:flex;
+    gap:7px;
+    align-items:center;
+    padding:7px;
+    border-bottom:1px solid var(--border);
+}
+
+#code{
+    width:100%;
+    height:100%;
+    resize:none;
+    border:0;
+    outline:0;
+    background:#02070c;
+    color:#d9faff;
+    padding:18px;
+    font-family:Consolas,monospace;
+    font-size:13px;
+    line-height:1.55;
+}
+
+/* =========================================================
+   BUILDER
+========================================================= */
+
+.builder{
+    padding:18px;
+}
+
+.builder h2{
+    color:var(--cyan);
+    font-size:16px;
+}
+
+.builder-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.builder input,
+.builder textarea,
+.builder select{
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    background:#020810;
+    border:1px solid var(--border);
+    color:white;
+    border-radius:8px;
+}
+
+.builder textarea{
+    min-height:130px;
+}
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+.settings{
+    padding:18px;
+}
+
+.settings label{
+    display:block;
+    margin-bottom:5px;
+    font-size:10px;
+    color:#8da8b9;
+}
+
+.settings input,
+.settings select{
+    width:100%;
+    padding:11px;
+    margin-bottom:15px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:#020810;
+    color:white;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:105px;
+    z-index:200;
+    padding:12px 15px;
+    background:#06121f;
+    border:1px solid var(--cyan);
+    color:var(--cyan);
+    border-radius:9px;
+    font-size:11px;
+    transform:translateY(20px);
+    opacity:0;
+    pointer-events:none;
+    transition:.3s;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px){
+    main{
+        grid-template-columns:220px minmax(300px,1fr);
+    }
+
+    .right-column{
+        display:none;
+    }
+}
+
+@media(max-width:750px){
+    .app{
+        grid-template-rows:62px 1fr 105px;
+    }
+
+    main{
+        grid-template-columns:1fr;
+        padding:8px;
+    }
+
+    .left-column{
+        display:none;
+    }
+
+    .core-panel{
+        flex-basis:280px;
+    }
+
+    footer{
+        grid-template-columns:1fr;
+    }
+
+    .quick-buttons{
+        overflow:auto;
+    }
+
+    .status-pill:nth-child(n+2){
+        display:none;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div id="stars"></div>
+<canvas id="stars"></canvas>
 <div class="grid"></div>
 <div class="scanlines"></div>
+<div class="vignette"></div>
 
 <div class="app">
 
-<!-- HEADER -->
-
-<header class="header">
-
-  <div class="brand">
-    <div class="brand-core"></div>
-
-    <div>
-      <div class="brand-name">J.A.R.V.I.S.</div>
-      <div class="brand-sub">NEXT GENERATION INTELLIGENCE SYSTEM</div>
+<header>
+    <div class="logo">
+        <div class="logo-core"></div>
+        <div class="logo-text">
+            <strong>J.A.R.V.I.S.</strong>
+            <span>JUST A RATHER VERY INTELLIGENT SYSTEM // V3</span>
+        </div>
     </div>
-  </div>
 
-  <div class="header-status">
-    <span><i class="status-dot"></i> SYSTEM ONLINE</span>
-    <span id="clock">00:00:00</span>
-    <span id="connection">NEURAL LINK</span>
-  </div>
+    <div class="header-status">
+        <div class="status-pill">
+            <span class="dot"></span>
+            ONLINE
+        </div>
 
-  <div class="header-actions">
-    <button class="icon-btn" onclick="openProjects()">⌘</button>
-    <button class="icon-btn" onclick="openSettings()">⚙</button>
-    <button class="icon-btn" onclick="openUpdate()">↻</button>
-  </div>
+        <div class="status-pill">
+            VOICE: <span id="voiceHeader">READY</span>
+        </div>
 
+        <div class="status-pill" id="clock">
+            --:--:--
+        </div>
+    </div>
 </header>
 
-<!-- MAIN -->
+<main>
 
-<main class="main">
+<!-- ======================================================
+     LEFT COLUMN
+======================================================= -->
 
-  <!-- LEFT -->
+<section class="left-column">
 
-  <aside class="left">
-
-    <section class="panel telemetry">
-
-      <div class="panel-title">
-        SYSTEM TELEMETRY
-        <span>LIVE</span>
-      </div>
-
-      <div class="panel-body">
-
-        <div class="metric">
-          <div class="metric-top">
-            <span>CPU LOAD</span>
-            <span class="metric-value" id="cpuText">24%</span>
-          </div>
-          <div class="bar"><i id="cpuBar"></i></div>
+    <div class="panel telemetry">
+        <div class="panel-title">
+            SYSTEM TELEMETRY
+            <span>LIVE</span>
         </div>
 
-        <div class="metric">
-          <div class="metric-top">
-            <span>MEMORY</span>
-            <span class="metric-value" id="ramText">41%</span>
-          </div>
-          <div class="bar"><i id="ramBar"></i></div>
+        <div class="panel-body">
+
+            <div class="metric">
+                <div class="metric-head">
+                    <span>CPU LOAD</span>
+                    <span id="cpuValue">32%</span>
+                </div>
+                <div class="bar">
+                    <i id="cpuBar" style="width:32%"></i>
+                </div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-head">
+                    <span>MEMORY</span>
+                    <span id="memoryValue">48%</span>
+                </div>
+                <div class="bar">
+                    <i id="memoryBar" style="width:48%"></i>
+                </div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-head">
+                    <span>NEURAL ACTIVITY</span>
+                    <span id="neuralValue">71%</span>
+                </div>
+                <div class="bar">
+                    <i id="neuralBar" style="width:71%"></i>
+                </div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-head">
+                    <span>VOICE ENGINE</span>
+                    <span id="voiceValue">100%</span>
+                </div>
+                <div class="bar">
+                    <i id="voiceBar" style="width:100%"></i>
+                </div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-head">
+                    <span>CONNECTION</span>
+                    <span id="connectionValue">LOCAL</span>
+                </div>
+                <div class="bar">
+                    <i style="width:100%"></i>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="panel memory">
+        <div class="panel-title">
+            MEMORY CORE
+            <span id="memoryCount">0</span>
         </div>
 
-        <div class="metric">
-          <div class="metric-top">
-            <span>NEURAL ACTIVITY</span>
-            <span class="metric-value" id="aiText">88%</span>
-          </div>
-          <div class="bar"><i id="aiBar"></i></div>
+        <div class="panel-body">
+            <div class="memory-list" id="memoryList"></div>
+        </div>
+    </div>
+
+</section>
+
+<!-- ======================================================
+     CENTER
+======================================================= -->
+
+<section class="center">
+
+    <div class="panel core-panel">
+
+        <div class="voice-state" id="voiceState">
+            VOICE READY
         </div>
 
-        <div class="metric">
-          <div class="metric-top">
-            <span>NETWORK</span>
-            <span class="metric-value">ONLINE</span>
-          </div>
-          <div class="bar"><i style="width:96%"></i></div>
+        <div class="core">
+
+            <div class="ring r4"></div>
+            <div class="ring r3"></div>
+            <div class="ring r2"></div>
+            <div class="ring r1"></div>
+
+            <div class="core-center"></div>
+
         </div>
-
-      </div>
-
-    </section>
-
-    <section class="panel memory">
-
-      <div class="panel-title">
-        MEMORY CORE
-        <span id="memoryCount">0</span>
-      </div>
-
-      <div class="memory-list" id="memoryList"></div>
-
-    </section>
-
-  </aside>
-
-  <!-- CENTER -->
-
-  <section class="panel center">
-
-    <div class="core-area">
-
-      <div class="core-halo"></div>
-
-      <div class="core">
-
-        <div class="core-status">
-          <span id="coreMode">STANDBY</span>
-          <span id="coreLoad">100%</span>
-        </div>
-
-        <div class="ring r1"></div>
-        <div class="ring r2"></div>
-        <div class="ring r3"></div>
-        <div class="ring r4"></div>
-
-        <div class="core-energy"></div>
 
         <div class="core-label">
-          J.A.R.V.I.S. CORE
+            ARTIFICIAL INTELLIGENCE CORE
+            <strong id="coreMode">STANDBY</strong>
         </div>
-
-      </div>
 
     </div>
 
-    <div class="chat">
+    <div class="panel chat-panel">
 
-      <div class="messages" id="messages">
-
-        <div class="message ai">
-          <div class="message-label">J.A.R.V.I.S.</div>
-          <div class="message-content">
-            System initialized. All primary systems are operational.
-            How may I assist you?
-          </div>
+        <div class="panel-title">
+            J.A.R.V.I.S. CONVERSATION
+            <span id="chatStatus">READY</span>
         </div>
 
-      </div>
+        <div class="chat" id="chat">
 
-      <div class="input-row">
+            <div class="message ai">
+                <div class="bubble">
+                    Guten Tag. Ich bin J.A.R.V.I.S. V3.
+                    <br><br>
+                    Meine Sprachschnittstelle ist aktiv.
+                    Sobald dein Browser die Audiowiedergabe freigibt,
+                    werde ich meine Antworten automatisch sprechen.
+                </div>
+            </div>
 
-        <input
-          id="prompt"
-          placeholder="Kommuniziere mit J.A.R.V.I.S..."
-          autocomplete="off"
-        >
-
-        <button class="send" onclick="sendMessage()">➤</button>
-
-      </div>
+        </div>
 
     </div>
 
-  </section>
+</section>
 
-  <!-- RIGHT -->
+<!-- ======================================================
+     RIGHT COLUMN
+======================================================= -->
 
-  <aside class="right">
+<section class="right-column">
 
-    <section class="panel visual">
+    <div class="panel visual">
 
-      <div class="panel-title">
-        VISUAL INTELLIGENCE
-        <span id="visualMode">CORE</span>
-      </div>
-
-      <div class="visual-scene">
-
-        <div class="scene-orbit"></div>
-        <div class="scene-core"></div>
-
-        <div class="scene-text" id="sceneText">
-          ADAPTIVE VISUAL SYSTEM
+        <div class="panel-title">
+            VISUAL INTELLIGENCE
+            <span id="visualMode">NEUTRAL</span>
         </div>
 
-      </div>
+        <div class="visual-screen">
 
-    </section>
+            <div class="visual-grid"></div>
 
-    <section class="panel quick">
+            <div class="visual-circle"></div>
 
-      <div class="panel-title">
-        COMMAND CENTER
-        <span>READY</span>
-      </div>
+        </div>
 
-      <div class="quick-grid">
+        <div class="panel-body">
 
-        <button class="action" onclick="openCode()">
-          CODE EDITOR
-        </button>
+            <div class="command-list">
 
-        <button class="action" onclick="openAppBuilder()">
-          APP BUILDER
-        </button>
+                <div class="command">
+                    <span>VOICE</span>
+                    <span id="voiceCommand">AUTO</span>
+                </div>
 
-        <button class="action" onclick="openGameBuilder()">
-          GAME BUILDER
-        </button>
+                <div class="command">
+                    <span>MEMORY</span>
+                    <span>ACTIVE</span>
+                </div>
 
-        <button class="action" onclick="openProjects()">
-          PROJECTS
-        </button>
+                <div class="command">
+                    <span>CODE ENGINE</span>
+                    <span>READY</span>
+                </div>
 
-        <button class="action" onclick="exportData()">
-          EXPORT DATA
-        </button>
+                <div class="command">
+                    <span>APP BUILDER</span>
+                    <span>READY</span>
+                </div>
 
-        <button class="action" onclick="openUpdate()">
-          UPDATE CENTER
-        </button>
+                <div class="command">
+                    <span>GAME BUILDER</span>
+                    <span>READY</span>
+                </div>
 
-      </div>
+            </div>
 
-    </section>
+        </div>
 
-  </aside>
+    </div>
+
+</section>
 
 </main>
 
-<!-- BOTTOM -->
+<!-- ======================================================
+     FOOTER
+======================================================= -->
 
-<footer class="bottom">
+<footer>
 
-  <div class="command">
+    <div class="command-bar">
 
-    <div class="command-label">
-      COMMAND INTERFACE · CTRL + K
+        <button class="btn" id="micBtn" onclick="toggleListening()">
+            🎙 MIKROFON
+        </button>
+
+        <input
+            id="input"
+            type="text"
+            placeholder="Sprich mit J.A.R.V.I.S. oder schreibe einen Befehl..."
+            autocomplete="off"
+        >
+
+        <button class="btn primary" onclick="sendMessage()">
+            SEND
+        </button>
+
     </div>
 
-    <input
-      id="command"
-      placeholder="z.B. 'Erstelle eine App', 'öffne Code Editor', 'zeige Projekte'..."
-    >
+    <div class="quick-buttons">
 
-  </div>
+        <button class="btn" onclick="openWindow('codeWindow')">
+            CODE
+        </button>
 
-  <div class="mode">
-    AI CORE / ACTIVE
-  </div>
+        <button class="btn" onclick="openWindow('appWindow')">
+            APP
+        </button>
+
+        <button class="btn" onclick="openWindow('gameWindow')">
+            GAME
+        </button>
+
+        <button class="btn" onclick="openWindow('settingsWindow')">
+            SETTINGS
+        </button>
+
+    </div>
 
 </footer>
 
 </div>
 
-<div id="windowLayer"></div>
-<div id="toast"></div>
+<!-- ======================================================
+     WINDOW LAYER
+======================================================= -->
 
-<input
-  type="file"
-  id="importFile"
-  accept=".json"
-  style="display:none"
-  onchange="importData(event)"
->
+<div class="window-layer">
 
-<script>
+<!-- CODE WINDOW -->
 
-/* =========================================================
-   J.A.R.V.I.S. NEXT GENERATION
-   CORE STATE
-========================================================= */
-
-const state = {
-
-  apiKey: localStorage.getItem("jarvis_api_key") || "",
-
-  model:
-    localStorage.getItem("jarvis_model") ||
-    "gpt-5.6-luna",
-
-  memory:
-    JSON.parse(localStorage.getItem("jarvis_memory") || "[]"),
-
-  projects:
-    JSON.parse(localStorage.getItem("jarvis_projects") || "[]"),
-
-  editorCode:
-    localStorage.getItem("jarvis_editor") ||
-    defaultHTML(),
-
-  windows: {},
-
-  activeProject: null,
-
-  previewWindow: null,
-
-  visualMode: "CORE"
-
-};
-
-
-/* =========================================================
-   STORAGE
-========================================================= */
-
-const Storage = {
-
-  save(){
-
-    localStorage.setItem(
-      "jarvis_memory",
-      JSON.stringify(state.memory)
-    );
-
-    localStorage.setItem(
-      "jarvis_projects",
-      JSON.stringify(state.projects)
-    );
-
-    localStorage.setItem(
-      "jarvis_editor",
-      state.editorCode
-    );
-
-  },
-
-  export(){
-
-    return JSON.stringify({
-
-      version: "JARVIS-NEXT-1.0",
-
-      timestamp: new Date().toISOString(),
-
-      memory: state.memory,
-
-      projects: state.projects,
-
-      editorCode: state.editorCode
-
-    },null,2);
-
-  }
-
-};
-
-
-/* =========================================================
-   UTILITIES
-========================================================= */
-
-function esc(value){
-
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-
-function toast(text){
-
-  const el = document.getElementById("toast");
-
-  el.textContent = text;
-
-  el.classList.add("show");
-
-  setTimeout(()=>{
-    el.classList.remove("show");
-  },2200);
-
-}
-
-
-function downloadText(filename,text,type="text/plain"){
-
-  const blob = new Blob([text],{type});
-
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-
-  a.href = url;
-  a.download = filename;
-
-  document.body.appendChild(a);
-
-  a.click();
-
-  a.remove();
-
-  setTimeout(()=>{
-    URL.revokeObjectURL(url);
-  },1000);
-
-}
-
-
-/* =========================================================
-   WINDOW MANAGER
-========================================================= */
-
-let windowCounter = 0;
-
-function openWindow(title,content,width=720,height=520){
-
-  const id = "window_" + (++windowCounter);
-
-  const win = document.createElement("div");
-
-  win.className = "window";
-
-  win.style.width = width+"px";
-  win.style.height = height+"px";
-
-  win.innerHTML = `
+<div class="window" id="codeWindow"
+     style="left:8%;top:10%;">
 
     <div class="window-header">
 
-      <div class="window-title">
-        ${esc(title)}
-      </div>
+        <div class="window-title">
+            J.A.R.V.I.S. CODE STUDIO
+        </div>
 
-      <div class="window-buttons">
-
-        <button onclick="minimizeWindow('${id}')">−</button>
-
-        <button onclick="closeWindow('${id}')">×</button>
-
-      </div>
+        <div class="window-actions">
+            <button onclick="aiCompleteCode()">AI</button>
+            <button onclick="saveCode()">✓</button>
+            <button onclick="closeWindow('codeWindow')">×</button>
+        </div>
 
     </div>
 
     <div class="window-content">
-      ${content}
+
+        <div class="editor">
+
+            <div class="editor-toolbar">
+
+                <button class="btn" onclick="newCode()">
+                    NEW
+                </button>
+
+                <button class="btn" onclick="formatCode()">
+                    FORMAT
+                </button>
+
+                <button class="btn" onclick="previewCode()">
+                    PREVIEW
+                </button>
+
+                <button class="btn" onclick="downloadCode()">
+                    DOWNLOAD
+                </button>
+
+                <button class="btn" onclick="aiRewriteCode()">
+                    AI REWRITE
+                </button>
+
+            </div>
+
+            <textarea id="code"><!DOCTYPE html>
+<html>
+<head>
+<title>J.A.R.V.I.S. App</title>
+<style>
+body{
+    background:#03070d;
+    color:#00eaff;
+    font-family:Arial;
+    text-align:center;
+    padding:50px;
+}
+button{
+    padding:15px 25px;
+    background:#00eaff;
+    border:0;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>J.A.R.V.I.S. APP</h1>
+<p>Meine erste generierte Anwendung.</p>
+
+<button onclick="alert('J.A.R.V.I.S. ONLINE')">
+    ACTIVATE
+</button>
+
+</body>
+</html></textarea>
+
+        </div>
+
     </div>
-  `;
 
-  document.getElementById("windowLayer").appendChild(win);
-
-  state.windows[id] = win;
-
-  return id;
-
-}
+</div>
 
 
-function closeWindow(id){
+<!-- APP BUILDER -->
 
-  const win = state.windows[id];
+<div class="window" id="appWindow"
+     style="left:15%;top:15%;">
 
-  if(!win)return;
+    <div class="window-header">
 
-  win.remove();
+        <div class="window-title">
+            APP BUILDER
+        </div>
 
-  delete state.windows[id];
+        <div class="window-actions">
+            <button onclick="buildApp()">▶</button>
+            <button onclick="closeWindow('appWindow')">×</button>
+        </div>
 
-}
+    </div>
+
+    <div class="window-content">
+
+        <div class="builder">
+
+            <h2>CREATE APPLICATION</h2>
+
+            <div class="builder-grid">
+
+                <div>
+
+                    <label>APP NAME</label>
+                    <input id="appName"
+                           value="J.A.R.V.I.S. Assistant">
+
+                    <label>TYPE</label>
+
+                    <select id="appType">
+                        <option>Dashboard</option>
+                        <option>Tool</option>
+                        <option>Calculator</option>
+                        <option>Notes</option>
+                        <option>AI Assistant</option>
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label>DESCRIPTION</label>
+
+                    <textarea id="appDescription">
+Eine futuristische Webanwendung mit J.A.R.V.I.S.-Design.
+                    </textarea>
+
+                </div>
+
+            </div>
+
+            <button class="btn primary"
+                    onclick="buildApp()">
+                APPLICATION GENERIEREN
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
 
-function minimizeWindow(id){
+<!-- GAME BUILDER -->
 
-  const win = state.windows[id];
+<div class="window" id="gameWindow"
+     style="left:20%;top:12%;">
 
-  if(!win)return;
+    <div class="window-header">
 
-  const content = win.querySelector(".window-content");
+        <div class="window-title">
+            GAME BUILDER
+        </div>
 
-  if(content.style.display==="none"){
+        <div class="window-actions">
+            <button onclick="buildGame()">▶</button>
+            <button onclick="closeWindow('gameWindow')">×</button>
+        </div>
 
-    content.style.display="block";
+    </div>
 
-    win.style.height = win.dataset.height || "520px";
+    <div class="window-content">
 
-  }else{
+        <div class="builder">
 
-    win.dataset.height = win.style.height;
+            <h2>CREATE GAME</h2>
 
-    content.style.display="none";
+            <label>GAME NAME</label>
 
-    win.style.height="43px";
+            <input id="gameName"
+                   value="Neural Defender">
 
-  }
+            <label>GAME TYPE</label>
 
+            <select id="gameType">
+                <option>Arcade</option>
+                <option>Clicker</option>
+                <option>Space</option>
+                <option>Runner</option>
+            </select>
+
+            <label>GAME IDEA</label>
+
+            <textarea id="gameDescription">
+Ein futuristisches Arcade-Spiel im J.A.R.V.I.S.-Universum.
+            </textarea>
+
+            <button class="btn primary"
+                    onclick="buildGame()">
+                GAME GENERIEREN
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SETTINGS -->
+
+<div class="window" id="settingsWindow"
+     style="left:28%;top:18%;">
+
+    <div class="window-header">
+
+        <div class="window-title">
+            J.A.R.V.I.S. SETTINGS
+        </div>
+
+        <div class="window-actions">
+            <button onclick="saveSettings()">✓</button>
+            <button onclick="closeWindow('settingsWindow')">×</button>
+        </div>
+
+    </div>
+
+    <div class="window-content">
+
+        <div class="settings">
+
+            <label>OPENAI API KEY</label>
+
+            <input
+                id="apiKey"
+                type="password"
+                placeholder="sk-..."
+            >
+
+            <label>TEXT MODEL</label>
+
+            <input
+                id="model"
+                value="gpt-5.1"
+            >
+
+            <label>VOICE MODEL</label>
+
+            <select id="voiceModel">
+                <option value="gpt-4o-mini-tts">
+                    gpt-4o-mini-tts
+                </option>
+                <option value="tts-1">
+                    tts-1
+                </option>
+                <option value="tts-1-hd">
+                    tts-1-hd
+                </option>
+            </select>
+
+            <label>VOICE</label>
+
+            <select id="voice">
+                <option>alloy</option>
+                <option>ash</option>
+                <option>ballad</option>
+                <option>coral</option>
+                <option>echo</option>
+                <option>fable</option>
+                <option>onyx</option>
+                <option>nova</option>
+                <option>sage</option>
+                <option>shimmer</option>
+                <option>verse</option>
+                <option>marin</option>
+                <option>cedar</option>
+            </select>
+
+            <label>
+                SPEECH SPEED:
+                <span id="speedValue">1.0</span>
+            </label>
+
+            <input
+                id="speechSpeed"
+                type="range"
+                min="0.5"
+                max="2"
+                step="0.1"
+                value="1"
+                oninput="speedValue.textContent=this.value"
+            >
+
+            <label>
+                VOLUME:
+                <span id="volumeValue">100%</span>
+            </label>
+
+            <input
+                id="volume"
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value="1"
+                oninput="volumeValue.textContent=Math.round(this.value*100)+'%'"
+            >
+
+            <br>
+
+            <button class="btn primary"
+                    onclick="testVoice()">
+                🔊 STIMME TESTEN
+            </button>
+
+            <button class="btn"
+                    onclick="clearMemory()">
+                MEMORY LÖSCHEN
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* =========================================================
+   J.A.R.V.I.S. V3 ENGINE
+========================================================= */
+
+const state = {
+
+    apiKey:
+        localStorage.getItem("jarvis_api_key") || "",
+
+    model:
+        localStorage.getItem("jarvis_model") || "gpt-5.1",
+
+    voiceModel:
+        localStorage.getItem("jarvis_voice_model")
+        || "gpt-4o-mini-tts",
+
+    voice:
+        localStorage.getItem("jarvis_voice")
+        || "alloy",
+
+    speechSpeed:
+        parseFloat(
+            localStorage.getItem("jarvis_speech_speed")
+        ) || 1,
+
+    volume:
+        parseFloat(
+            localStorage.getItem("jarvis_volume")
+        ) || 1,
+
+    speaking:false,
+
+    listening:false,
+
+    autoSpeak:true,
+
+    wakeMode:true,
+
+    messages:[],
+
+    memory:
+        JSON.parse(
+            localStorage.getItem("jarvis_memory")
+            || "[]"
+        )
+};
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const chat =
+    document.getElementById("chat");
+
+const input =
+    document.getElementById("input");
+
+const voiceState =
+    document.getElementById("voiceState");
+
+const voiceHeader =
+    document.getElementById("voiceHeader");
+
+const coreMode =
+    document.getElementById("coreMode");
+
+const chatStatus =
+    document.getElementById("chatStatus");
+
+const visualMode =
+    document.getElementById("visualMode");
+
+const toast =
+    document.getElementById("toast");
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(text){
+
+    toast.textContent = text;
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },2500);
 }
 
 
 /* =========================================================
-   CHAT
+   CLOCK
 ========================================================= */
 
-function addMessage(role,text){
+function updateClock(){
 
-  const box = document.getElementById("messages");
+    const now = new Date();
 
-  const msg = document.createElement("div");
-
-  msg.className = "message " + role;
-
-  msg.innerHTML = `
-
-    <div class="message-label">
-      ${role==="ai" ? "J.A.R.V.I.S." : "YOU"}
-    </div>
-
-    <div class="message-content">
-      ${esc(text).replace(/\n/g,"<br>")}
-    </div>
-
-  `;
-
-  box.appendChild(msg);
-
-  box.scrollTop = box.scrollHeight;
+    document.getElementById("clock")
+        .textContent =
+        now.toLocaleTimeString("de-DE");
 
 }
 
-
-async function sendMessage(){
-
-  const input = document.getElementById("prompt");
-
-  const text = input.value.trim();
-
-  if(!text)return;
-
-  input.value="";
-
-  addMessage("user",text);
-
-  adaptVisual(text);
-
-  remember("USER REQUEST",text);
-
-  processCommand(text);
-
-}
+setInterval(updateClock,1000);
+updateClock();
 
 
 /* =========================================================
-   COMMAND PROCESSOR
+   STAR FIELD
 ========================================================= */
 
-function processCommand(text){
+const canvas =
+    document.getElementById("stars");
 
-  const t = text.toLowerCase();
+const ctx =
+    canvas.getContext("2d");
 
-  if(
-    t.includes("code editor") ||
-    t.includes("codefenster") ||
-    t.includes("programmier")
-  ){
+let stars = [];
 
-    openCode();
+function resizeStars(){
 
-    respond("Code Editor geöffnet.");
+    canvas.width =
+        window.innerWidth;
 
-    return;
+    canvas.height =
+        window.innerHeight;
 
-  }
+    stars =
+        Array.from(
+            {length:140},
+            ()=>({
+                x:Math.random()*canvas.width,
+                y:Math.random()*canvas.height,
+                z:Math.random()*2+0.2,
+                r:Math.random()*1.3
+            })
+        );
+}
 
-  if(
-    t.includes("game builder") ||
-    t.includes("spiel erstellen") ||
-    t.includes("spiel bauen")
-  ){
+function drawStars(){
 
-    openGameBuilder();
-
-    respond("Game Builder geöffnet.");
-
-    return;
-
-  }
-
-  if(
-    t.includes("app builder") ||
-    t.includes("app erstellen") ||
-    t.includes("app bauen")
-  ){
-
-    openAppBuilder();
-
-    respond("App Builder geöffnet.");
-
-    return;
-
-  }
-
-  if(
-    t.includes("projekt") ||
-    t.includes("projects")
-  ){
-
-    openProjects();
-
-    respond("Projektverwaltung geöffnet.");
-
-    return;
-
-  }
-
-  if(
-    t.includes("update")
-  ){
-
-    openUpdate();
-
-    respond("Update Center geöffnet.");
-
-    return;
-
-  }
-
-  if(
-    t.includes("export")
-  ){
-
-    exportData();
-
-    respond("Datenexport vorbereitet.");
-
-    return;
-
-  }
-
-  if(
-    t.includes("download") ||
-    t.includes("herunterladen")
-  ){
-
-    downloadText(
-      "jarvis-project.html",
-      state.editorCode,
-      "text/html"
+    ctx.clearRect(
+        0,0,
+        canvas.width,
+        canvas.height
     );
 
-    respond("Das aktuelle Projekt wurde als HTML-Datei ausgegeben.");
+    for(const s of stars){
 
-    return;
+        s.y += s.z*.12;
 
-  }
+        if(s.y > canvas.height)
+            s.y = 0;
 
-  respond(
-    "Anfrage erkannt. Für komplexe KI-Aufgaben kann der konfigurierbare AI-Core verwendet werden."
-  );
+        ctx.beginPath();
 
+        ctx.arc(
+            s.x,
+            s.y,
+            s.r,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fillStyle =
+            "rgba(0,234,255,.35)";
+
+        ctx.fill();
+    }
+
+    requestAnimationFrame(drawStars);
 }
 
+window.addEventListener(
+    "resize",
+    resizeStars
+);
 
-function respond(text){
-
-  setTimeout(()=>{
-    addMessage("ai",text);
-  },350);
-
-}
-
-
-/* =========================================================
-   ADAPTIVE VISUAL INTELLIGENCE
-========================================================= */
-
-function adaptVisual(text){
-
-  const t = text.toLowerCase();
-
-  let mode="CORE";
-
-  if(
-    t.includes("code") ||
-    t.includes("programm") ||
-    t.includes("javascript") ||
-    t.includes("html")
-  ){
-
-    mode="DEVELOPMENT";
-
-  }else if(
-    t.includes("spiel") ||
-    t.includes("game") ||
-    t.includes("gameplay")
-  ){
-
-    mode="GAME";
-
-  }else if(
-    t.includes("musik") ||
-    t.includes("audio") ||
-    t.includes("sound")
-  ){
-
-    mode="AUDIO";
-
-  }else if(
-    t.includes("raum") ||
-    t.includes("planet") ||
-    t.includes("universum")
-  ){
-
-    mode="SPACE";
-
-  }else if(
-    t.includes("app") ||
-    t.includes("software")
-  ){
-
-    mode="APPLICATION";
-
-  }else if(
-    t.includes("system") ||
-    t.includes("server")
-  ){
-
-    mode="SYSTEM";
-
-  }
-
-  state.visualMode=mode;
-
-  document.getElementById("visualMode").textContent=mode;
-
-  document.getElementById("sceneText").textContent=
-    mode + " · ADAPTIVE VISUALIZATION";
-
-  document.getElementById("coreMode").textContent=mode;
-
-}
+resizeStars();
+drawStars();
 
 
 /* =========================================================
    MEMORY
 ========================================================= */
 
-function remember(type,text){
+function saveMemory(text){
 
-  state.memory.unshift({
+    if(!text || text.length < 3)
+        return;
 
-    type,
+    state.memory.unshift({
+        text,
+        time:new Date().toISOString()
+    });
 
-    text,
+    state.memory =
+        state.memory.slice(0,50);
 
-    time:new Date().toLocaleString()
+    localStorage.setItem(
+        "jarvis_memory",
+        JSON.stringify(state.memory)
+    );
 
-  });
-
-  state.memory = state.memory.slice(0,100);
-
-  Storage.save();
-
-  renderMemory();
-
+    renderMemory();
 }
-
 
 function renderMemory(){
 
-  const list=document.getElementById("memoryList");
+    const list =
+        document.getElementById(
+            "memoryList"
+        );
 
-  document.getElementById("memoryCount").textContent=
-    state.memory.length;
+    list.innerHTML = "";
 
-  list.innerHTML="";
+    state.memory
+        .slice(0,8)
+        .forEach(item=>{
 
-  state.memory.slice(0,30).forEach(item=>{
+            const div =
+                document.createElement("div");
 
-    const el=document.createElement("div");
+            div.className =
+                "memory-item";
 
-    el.className="memory-item";
+            div.textContent =
+                item.text;
 
-    el.innerHTML=`
+            list.appendChild(div);
+        });
 
-      <span>${esc(item.type)}</span>
+    document.getElementById(
+        "memoryCount"
+    ).textContent =
+        state.memory.length;
+}
 
-      ${esc(item.text)}
+function clearMemory(){
 
-    `;
+    state.memory = [];
 
-    list.appendChild(el);
+    localStorage.removeItem(
+        "jarvis_memory"
+    );
 
-  });
+    renderMemory();
 
+    showToast(
+        "Memory Core gelöscht."
+    );
+}
+
+renderMemory();
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+function addMessage(
+    text,
+    role="ai"
+){
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message " + role;
+
+    const bubble =
+        document.createElement("div");
+
+    bubble.className =
+        "bubble";
+
+    bubble.textContent =
+        text;
+
+    message.appendChild(bubble);
+
+    chat.appendChild(message);
+
+    chat.scrollTop =
+        chat.scrollHeight;
 }
 
 
 /* =========================================================
-   CODE EDITOR
+   VISUAL INTELLIGENCE
 ========================================================= */
 
-function openCode(){
+function updateVisualMode(text){
 
-  const content = `
+    const t =
+        text.toLowerCase();
 
-    <div class="editor-wrap">
+    let mode = "NEUTRAL";
 
-      <div class="editor-toolbar">
+    if(
+        t.includes("code") ||
+        t.includes("programm") ||
+        t.includes("html") ||
+        t.includes("javascript")
+    ){
+        mode = "CODE";
+    }
 
-        <button class="tool" onclick="saveEditor()">
-          SAVE
-        </button>
+    else if(
+        t.includes("spiel") ||
+        t.includes("game")
+    ){
+        mode = "GAME";
+    }
 
-        <button class="tool" onclick="formatCode()">
-          FORMAT
-        </button>
+    else if(
+        t.includes("app") ||
+        t.includes("anwendung")
+    ){
+        mode = "APP";
+    }
 
-        <button class="tool" onclick="previewCode()">
-          PREVIEW
-        </button>
+    else if(
+        t.includes("system") ||
+        t.includes("server")
+    ){
+        mode = "SYSTEM";
+    }
 
-        <button class="tool" onclick="downloadEditor()">
-          DOWNLOAD HTML
-        </button>
+    else if(
+        t.includes("musik") ||
+        t.includes("audio")
+    ){
+        mode = "AUDIO";
+    }
 
-        <button class="tool" onclick="aiCompleteCode()">
-          AI COMPLETE
-        </button>
-
-        <button class="tool" onclick="aiRewriteCode()">
-          AI REWRITE
-        </button>
-
-        <button class="tool" onclick="newEditor()">
-          NEW
-        </button>
-
-      </div>
-
-      <textarea id="codeEditor" spellcheck="false">
-${esc(state.editorCode)}
-      </textarea>
-
-    </div>
-
-  `;
-
-  openWindow("DEVELOPMENT · CODE ENGINE",content,850,650);
-
-}
-
-
-function saveEditor(){
-
-  const editor=document.getElementById("codeEditor");
-
-  if(!editor)return;
-
-  state.editorCode=editor.value;
-
-  Storage.save();
-
-  toast("CODE SAVED");
-
-}
-
-
-function newEditor(){
-
-  const editor=document.getElementById("codeEditor");
-
-  if(editor){
-
-    editor.value=defaultHTML();
-
-  }
-
-}
-
-
-function formatCode(){
-
-  const editor=document.getElementById("codeEditor");
-
-  if(!editor)return;
-
-  let code=editor.value;
-
-  code=code
-    .replace(/></g,">\n<")
-    .replace(/\n\s*\n/g,"\n");
-
-  editor.value=code;
-
-  toast("FORMAT COMPLETE");
-
-}
-
-
-function downloadEditor(){
-
-  const editor=document.getElementById("codeEditor");
-
-  if(!editor)return;
-
-  downloadText(
-    "jarvis-app.html",
-    editor.value,
-    "text/html"
-  );
-
-  toast("HTML EXPORTED");
-
-}
-
-
-function previewCode(){
-
-  const editor=document.getElementById("codeEditor");
-
-  if(!editor)return;
-
-  state.editorCode=editor.value;
-
-  const content=`
-
-    <iframe
-      sandbox="allow-scripts"
-      style="
-        width:100%;
-        height:100%;
-        border:0;
-        background:#fff;
-      "
-      srcdoc="${esc(editor.value)}">
-    </iframe>
-
-  `;
-
-  openWindow(
-    "LIVE PREVIEW",
-    content,
-    900,
-    650
-  );
-
+    visualMode.textContent =
+        mode;
 }
 
 
 /* =========================================================
-   APP BUILDER
+   VOICE UI
 ========================================================= */
 
-function openAppBuilder(){
+function setVoiceState(
+    text,
+    speaking=false
+){
 
-  const content=`
+    voiceState.textContent =
+        text;
 
-    <div class="builder">
+    voiceState.classList.toggle(
+        "speaking",
+        speaking
+    );
 
-      <h2>Application Builder</h2>
+    voiceHeader.textContent =
+        text;
 
-      <p>
-        Erstelle eine eigenständige Web-App direkt aus deinen Vorgaben.
-      </p>
-
-      <div class="form-grid">
-
-        <div class="field">
-          <label>APP NAME</label>
-          <input id="appName" value="My Future App">
-        </div>
-
-        <div class="field">
-          <label>STYLE</label>
-          <select id="appStyle">
-            <option>Futuristic</option>
-            <option>Minimal</option>
-            <option>Glassmorphism</option>
-            <option>Cyberpunk</option>
-            <option>Professional</option>
-          </select>
-        </div>
-
-        <div class="field full">
-          <label>BESCHREIBUNG</label>
-          <textarea id="appDescription">Eine moderne intelligente Web-Anwendung.</textarea>
-        </div>
-
-        <div class="field full">
-          <label>FUNKTIONEN</label>
-          <textarea id="appFeatures">Dashboard, Suche, Einstellungen, lokale Speicherung</textarea>
-        </div>
-
-      </div>
-
-      <div class="builder-actions">
-
-        <button class="primary" onclick="buildApp()">
-          GENERATE APPLICATION
-        </button>
-
-        <button class="secondary" onclick="closeBuilder(this)">
-          CLOSE
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-  openWindow("APPLICATION BUILDER",content,760,570);
-
-}
-
-
-function buildApp(){
-
-  const name=document.getElementById("appName").value;
-
-  const description=document.getElementById("appDescription").value;
-
-  const features=document.getElementById("appFeatures").value;
-
-  const style=document.getElementById("appStyle").value;
-
-  const html=generateAppHTML(
-    name,
-    description,
-    features,
-    style
-  );
-
-  state.editorCode=html;
-
-  saveProject(
-    name,
-    html,
-    "APPLICATION"
-  );
-
-  Storage.save();
-
-  toast("APPLICATION GENERATED");
-
-  openGeneratedResult(
-    "APPLICATION READY",
-    html
-  );
-
+    coreMode.textContent =
+        speaking
+        ? "SPEAKING"
+        : "STANDBY";
 }
 
 
 /* =========================================================
-   GAME BUILDER
+   BROWSER FALLBACK TTS
 ========================================================= */
 
-function openGameBuilder(){
+function browserSpeak(text){
 
-  const content=`
+    if(!("speechSynthesis" in window))
+        return;
 
-    <div class="builder">
+    speechSynthesis.cancel();
 
-      <h2>Game Builder</h2>
+    const utterance =
+        new SpeechSynthesisUtterance(
+            text
+        );
 
-      <p>
-        Erstelle ein spielbares Browser-Game als eigenständige HTML-Datei.
-      </p>
+    utterance.lang =
+        "de-DE";
 
-      <div class="form-grid">
+    utterance.rate =
+        state.speechSpeed;
 
-        <div class="field">
-          <label>GAME NAME</label>
-          <input id="gameName" value="Neon Runner">
-        </div>
+    utterance.volume =
+        state.volume;
 
-        <div class="field">
-          <label>GENRE</label>
-          <select id="gameGenre">
-            <option>Arcade</option>
-            <option>Space</option>
-            <option>Racing</option>
-            <option>Puzzle</option>
-            <option>Strategy</option>
-          </select>
-        </div>
+    utterance.onstart = ()=>{
+        state.speaking = true;
 
-        <div class="field full">
-          <label>MECHANICS</label>
-          <textarea id="gameMechanics">
-Bewegen, Punkte sammeln, Hindernissen ausweichen
-          </textarea>
-        </div>
+        setVoiceState(
+            "SPEAKING",
+            true
+        );
+    };
 
-      </div>
+    utterance.onend = ()=>{
+        state.speaking = false;
 
-      <div class="builder-actions">
+        setVoiceState(
+            "VOICE READY",
+            false
+        );
+    };
 
-        <button class="primary" onclick="buildGame()">
-          GENERATE GAME
-        </button>
+    utterance.onerror = ()=>{
+        state.speaking = false;
 
-        <button class="secondary">
-          CLOSE
-        </button>
+        setVoiceState(
+            "VOICE ERROR",
+            false
+        );
+    };
 
-      </div>
-
-    </div>
-
-  `;
-
-  openWindow(
-    "GAME CREATOR",
-    content,
-    760,
-    540
-  );
-
-}
-
-
-function buildGame(){
-
-  const name=document.getElementById("gameName").value;
-
-  const genre=document.getElementById("gameGenre").value;
-
-  const mechanics=document.getElementById("gameMechanics").value;
-
-  const html=generateGameHTML(
-    name,
-    genre,
-    mechanics
-  );
-
-  state.editorCode=html;
-
-  saveProject(
-    name,
-    html,
-    "GAME"
-  );
-
-  Storage.save();
-
-  toast("GAME GENERATED");
-
-  openGeneratedResult(
-    "GAME READY",
-    html
-  );
-
+    speechSynthesis.speak(
+        utterance
+    );
 }
 
 
 /* =========================================================
-   GENERATED RESULT
+   OPENAI TTS
 ========================================================= */
 
-function openGeneratedResult(title,html){
+async function speak(text){
 
-  const id=openWindow(
-    title,
-    `
-      <iframe
-        sandbox="allow-scripts"
-        style="
-          width:100%;
-          height:100%;
-          border:0;
-          background:white;
-        "
-        srcdoc="${esc(html)}">
-      </iframe>
-    `,
-    900,
-    650
-  );
+    if(!state.autoSpeak)
+        return;
 
-  return id;
+    if(!text)
+        return;
 
-}
+    /*
+       OpenAI TTS requests accept text input and
+       return generated audio.
+    */
 
+    if(!state.apiKey){
 
-/* =========================================================
-   PROJECT MANAGER
-========================================================= */
+        browserSpeak(text);
 
-function saveProject(name,code,type){
-
-  const project={
-
-    id:Date.now(),
-
-    name,
-
-    type,
-
-    code,
-
-    created:new Date().toISOString(),
-
-    updated:new Date().toISOString()
-
-  };
-
-  state.projects.unshift(project);
-
-  state.projects=state.projects.slice(0,100);
-
-  Storage.save();
-
-}
-
-
-function openProjects(){
-
-  let projects="";
-
-  if(!state.projects.length){
-
-    projects=`
-
-      <div style="
-        padding:25px;
-        color:#7593a5;
-        font-size:11px;
-      ">
-        Noch keine Projekte vorhanden.
-      </div>
-
-    `;
-
-  }else{
-
-    projects=state.projects.map(p=>`
-
-      <div class="project">
-
-        <div>
-
-          <div class="project-name">
-            ${esc(p.name)}
-          </div>
-
-          <div class="project-type">
-            ${esc(p.type)}
-          </div>
-
-        </div>
-
-        <div>
-
-          <button onclick="loadProject(${p.id})">
-            OPEN
-          </button>
-
-        </div>
-
-      </div>
-
-    `).join("");
-
-  }
-
-  const content=`
-
-    <div>
-
-      <div style="
-        padding:15px;
-        border-bottom:1px solid var(--line);
-        display:flex;
-        gap:8px;
-      ">
-
-        <button
-          class="primary"
-          onclick="openCode()"
-        >
-          CODE
-        </button>
-
-        <button
-          class="secondary"
-          onclick="exportData()"
-        >
-          EXPORT
-        </button>
-
-        <button
-          class="secondary"
-          onclick="document.getElementById('importFile').click()"
-        >
-          IMPORT
-        </button>
-
-      </div>
-
-      ${projects}
-
-    </div>
-
-  `;
-
-  openWindow(
-    "PROJECT ARCHIVE",
-    content,
-    650,
-    550
-  );
-
-}
-
-
-function loadProject(id){
-
-  const project=state.projects.find(
-    p=>p.id===id
-  );
-
-  if(!project)return;
-
-  state.activeProject=id;
-
-  state.editorCode=project.code;
-
-  Storage.save();
-
-  openCode();
-
-  toast("PROJECT LOADED");
-
-}
-
-
-/* =========================================================
-   EXPORT / IMPORT
-========================================================= */
-
-function exportData(){
-
-  downloadText(
-    "jarvis-data.json",
-    Storage.export(),
-    "application/json"
-  );
-
-  toast("DATA EXPORTED");
-
-}
-
-
-function importData(event){
-
-  const file=event.target.files[0];
-
-  if(!file)return;
-
-  const reader=new FileReader();
-
-  reader.onload=()=>{
+        return;
+    }
 
     try{
 
-      const data=JSON.parse(reader.result);
+        setVoiceState(
+            "GENERATING VOICE",
+            true
+        );
 
-      if(Array.isArray(data.memory))
-        state.memory=data.memory;
+        const response =
+            await fetch(
+                "https://api.openai.com/v1/audio/speech",
+                {
+                    method:"POST",
 
-      if(Array.isArray(data.projects))
-        state.projects=data.projects;
+                    headers:{
+                        "Authorization":
+                            "Bearer " +
+                            state.apiKey,
 
-      if(data.editorCode)
-        state.editorCode=data.editorCode;
+                        "Content-Type":
+                            "application/json"
+                    },
 
-      Storage.save();
+                    body:JSON.stringify({
 
-      renderMemory();
+                        model:
+                            state.voiceModel,
 
-      toast("DATA IMPORTED");
+                        voice:
+                            state.voice,
 
-    }catch(e){
+                        input:
+                            text,
 
-      toast("IMPORT ERROR");
+                        response_format:
+                            "mp3",
+
+                        speed:
+                            state.speechSpeed
+
+                    })
+                }
+            );
+
+        if(!response.ok)
+            throw new Error(
+                "TTS API Fehler"
+            );
+
+        const blob =
+            await response.blob();
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const audio =
+            new Audio(url);
+
+        audio.volume =
+            state.volume;
+
+        audio.onplay = ()=>{
+            state.speaking = true;
+
+            setVoiceState(
+                "SPEAKING",
+                true
+            );
+        };
+
+        audio.onended = ()=>{
+
+            state.speaking = false;
+
+            setVoiceState(
+                "VOICE READY",
+                false
+            );
+
+            URL.revokeObjectURL(url);
+        };
+
+        audio.onerror = ()=>{
+
+            state.speaking = false;
+
+            setVoiceState(
+                "VOICE ERROR",
+                false
+            );
+
+            URL.revokeObjectURL(url);
+        };
+
+        await audio.play();
 
     }
 
-  };
+    catch(error){
 
-  reader.readAsText(file);
+        console.error(error);
 
+        showToast(
+            "OpenAI TTS nicht verfügbar — Browserstimme aktiv."
+        );
+
+        browserSpeak(text);
+    }
+}
+
+
+/* =========================================================
+   TEST VOICE
+========================================================= */
+
+function testVoice(){
+
+    speak(
+        "Guten Tag. J.A.R.V.I.S. Sprachsystem ist online."
+    );
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+========================================================= */
+
+async function sendMessage(){
+
+    const text =
+        input.value.trim();
+
+    if(!text)
+        return;
+
+    input.value = "";
+
+    addMessage(
+        text,
+        "user"
+    );
+
+    saveMemory(
+        "USER: " + text
+    );
+
+    updateVisualMode(text);
+
+    chatStatus.textContent =
+        "THINKING";
+
+    coreMode.textContent =
+        "PROCESSING";
+
+    await askAI(text);
+}
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+input.addEventListener(
+    "keydown",
+    event=>{
+
+        if(event.key === "Enter")
+            sendMessage();
+
+    }
+);
+
+
+/* =========================================================
+   OPENAI RESPONSE
+========================================================= */
+
+async function askAI(userText){
+
+    if(!state.apiKey){
+
+        const answer =
+            "Ich bin bereit. Bitte hinterlege deinen OpenAI API-Key in SETTINGS, damit ich mit dem KI-Modell kommunizieren kann. Die lokale Sprachfunktion bleibt trotzdem verfügbar.";
+
+        addMessage(
+            answer,
+            "ai"
+        );
+
+        chatStatus.textContent =
+            "READY";
+
+        coreMode.textContent =
+            "STANDBY";
+
+        await speak(answer);
+
+        return;
+    }
+
+    try{
+
+        setVoiceState(
+            "THINKING",
+            false
+        );
+
+        const response =
+            await fetch(
+                "https://api.openai.com/v1/responses",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            "Bearer " +
+                            state.apiKey
+                    },
+
+                    body:JSON.stringify({
+
+                        model:
+                            state.model,
+
+                        input:[
+                            {
+                                role:"system",
+
+                                content:
+                                "Du bist J.A.R.V.I.S., ein futuristischer deutschsprachiger KI-Assistent. Antworte klar, kompetent und natürlich. Wenn der Nutzer nach Code fragt, liefere vollständigen funktionsfähigen Code. Wenn er eine App oder ein Spiel bauen möchte, beschreibe die Lösung und nutze den integrierten Builder wenn möglich."
+                            },
+
+                            {
+                                role:"user",
+
+                                content:userText
+                            }
+                        ]
+
+                    })
+                }
+            );
+
+        if(!response.ok){
+
+            const error =
+                await response.text();
+
+            throw new Error(error);
+        }
+
+        const data =
+            await response.json();
+
+        const answer =
+            extractResponseText(data);
+
+        addMessage(
+            answer,
+            "ai"
+        );
+
+        saveMemory(
+            "JARVIS: " + answer
+        );
+
+        updateVisualMode(answer);
+
+        chatStatus.textContent =
+            "READY";
+
+        coreMode.textContent =
+            "STANDBY";
+
+        await speak(answer);
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        const message =
+            "Es ist ein Fehler bei der KI-Verbindung aufgetreten.";
+
+        addMessage(
+            message,
+            "ai"
+        );
+
+        chatStatus.textContent =
+            "ERROR";
+
+        coreMode.textContent =
+            "ERROR";
+
+        await speak(message);
+    }
+}
+
+
+/* =========================================================
+   RESPONSE EXTRACTION
+========================================================= */
+
+function extractResponseText(data){
+
+    if(
+        typeof data.output_text ===
+        "string"
+    ){
+        return data.output_text;
+    }
+
+    if(
+        Array.isArray(data.output)
+    ){
+
+        let result = "";
+
+        for(
+            const item
+            of data.output
+        ){
+
+            if(
+                Array.isArray(item.content)
+            ){
+
+                for(
+                    const content
+                    of item.content
+                ){
+
+                    if(
+                        content.type ===
+                        "output_text"
+                    ){
+
+                        result +=
+                            content.text;
+                    }
+                }
+            }
+        }
+
+        if(result)
+            return result;
+    }
+
+    return "Keine Antwort erhalten.";
+}
+
+
+/* =========================================================
+   MICROPHONE
+========================================================= */
+
+let recognition = null;
+
+function initRecognition(){
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if(!SpeechRecognition){
+
+        showToast(
+            "Dieser Browser unterstützt keine Spracherkennung."
+        );
+
+        return null;
+    }
+
+    const r =
+        new SpeechRecognition();
+
+    r.lang =
+        "de-DE";
+
+    r.continuous =
+        false;
+
+    r.interimResults =
+        false;
+
+    r.onstart = ()=>{
+
+        state.listening = true;
+
+        document
+            .getElementById("micBtn")
+            .classList.add("recording");
+
+        setVoiceState(
+            "LISTENING",
+            false
+        );
+    };
+
+    r.onresult = event=>{
+
+        const text =
+            event.results[0][0].transcript;
+
+        input.value =
+            text;
+
+        state.listening = false;
+
+        sendMessage();
+    };
+
+    r.onerror = event=>{
+
+        console.error(
+            event.error
+        );
+
+        state.listening = false;
+
+        setVoiceState(
+            "VOICE READY",
+            false
+        );
+    };
+
+    r.onend = ()=>{
+
+        state.listening = false;
+
+        document
+            .getElementById("micBtn")
+            .classList.remove("recording");
+
+        if(!state.speaking){
+
+            setVoiceState(
+                "VOICE READY",
+                false
+            );
+        }
+    };
+
+    return r;
+}
+
+recognition =
+    initRecognition();
+
+function toggleListening(){
+
+    if(!recognition){
+
+        recognition =
+            initRecognition();
+
+        if(!recognition)
+            return;
+    }
+
+    if(state.listening){
+
+        recognition.stop();
+
+    }else{
+
+        try{
+
+            recognition.start();
+
+        }catch(e){
+
+            console.log(e);
+        }
+    }
+}
+
+
+/* =========================================================
+   WINDOWS
+========================================================= */
+
+function openWindow(id){
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+}
+
+function closeWindow(id){
+
+    document
+        .getElementById(id)
+        .classList.remove("active");
 }
 
 
@@ -2352,501 +2430,341 @@ function importData(event){
    SETTINGS
 ========================================================= */
 
-function openSettings(){
+function loadSettings(){
 
-  const content=`
+    document.getElementById(
+        "apiKey"
+    ).value =
+        state.apiKey;
 
-    <div class="settings">
+    document.getElementById(
+        "model"
+    ).value =
+        state.model;
 
-      <h2>System Configuration</h2>
+    document.getElementById(
+        "voiceModel"
+    ).value =
+        state.voiceModel;
 
-      <p style="color:var(--muted);font-size:11px">
-        Lokale Konfiguration des AI-Core.
-      </p>
+    document.getElementById(
+        "voice"
+    ).value =
+        state.voice;
 
-      <label style="
-        font-size:8px;
-        color:var(--muted);
-        letter-spacing:2px;
-      ">
-        OPENAI API KEY
-      </label>
+    document.getElementById(
+        "speechSpeed"
+    ).value =
+        state.speechSpeed;
 
-      <input
-        id="apiKey"
-        type="password"
-        value="${esc(state.apiKey)}"
-        placeholder="API Key"
-      >
+    document.getElementById(
+        "volume"
+    ).value =
+        state.volume;
 
-      <label style="
-        font-size:8px;
-        color:var(--muted);
-        letter-spacing:2px;
-      ">
-        MODEL
-      </label>
+    document.getElementById(
+        "speedValue"
+    ).textContent =
+        state.speechSpeed;
 
-      <input
-        id="model"
-        value="${esc(state.model)}"
-      >
-
-      <small>
-        Für eine echte Serverinstallation sollte der API-Key
-        nicht im Browser gespeichert werden. Verwende dort einen
-        Backend-Proxy.
-      </small>
-
-      <br><br>
-
-      <button class="primary" onclick="saveSettings()">
-        SAVE CONFIGURATION
-      </button>
-
-    </div>
-
-  `;
-
-  openWindow(
-    "SYSTEM CONFIGURATION",
-    content,
-    560,
-    480
-  );
-
+    document.getElementById(
+        "volumeValue"
+    ).textContent =
+        Math.round(
+            state.volume*100
+        ) + "%";
 }
-
 
 function saveSettings(){
 
-  state.apiKey=
-    document.getElementById("apiKey").value.trim();
+    state.apiKey =
+        document.getElementById(
+            "apiKey"
+        ).value.trim();
 
-  state.model=
-    document.getElementById("model").value.trim();
+    state.model =
+        document.getElementById(
+            "model"
+        ).value.trim();
 
-  localStorage.setItem(
-    "jarvis_api_key",
-    state.apiKey
-  );
+    state.voiceModel =
+        document.getElementById(
+            "voiceModel"
+        ).value;
 
-  localStorage.setItem(
-    "jarvis_model",
-    state.model
-  );
+    state.voice =
+        document.getElementById(
+            "voice"
+        ).value;
 
-  toast("CONFIGURATION SAVED");
+    state.speechSpeed =
+        parseFloat(
+            document.getElementById(
+                "speechSpeed"
+            ).value
+        );
 
+    state.volume =
+        parseFloat(
+            document.getElementById(
+                "volume"
+            ).value
+        );
+
+    localStorage.setItem(
+        "jarvis_api_key",
+        state.apiKey
+    );
+
+    localStorage.setItem(
+        "jarvis_model",
+        state.model
+    );
+
+    localStorage.setItem(
+        "jarvis_voice_model",
+        state.voiceModel
+    );
+
+    localStorage.setItem(
+        "jarvis_voice",
+        state.voice
+    );
+
+    localStorage.setItem(
+        "jarvis_speech_speed",
+        state.speechSpeed
+    );
+
+    localStorage.setItem(
+        "jarvis_volume",
+        state.volume
+    );
+
+    showToast(
+        "J.A.R.V.I.S. Einstellungen gespeichert."
+    );
+
+    closeWindow(
+        "settingsWindow"
+    );
+}
+
+loadSettings();
+
+
+/* =========================================================
+   CODE EDITOR
+========================================================= */
+
+function newCode(){
+
+    document.getElementById(
+        "code"
+    ).value =
+`<!DOCTYPE html>
+<html>
+<head>
+<title>New J.A.R.V.I.S. App</title>
+</head>
+<body>
+
+<h1>Hello J.A.R.V.I.S.</h1>
+
+</body>
+</html>`;
+}
+
+function saveCode(){
+
+    localStorage.setItem(
+        "jarvis_code",
+        document.getElementById(
+            "code"
+        ).value
+    );
+
+    showToast(
+        "Code gespeichert."
+    );
+}
+
+function formatCode(){
+
+    let code =
+        document.getElementById(
+            "code"
+        ).value;
+
+    code =
+        code
+        .replace(/></g, ">\n<");
+
+    document.getElementById(
+        "code"
+    ).value =
+        code;
+
+    showToast(
+        "Code formatiert."
+    );
+}
+
+function previewCode(){
+
+    const code =
+        document.getElementById(
+            "code"
+        ).value;
+
+    const blob =
+        new Blob(
+            [code],
+            {type:"text/html"}
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    window.open(
+        url,
+        "_blank"
+    );
+}
+
+function downloadCode(){
+
+    const code =
+        document.getElementById(
+            "code"
+        ).value;
+
+    const blob =
+        new Blob(
+            [code],
+            {type:"text/html"}
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href =
+        url;
+
+    a.download =
+        "jarvis-generated-app.html";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
 }
 
 
 /* =========================================================
-   AI CORE
+   AI CODE COMPLETION
 ========================================================= */
-
-async function callAI(prompt){
-
-  if(!state.apiKey){
-
-    return null;
-
-  }
-
-  try{
-
-    const response=await fetch(
-      "https://api.openai.com/v1/responses",
-      {
-        method:"POST",
-
-        headers:{
-          "Content-Type":"application/json",
-          "Authorization":
-            "Bearer "+state.apiKey
-        },
-
-        body:JSON.stringify({
-
-          model:state.model,
-
-          input:[
-            {
-              role:"system",
-              content:
-                "You are J.A.R.V.I.S., an advanced development assistant. Return concise useful results."
-            },
-            {
-              role:"user",
-              content:prompt
-            }
-          ]
-
-        })
-
-      }
-    );
-
-    if(!response.ok){
-
-      throw new Error(
-        "AI request failed"
-      );
-
-    }
-
-    const data=await response.json();
-
-    if(data.output_text){
-
-      return data.output_text;
-
-    }
-
-    return JSON.stringify(data);
-
-  }catch(error){
-
-    console.error(error);
-
-    return null;
-
-  }
-
-}
-
 
 async function aiCompleteCode(){
 
-  const editor=document.getElementById("codeEditor");
+    const existing =
+        document.getElementById(
+            "code"
+        ).value;
 
-  if(!editor)return;
+    input.value =
+        "Vervollständige folgenden Code:\n\n"
+        + existing;
 
-  const original=editor.value;
+    openWindow(
+        "codeWindow"
+    );
 
-  toast("AI ANALYZING CODE...");
-
-  const result=await callAI(`
-
-Complete and improve the following HTML application.
-
-Keep existing functionality.
-Return ONLY the complete HTML document.
-
-CODE:
-
-${original}
-
-  `);
-
-  if(result){
-
-    editor.value=
-      cleanAIHTML(result);
-
-    saveEditor();
-
-    toast("AI CODE COMPLETE");
-
-  }else{
-
-    toast("AI NOT CONNECTED");
-
-  }
-
+    showToast(
+        "Code zur KI-Vervollständigung vorbereitet."
+    );
 }
-
 
 async function aiRewriteCode(){
 
-  const editor=document.getElementById("codeEditor");
+    const existing =
+        document.getElementById(
+            "code"
+        ).value;
 
-  if(!editor)return;
+    input.value =
+        "Verbessere und modernisiere diesen Code. Schreibe eine vollständige Version:\n\n"
+        + existing;
 
-  const request=prompt(
-    "Was soll J.A.R.V.I.S. am Code ändern?"
-  );
+    openWindow(
+        "codeWindow"
+    );
 
-  if(!request)return;
-
-  toast("AI REWRITING...");
-
-  const result=await callAI(`
-
-Rewrite the following complete HTML application.
-
-User instruction:
-${request}
-
-Return ONLY a complete HTML document.
-
-Existing code:
-${editor.value}
-
-  `);
-
-  if(result){
-
-    editor.value=
-      cleanAIHTML(result);
-
-    saveEditor();
-
-    toast("AI REWRITE COMPLETE");
-
-  }else{
-
-    toast("AI NOT CONNECTED");
-
-  }
-
-}
-
-
-function cleanAIHTML(text){
-
-  text=text.trim();
-
-  text=text.replace(/^```html/i,"");
-  text=text.replace(/^```/i,"");
-  text=text.replace(/```$/i,"");
-
-  return text.trim();
-
+    showToast(
+        "AI Rewrite vorbereitet."
+    );
 }
 
 
 /* =========================================================
-   UPDATE CENTER
+   APP BUILDER
 ========================================================= */
 
-function openUpdate(){
+function buildApp(){
 
-  const content=`
+    const name =
+        document.getElementById(
+            "appName"
+        ).value;
 
-    <div class="update-box">
+    const description =
+        document.getElementById(
+            "appDescription"
+        ).value;
 
-      <h2>J.A.R.V.I.S. Update Center</h2>
-
-      <p style="color:var(--muted);font-size:11px">
-
-        Das System kann einen neuen Update-Entwurf erzeugen.
-        Die Anwendung wird nicht stillschweigend durch fremden
-        Code ersetzt.
-
-      </p>
-
-      <div class="update-state" id="updateState">
-SYSTEM STATUS
--------------
-VERSION: NEXT-GEN
-UPDATE ENGINE: READY
-CURRENT PROJECT: LOCAL
-
-Awaiting instruction...
-      </div>
-
-      <div class="builder-actions">
-
-        <button
-          class="primary"
-          onclick="createUpdatePlan()"
-        >
-          CREATE UPDATE
-        </button>
-
-        <button
-          class="secondary"
-          onclick="downloadCurrentVersion()"
-        >
-          BACKUP
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-  openWindow(
-    "UPDATE CENTER",
-    content,
-    650,
-    500
-  );
-
-}
-
-
-async function createUpdatePlan(){
-
-  const box=document.getElementById("updateState");
-
-  if(!box)return;
-
-  box.textContent=
-`ANALYZING CURRENT SYSTEM...
-
-VERSION: NEXT-GEN
-ARCHITECTURE: MODULAR
-STATUS: UPDATE CANDIDATE
-
-Generating improvement proposal...`;
-
-  const result=await callAI(`
-
-Analyze this J.A.R.V.I.S. HTML application.
-
-Suggest improvements for:
-- UI
-- performance
-- architecture
-- developer tools
-- adaptive visuals
-- app builder
-- game builder
-
-Do not execute anything.
-Return a concise update plan.
-
-Current HTML:
-${state.editorCode}
-
-  `);
-
-  if(result){
-
-    box.textContent=
-`UPDATE PROPOSAL
-
-${result}
-
---------------------------------
-
-ACTION:
-Review the proposal before applying
-any changes.`;
-
-  }else{
-
-    box.textContent=
-`LOCAL UPDATE ENGINE
-
-Suggested improvements:
-
-• Improve responsive layout
-• Optimize animations
-• Add new builder components
-• Improve project storage
-• Add additional visual modes
-• Improve code editor
-• Improve accessibility
-
-No AI connection configured.`;
-
-  }
-
-}
-
-
-function downloadCurrentVersion(){
-
-  downloadText(
-    "jarvis-backup.html",
-    document.documentElement.outerHTML,
-    "text/html"
-  );
-
-  toast("BACKUP CREATED");
-
-}
-
-
-/* =========================================================
-   GENERATED APP TEMPLATE
-========================================================= */
-
-function generateAppHTML(
-  name,
-  description,
-  features,
-  style
-){
-
-  const featureList=features
-    .split(",")
-    .map(x=>x.trim())
-    .filter(Boolean);
-
-  return `<!DOCTYPE html>
+    const code =
+`<!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-content="width=device-width,initial-scale=1.0">
-<title>${escapeHTML(name)}</title>
+content="width=device-width,initial-scale=1">
+
+<title>${escapeHtml(name)}</title>
 
 <style>
 
-*{box-sizing:border-box}
-
 body{
-  margin:0;
-  min-height:100vh;
-  font-family:Arial,sans-serif;
-  background:
-    radial-gradient(circle at center,
-    #12344b,
-    #03070c 70%);
-  color:white;
-  padding:30px;
-}
-
-.app{
-  max-width:1000px;
-  margin:auto;
-}
-
-header{
-  padding:35px;
-  border:1px solid #3ee7ff55;
-  border-radius:20px;
-  background:#ffffff08;
-  backdrop-filter:blur(20px);
-}
-
-h1{
-  margin:0;
-  font-size:40px;
-}
-
-p{
-  color:#9bb6c4;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:
-    repeat(auto-fit,minmax(220px,1fr));
-  gap:15px;
-  margin-top:20px;
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(circle,
+        #06263a,
+        #02060b 70%);
+    color:#00eaff;
+    font-family:Arial;
 }
 
 .card{
-  padding:25px;
-  border:1px solid #3ee7ff33;
-  border-radius:15px;
-  background:#ffffff07;
+    width:min(700px,90%);
+    padding:40px;
+    border:1px solid #00eaff;
+    border-radius:20px;
+    background:rgba(0,20,35,.75);
+    box-shadow:0 0 60px rgba(0,234,255,.15);
 }
 
 button{
-  margin-top:20px;
-  padding:12px 20px;
-  border:1px solid #4de7ff;
-  color:#4de7ff;
-  background:#4de7ff11;
-  border-radius:8px;
-  cursor:pointer;
+    padding:12px 20px;
+    background:#00eaff;
+    border:0;
+    border-radius:8px;
+    cursor:pointer;
 }
 
 </style>
@@ -2854,47 +2772,27 @@ button{
 
 <body>
 
-<div class="app">
-
-<header>
-
-<h1>${escapeHTML(name)}</h1>
-
-<p>${escapeHTML(description)}</p>
-
-</header>
-
-<div class="grid">
-
-${featureList.map(feature=>`
-
 <div class="card">
 
-<h3>${escapeHTML(feature)}</h3>
+<h1>${escapeHtml(name)}</h1>
 
-<p>
-Dieses Modul ist Bestandteil deiner Anwendung.
-</p>
+<p>${escapeHtml(description)}</p>
 
-<button onclick="runFeature('${escapeHTML(feature)}')">
-OPEN
+<button onclick="activate()">
+ACTIVATE
 </button>
 
-</div>
-
-`).join("")}
-
-</div>
+<p id="status"></p>
 
 </div>
 
 <script>
 
-function runFeature(name){
+function activate(){
 
-  alert(
-    name + " wurde aktiviert."
-  );
+document.getElementById("status")
+.textContent =
+"J.A.R.V.I.S. APPLICATION ONLINE.";
 
 }
 
@@ -2903,209 +2801,213 @@ function runFeature(name){
 </body>
 </html>`;
 
+    document.getElementById(
+        "code"
+    ).value =
+        code;
+
+    openWindow(
+        "codeWindow"
+    );
+
+    showToast(
+        "Application wurde generiert."
+    );
 }
 
 
 /* =========================================================
-   GENERATED GAME
+   GAME BUILDER
 ========================================================= */
 
-function generateGameHTML(
-  name,
-  genre,
-  mechanics
-){
+function buildGame(){
 
-  return `<!DOCTYPE html>
+    const name =
+        document.getElementById(
+            "gameName"
+        ).value;
+
+    const description =
+        document.getElementById(
+            "gameDescription"
+        ).value;
+
+    const code =
+`<!DOCTYPE html>
 <html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
 
-<title>${escapeHTML(name)}</title>
+<head>
+
+<meta charset="UTF-8">
+
+<title>${escapeHtml(name)}</title>
 
 <style>
 
 html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#02050a;
-  color:#fff;
-  font-family:Arial,sans-serif;
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#02050a;
 }
 
 canvas{
-  display:block;
+    display:block;
 }
 
-.hud{
-  position:fixed;
-  top:20px;
-  left:20px;
-  z-index:2;
-  padding:12px 18px;
-  border:1px solid #4de7ff55;
-  background:#04101a99;
-  border-radius:10px;
-  backdrop-filter:blur(10px);
+#hud{
+    position:fixed;
+    top:15px;
+    left:15px;
+    color:#00eaff;
+    font-family:Arial;
+    z-index:5;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="hud">
-
-<b>${escapeHTML(name)}</b>
-
+<div id="hud">
+${escapeHtml(name)}
 <br>
-
-Genre: ${escapeHTML(genre)}
-
-<br>
-
-Score:
-<span id="score">0</span>
-
+Score: <span id="score">0</span>
 </div>
 
 <canvas id="game"></canvas>
 
 <script>
 
-const canvas=document.getElementById("game");
+const canvas =
+document.getElementById("game");
 
-const ctx=canvas.getContext("2d");
-
-let score=0;
-
-let player={
-  x:100,
-  y:100,
-  size:20,
-  speed:5
-};
-
-let keys={};
-
-let stars=[];
+const ctx =
+canvas.getContext("2d");
 
 function resize(){
 
-  canvas.width=innerWidth;
-  canvas.height=innerHeight;
+canvas.width =
+window.innerWidth;
+
+canvas.height =
+window.innerHeight;
 
 }
 
 resize();
 
-addEventListener(
-  "resize",
-  resize
+window.addEventListener(
+"resize",
+resize
 );
 
-addEventListener(
-  "keydown",
-  e=>keys[e.key]=true
+let score = 0;
+
+let player = {
+x:canvas.width/2,
+y:canvas.height/2,
+r:18
+};
+
+let keys = {};
+
+window.addEventListener(
+"keydown",
+e=>keys[e.key]=true
 );
 
-addEventListener(
-  "keyup",
-  e=>keys[e.key]=false
+window.addEventListener(
+"keyup",
+e=>keys[e.key]=false
 );
 
-for(let i=0;i<100;i++){
-
-  stars.push({
-    x:Math.random()*innerWidth,
-    y:Math.random()*innerHeight,
-    s:Math.random()*2+1
-  });
-
-}
-
-function update(){
-
-  if(keys.ArrowUp)player.y-=player.speed;
-  if(keys.ArrowDown)player.y+=player.speed;
-  if(keys.ArrowLeft)player.x-=player.speed;
-  if(keys.ArrowRight)player.x+=player.speed;
-
-  player.x=Math.max(
-    0,
-    Math.min(
-      canvas.width-player.size,
-      player.x
-    )
-  );
-
-  player.y=Math.max(
-    0,
-    Math.min(
-      canvas.height-player.size,
-      player.y
-    )
-  );
-
-  score++;
-
-  document.getElementById(
-    "score"
-  ).textContent=score;
-
-}
-
-function draw(){
-
-  ctx.fillStyle="#02050a";
-
-  ctx.fillRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
-  stars.forEach(s=>{
-
-    ctx.fillStyle="#4de7ff";
-
-    ctx.fillRect(
-      s.x,
-      s.y,
-      s.s,
-      s.s
-    );
-
-  });
-
-  ctx.shadowBlur=25;
-  ctx.shadowColor="#4de7ff";
-
-  ctx.fillStyle="#4de7ff";
-
-  ctx.fillRect(
-    player.x,
-    player.y,
-    player.size,
-    player.size
-  );
-
-  ctx.shadowBlur=0;
-
-}
+let target = {
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:12
+};
 
 function loop(){
 
-  update();
+ctx.clearRect(
+0,0,
+canvas.width,
+canvas.height
+);
 
-  draw();
+if(keys["ArrowLeft"])
+player.x -= 5;
 
-  requestAnimationFrame(loop);
+if(keys["ArrowRight"])
+player.x += 5;
+
+if(keys["ArrowUp"])
+player.y -= 5;
+
+if(keys["ArrowDown"])
+player.y += 5;
+
+ctx.fillStyle =
+"#00eaff";
+
+ctx.beginPath();
+
+ctx.arc(
+player.x,
+player.y,
+player.r,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+ctx.strokeStyle =
+"#00ff9d";
+
+ctx.beginPath();
+
+ctx.arc(
+target.x,
+target.y,
+target.r,
+0,
+Math.PI*2
+);
+
+ctx.stroke();
+
+const dx =
+player.x-target.x;
+
+const dy =
+player.y-target.y;
+
+if(
+Math.sqrt(dx*dx+dy*dy)
+<
+player.r+target.r
+){
+
+score++;
+
+document.getElementById(
+"score"
+).textContent =
+score;
+
+target.x =
+Math.random()*canvas.width;
+
+target.y =
+Math.random()*canvas.height;
+
+}
+
+requestAnimationFrame(loop);
 
 }
 
@@ -3116,284 +3018,291 @@ loop();
 </body>
 </html>`;
 
-}
+    document.getElementById(
+        "code"
+    ).value =
+        code;
 
+    openWindow(
+        "codeWindow"
+    );
 
-function escapeHTML(text){
-
-  return String(text)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
+    showToast(
+        "Game wurde generiert."
+    );
 }
 
 
 /* =========================================================
-   DEFAULT EDITOR
+   ESCAPE HTML
 ========================================================= */
 
-function defaultHTML(){
+function escapeHtml(value){
 
-  return `<!DOCTYPE html>
-<html lang="de">
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
-
-<title>J.A.R.V.I.S. Generated App</title>
-
-<style>
-
-body{
-  margin:0;
-  min-height:100vh;
-  display:grid;
-  place-items:center;
-  background:#03070c;
-  color:#4de7ff;
-  font-family:Arial,sans-serif;
-}
-
-.core{
-  text-align:center;
-}
-
-.orb{
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  background:
-    radial-gradient(circle,
-    white,
-    #4de7ff 15%,
-    transparent 70%);
-  box-shadow:
-    0 0 40px #4de7ff;
-  animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-
-  50%{
-    transform:scale(1.15);
-  }
-
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="core">
-
-  <div class="orb"></div>
-
-  <h1>J.A.R.V.I.S.</h1>
-
-  <p>Generated Application</p>
-
-</div>
-
-</body>
-</html>`;
-
+    return value
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
 }
 
 
 /* =========================================================
-   COMMAND PALETTE
+   STARTUP
+========================================================= */
+
+window.addEventListener(
+    "load",
+    ()=>{
+        setTimeout(()=>{
+
+            /*
+             Browser autoplay rules können
+             Audio beim allerersten Seitenaufruf
+             blockieren.
+
+             Nach einer Benutzerinteraktion
+             funktioniert die automatische
+             Sprachausgabe normal.
+            */
+
+            const greeting =
+                "J.A.R.V.I.S. ist online. Sprachsystem und künstliche Intelligenz sind bereit.";
+
+            showToast(
+                "J.A.R.V.I.S. ONLINE — Sprachsystem bereit."
+            );
+
+            /*
+               Wir versuchen die Begrüßung.
+               Falls der Browser Audio blockiert,
+               bleibt die normale Oberfläche aktiv.
+            */
+
+            speak(
+                greeting
+            );
+
+        },800);
+    }
+);
+
+
+/* =========================================================
+   AUTOMATISCHE SYSTEM TELEMETRIE
+========================================================= */
+
+setInterval(()=>{
+
+    const cpu =
+        Math.floor(
+            25+Math.random()*45
+        );
+
+    const memory =
+        Math.floor(
+            35+Math.random()*40
+        );
+
+    const neural =
+        Math.floor(
+            55+Math.random()*40
+        );
+
+    document.getElementById(
+        "cpuValue"
+    ).textContent =
+        cpu+"%";
+
+    document.getElementById(
+        "cpuBar"
+    ).style.width =
+        cpu+"%";
+
+    document.getElementById(
+        "memoryValue"
+    ).textContent =
+        memory+"%";
+
+    document.getElementById(
+        "memoryBar"
+    ).style.width =
+        memory+"%";
+
+    document.getElementById(
+        "neuralValue"
+    ).textContent =
+        neural+"%";
+
+    document.getElementById(
+        "neuralBar"
+    ).style.width =
+        neural+"%";
+
+},1500);
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
 ========================================================= */
 
 document.addEventListener(
-  "keydown",
-  e=>{
+    "keydown",
+    event=>{
 
-    if(
-      (e.ctrlKey || e.metaKey) &&
-      e.key.toLowerCase()==="k"
-    ){
+        if(event.ctrlKey &&
+           event.key.toLowerCase()==="k"){
 
-      e.preventDefault();
+            event.preventDefault();
 
-      document.getElementById(
-        "command"
-      ).focus();
+            input.focus();
+        }
+
+        if(
+            event.ctrlKey &&
+            event.key.toLowerCase()==="e"
+        ){
+
+            event.preventDefault();
+
+            openWindow(
+                "codeWindow"
+            );
+        }
+
+        if(
+            event.ctrlKey &&
+            event.key.toLowerCase()==="m"
+        ){
+
+            event.preventDefault();
+
+            toggleListening();
+        }
+
+        if(event.key==="Escape"){
+
+            document
+                .querySelectorAll(".window")
+                .forEach(
+                    w=>w.classList.remove("active")
+                );
+        }
 
     }
-
-    if(
-      (e.ctrlKey || e.metaKey) &&
-      e.key.toLowerCase()==="s"
-    ){
-
-      e.preventDefault();
-
-      saveEditor();
-
-    }
-
-  }
-);
-
-
-document.getElementById(
-  "command"
-).addEventListener(
-  "keydown",
-  e=>{
-
-    if(e.key!=="Enter")return;
-
-    const text=e.target.value.trim();
-
-    if(!text)return;
-
-    e.target.value="";
-
-    addMessage(
-      "user",
-      text
-    );
-
-    adaptVisual(text);
-
-    processCommand(text);
-
-  }
 );
 
 
 /* =========================================================
-   CLOCK
+   AUTOMATIC COMMAND DETECTION
 ========================================================= */
 
-setInterval(()=>{
+function detectCommand(text){
 
-  document.getElementById(
-    "clock"
-  ).textContent=
-    new Date().toLocaleTimeString();
+    const t =
+        text.toLowerCase();
 
-},1000);
+    if(
+        t.includes("öffne code") ||
+        t.includes("code editor")
+    ){
+
+        openWindow(
+            "codeWindow"
+        );
+
+        return true;
+    }
+
+    if(
+        t.includes("öffne app builder") ||
+        t.includes("app builder")
+    ){
+
+        openWindow(
+            "appWindow"
+        );
+
+        return true;
+    }
+
+    if(
+        t.includes("öffne game builder") ||
+        t.includes("game builder")
+    ){
+
+        openWindow(
+            "gameWindow"
+        );
+
+        return true;
+    }
+
+    if(
+        t.includes("einstellungen") ||
+        t.includes("settings")
+    ){
+
+        openWindow(
+            "settingsWindow"
+        );
+
+        return true;
+    }
+
+    return false;
+}
 
 
 /* =========================================================
-   TELEMETRY
+   ENHANCED SEND
 ========================================================= */
 
-setInterval(()=>{
+const originalSendMessage =
+    sendMessage;
 
-  const cpu=
-    Math.floor(18+Math.random()*45);
+sendMessage = async function(){
 
-  const ram=
-    Math.floor(35+Math.random()*30);
+    const text =
+        input.value.trim();
 
-  const ai=
-    Math.floor(70+Math.random()*29);
+    if(
+        text &&
+        detectCommand(text)
+    ){
 
-  document.getElementById(
-    "cpuText"
-  ).textContent=cpu+"%";
+        input.value = "";
 
-  document.getElementById(
-    "ramText"
-  ).textContent=ram+"%";
+        addMessage(
+            text,
+            "user"
+        );
 
-  document.getElementById(
-    "aiText"
-  ).textContent=ai+"%";
+        const response =
+            "Befehl erkannt. Das entsprechende Systemfenster wurde geöffnet.";
 
-  document.getElementById(
-    "cpuBar"
-  ).style.width=cpu+"%";
+        addMessage(
+            response,
+            "ai"
+        );
 
-  document.getElementById(
-    "ramBar"
-  ).style.width=ram+"%";
+        await speak(response);
 
-  document.getElementById(
-    "aiBar"
-  ).style.width=ai+"%";
+        return;
+    }
 
-  document.getElementById(
-    "coreLoad"
-  ).textContent=ai+"%";
-
-},1200);
+    return originalSendMessage();
+};
 
 
 /* =========================================================
-   STAR FIELD
+   INITIAL STATE
 ========================================================= */
 
-(function(){
-
-  const container=
-    document.getElementById("stars");
-
-  for(let i=0;i<100;i++){
-
-    const star=
-      document.createElement("i");
-
-    star.style.position="absolute";
-
-    star.style.left=
-      Math.random()*100+"%";
-
-    star.style.top=
-      Math.random()*100+"%";
-
-    const size=
-      Math.random()*2+1;
-
-    star.style.width=
-      size+"px";
-
-    star.style.height=
-      size+"px";
-
-    star.style.borderRadius="50%";
-
-    star.style.background=
-      "rgba(130,220,255,"+
-      (Math.random()*.5+.1)+")";
-
-    star.style.boxShadow=
-      "0 0 5px rgba(77,231,255,.3)";
-
-    container.appendChild(star);
-
-  }
-
-})();
-
-
-/* =========================================================
-   INITIALIZATION
-========================================================= */
-
-renderMemory();
-
-setTimeout(()=>{
-
-  adaptVisual(
-    "J.A.R.V.I.S. initialization"
-  );
-
-},500);
-
-console.log(
-  "J.A.R.V.I.S. NEXT GENERATION ONLINE"
+setVoiceState(
+    "VOICE READY",
+    false
 );
 
 </script>
